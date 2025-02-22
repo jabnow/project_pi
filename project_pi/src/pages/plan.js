@@ -1,7 +1,8 @@
+import Charts from "../components/charts";
 function Plan(){
     return(
         <div>
-            Plan
+            <Charts/>
         </div>
     )
 }
