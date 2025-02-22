@@ -1,9 +1,13 @@
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
+# import sys
+# sys.path.append(".venv\Lib\site-packages\sklearn")
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+# import sklearn
+# print(sklearn.__version__)
 
 def visualize_occupation_data(json_file):
     """
@@ -29,27 +33,26 @@ def visualize_occupation_data(json_file):
     descriptions = [item['Description'] for item in occupation_data]
 
     # vectorize text with TF-IDF
-    vectorizer = TfidfVectorizer(stop_words='english')  # Remove common English words
+    vectorizer = TfidfVectorizer(stop_words='english') 
     tfidf_matrix = vectorizer.fit_transform(descriptions)
 
     # 3. using PCA
     n_components = 2 # Reduce to 2 dimensions 
     pca = PCA(n_components=n_components)
-    pca_result = pca.fit_transform(tfidf_matrix.toarray())  # Pass as a dense array
+    pca_result = pca.fit_transform(tfidf_matrix.toarray()) 
 
 
     # data visualization 
     df = pd.DataFrame(pca_result, columns=['PCA1', 'PCA2'])
-    titles = [item['Title'] for item in occupation_data]  # Get occupation titles
-    df['Title'] = titles # Add Titles for richer plot
-    # Optionally add O*NET-SOC Code as a column, too
+    titles = [item['Title'] for item in occupation_data] 
+    df['Title'] = titles 
     df['O*NET-SOC Code'] = [item['O*NET-SOC Code'] for item in occupation_data]
 
 
     # Visualize
     plt.figure(figsize=(12, 8)) # make figure bigger to be able to read
     sns.scatterplot(x='PCA1', y='PCA2', data=df, hue='Title', alpha=0.7, palette="viridis")
-    plt.title('Occupation Data Visualization using TF-IDF and PCA')
+    plt.title('Occupation Data Visualization using TF-IDF and PCAq')
     plt.xlabel('Principal Component 1')
     plt.ylabel('Principal Component 2')
     # adjust legend position
@@ -59,5 +62,6 @@ def visualize_occupation_data(json_file):
 
 
 # Example Usage:
-json_file_path = "project_pi/backend/services/skill_graph.py"
+# json_file_path = "C:\Users\wangj\projects\project_pi\project_pi\data\Occupation Data.json"
+json_file_path = "C:\\Users\wangj\projects\project_pi\project_pi\data\Occupation Data.json"
 visualize_occupation_data(json_file_path)
