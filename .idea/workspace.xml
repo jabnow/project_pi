@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;skeleton of frontend without calendar&quot;">
+      <change afterPath="$PROJECT_DIR$/project_pi/src/components/calendar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project_pi/src/components/taskcalendar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project_pi/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project_pi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project_pi/src/pages/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/home.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2tNcUGOLUS0ybfQHEIiK86Kn82A" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="" />
+      <created>1740195988642</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740195988642</updated>
+      <workItem from="1740195998913" duration="1711000" />
+      <workItem from="1740208751802" duration="18071000" />
+    </task>
+    <task id="LOCAL-00001" summary="&quot;skeleton of frontend&quot;">
+      <option name="closed" value="true" />
+      <created>1740217934446</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1740217934446</updated>
+    </task>
+    <task id="LOCAL-00002" summary="&quot;skeleton of frontend without calendar&quot;">
+      <option name="closed" value="true" />
+      <created>1740238514818</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1740238514819</updated>
+    </task>
+    <task id="LOCAL-00003" summary="&quot;skeleton of frontend without calendar&quot;">
+      <option name="closed" value="true" />
+      <created>1740238566549</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1740238566549</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="&quot;skeleton of frontend&quot;" />
+    <MESSAGE value="&quot;skeleton of frontend without calendar&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;skeleton of frontend without calendar&quot;" />
+  </component>
+</project>

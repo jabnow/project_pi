@@ -1,12 +1,12 @@
 import React from "react";
-
+import Calendar from "../components/calendar";
 
 
 function Home(){
 
     return(
         <div>
-            <p> Home</p>
+            <Calendar/>
         </div>
     )
 }

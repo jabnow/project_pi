@@ -1,7 +1,10 @@
+// import ResumeUploader from './ResumeUploader';
+
 function Plan(){
     return(
         <div>
-            Plan
+          {/* Other components */}
+          {/* <ResumeUploader /> */}
         </div>
     )
 }
