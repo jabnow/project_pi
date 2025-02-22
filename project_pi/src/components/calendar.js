@@ -73,51 +73,54 @@ const AntdDatePicker = () => {
     }));
 
     return (
-        <div style={{display:"flex"}}>
-            <div style={{ padding: '10px' }}>
+        <div style={{ display: 'flex', padding: '10px', gap: '20px' }}>
+            <div style={{ flex: 1, padding: '10px' }}>
                 <h2>Select a Date</h2>
-                <Card style={{maxWidth: '350px', width: '100%'}}>
+                <Card style={{ maxWidth: '350px', width: '100%'}}>
                     <Calendar
                         fullscreen={false}
                         onSelect={handleDateChange} />
                     <p>Selected Date: {selectedDate ? selectedDate.format('YYYY-MM-DD') : 'None'}</p>
                 </Card>
-                <div>
-                    {selectedDate && (
-                        <div style={{ flex: 1 }}>
+            </div>
+            <div style={{flex:2}}>
+                {selectedDate && (
+                    <div style={{ flex: 1 }}>
+                        <div style={{display: "flex", alignItems: 'center',justifyContent: 'space-between'}}>
+                            <h2>Tasks for {selectedDate.format('YYYY-MM-DD')}</h2>
                             <Button
                                 onClick={()=>setIsModalVisible(true)}>
                                 add task
                             </Button>
-                            <h2>Tasks for {selectedDate.format('YYYY-MM-DD')}</h2>
-                            <Table dataSource={tableData} columns={columns} rowKey="id" />
                         </div>
-                    )}
-                </div>
-                <Modal
-                    title="add task"
-                    open={isModalVisible}
-                    onOk={handleAddTask}
-                    onCancel={() =>{
-                        setIsModalVisible(false)
-                        setTaskContent('')
-                        setTaskDescription('')
-                    }}
-                >
-                    <Input
-                        placeholder = "content"
-                        value = {taskContent}
-                        onChange={(e) => setTaskContent(e.target.value)}
-                        >
-                    </Input>
-                    <Input
-                        placeholder = "description"
-                        value = {taskDescription}
-                        onChange={(e) => setTaskDescription(e.target.value)}
-                        >
-                    </Input>
-                </Modal>
+                        <Table dataSource={tableData} columns={columns} rowKey="id" />
+                    </div>
+                )}
             </div>
+            <Modal
+                title="add task"
+                open={isModalVisible}
+                onOk={handleAddTask}
+                onCancel={() =>{
+                    setIsModalVisible(false)
+                    setTaskContent('')
+                    setTaskDescription('')
+                }}
+            >
+                <Input
+                    placeholder = "content"
+                    value = {taskContent}
+                    onChange={(e) => setTaskContent(e.target.value)}
+                    >
+                </Input>
+                <Input
+                    placeholder = "description"
+                    value = {taskDescription}
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                    >
+                </Input>
+            </Modal>
+
         </div>
     );
 };

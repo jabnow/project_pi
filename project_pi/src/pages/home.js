@@ -6,8 +6,6 @@ function Home(){
 
     return(
         <div>
-            <p> Home</p>
-            <p> Calendar</p>
             <Calendar/>
         </div>
     )
