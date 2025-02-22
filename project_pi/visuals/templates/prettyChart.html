@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Occupation Data Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            max-width: 90%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Occupation Data Visualization (O*NET-SOC Industries)</h2>
+    <p>Hover over points to see job titles. Colors indicate broad industry categories.</p>
+
+    <canvas id="scatterChart"></canvas>
+
+    <script>
+        async function fetchData() {
+            const response = await fetch('/get_data');
+            const data = await response.json();
+            console.log("Received Data:", data); // Debugging: Check if colors are assigned correctly
+            return data;
+        }
+
+        async function createChart() {
+            const ctx = document.getElementById('scatterChart').getContext('2d');
+            const data = await fetchData();
+
+            const chart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Occupations by Industry',
+                        data: data,
+                        backgroundColor: data.map(d => d.color),  // ✅ Assign color dynamically
+                        borderColor: data.map(d => d.color.replace('0.7', '1.0')),  // ✅ Darker border
+                        pointRadius: 6,
+                        pointHoverRadius: 9
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.raw.title}`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false // Hide default legend (optional)
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Industry Specialization (Technical vs. Business-Oriented)',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Functional Role (Hands-on Work vs. Strategic Management)',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        createChart();
+    </script>
+
+</body>
+</html>
