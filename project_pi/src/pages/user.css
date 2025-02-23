@@ -1,0 +1,120 @@
+.user-container {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  .breadcrumb {
+    margin-bottom: 20px;
+  }
+  
+  .user-main {
+    display: flex;
+    gap: 20px;
+  }
+  
+/* left card */
+  .user-left {
+    flex: 1;
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-avatar-section {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .user-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+  }
+  
+  .user-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .btn-resume {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+/* socials */
+  .user-social {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+  }
+  
+  .user-social div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  
+/* right card */
+  .user-right {
+    flex: 2;
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-info h4 {
+    font-weight: 600;
+    margin: 8px 0 4px;
+  }
+  
+  .user-info p {
+    margin: 0 0 10px;
+  }
+  
+/* project status */
+  .user-projects {
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+  }
+  
+  .user-projects h3 {
+    margin-bottom: 20px;
+  }
+  
+  .progress-container {
+    margin-bottom: 16px;
+  }
+  
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 8px;
+    background-color: #007bff;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  
