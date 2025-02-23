@@ -59,7 +59,6 @@ uvicorn chatbot:app --host 0.0.0.0 --port 8000 --reload
 
 #### 3⃣ Frontend Setup (React.js)
 ```sh
-cd frontend
 npm install
 npm start
 ```
