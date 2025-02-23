@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 import os
-from secrets import API_KEY
+from secretss import API_KEY
 # Load API Key (Replace with your actual API Key)
 GEMINI_API_KEY = API_KEY
 genai.configure(api_key=GEMINI_API_KEY)
