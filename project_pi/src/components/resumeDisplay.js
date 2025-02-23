@@ -4,7 +4,8 @@ const ResumeDisplay = () => {
     const storedResume = JSON.parse(localStorage.getItem('uploadedResume'));
 
     if (!storedResume) {
-        return <p>No resume uploaded for now.</p>;
+        return <p>No resume uploaded for now. Please upload a resume in User.
+        </p>;
     }
 
     const { name, type, data } = storedResume;

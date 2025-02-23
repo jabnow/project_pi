@@ -10,7 +10,7 @@ const ResumeUploader = forwardRef((props, ref) => {
             localStorage.setItem('uploadedResume', JSON.stringify({
                 name: file.name,
                 type: file.type,
-                data: URL.createObjectURL(file), // Create a URL for the file
+                data: URL.createObjectURL(file), 
             }));
         } else {
             setSelectedFile(null);
@@ -27,10 +27,11 @@ const ResumeUploader = forwardRef((props, ref) => {
         const formData = new FormData();
         formData.append('resume', selectedFile);
 
-        fetch('/upload', {
+        fetch('http://localhost:5000/upload', {
             method: 'POST',
             body: formData,
         })
+            .then((response) => response.json())
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Upload failed');
@@ -38,10 +39,10 @@ const ResumeUploader = forwardRef((props, ref) => {
                 return response.json();
             })
             .then((data) => {
-                console.log('Success:', data);
+                console.log('Successful upload:', data);
             })
             .catch((error) => {
-                console.error('Error:', error);
+                console.error('Error uploading:', error);
             });
     };
 
@@ -55,11 +56,11 @@ const ResumeUploader = forwardRef((props, ref) => {
     return (
         <div>
             <input
-                id="file-input" // Add id for programmatic access
+                id="file-input"
                 type="file"
                 accept=".pdf,.doc,.docx"
                 onChange={handleFileChange}
-                style={{ display: 'none' }} // Hide the file input
+                style={{ display: 'none' }} 
             />
             <button onClick={handleUpload} disabled={!selectedFile}>
                 Upload Resume
