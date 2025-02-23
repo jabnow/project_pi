@@ -1,9 +1,11 @@
+import os
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 import networkx as nx
 import plotly.graph_objects as go
-from typing import List, Dict, Any
 import plotly.offline as pyo
+from typing import List, Dict, Any
+
 class InteractiveJobGraph:
     """
     A wrapper class for creating an interactive job graph visualization.
@@ -23,7 +25,7 @@ class InteractiveJobGraph:
         self.similarity_threshold = similarity_threshold
         self.occupation_data: List[Dict[str, Any]] = []
         self.graph: nx.Graph = nx.Graph()
-        self.pos: Dict[int, List[float]] = {} # Position for graph layout
+        self.pos: Dict[int, List[float]] = {}  # Position for graph layout
 
         self._load_data()
         self._create_graph()
@@ -42,7 +44,6 @@ class InteractiveJobGraph:
         if not self.occupation_data:
             raise ValueError("Error: 'Occupation Data' key not found in JSON or is empty.")
 
-
     def _classify_job_levels(self) -> List[str]:
         """Classifies job levels based on keywords in titles."""
         job_levels = []
@@ -59,7 +60,6 @@ class InteractiveJobGraph:
             job_levels.append(level)
         return job_levels
 
-
     def _create_graph(self):
         """Creates the NetworkX graph from the occupation data."""
         titles = [item['Title'] for item in self.occupation_data]
@@ -74,9 +74,9 @@ class InteractiveJobGraph:
         for i in range(len(self.occupation_data)):
             self.graph.add_node(i,
                                 title=titles[i],
-                                description=descriptions[i], # Add description to node
+                                description=descriptions[i],  # Add description to node
                                 level=job_levels[i],
-                                onet_code=self.occupation_data[i].get('O*NET-SOC Code', 'N/A')) #Adding the O*NET-SOC code
+                                onet_code=self.occupation_data[i].get('O*NET-SOC Code', 'N/A'))  # Adding the O*NET-SOC code
 
         for i in range(len(self.occupation_data)):
             for j in range(i + 1, len(self.occupation_data)):
@@ -84,13 +84,13 @@ class InteractiveJobGraph:
                     self.graph.add_edge(i, j, weight=similarity_matrix[i, j])
 
         # Layout the graph
-        self.pos = nx.spring_layout(self.graph, k=0.3, iterations=50) # Store layout
+        self.pos = nx.spring_layout(self.graph, k=0.6, iterations=100)
 
     def create_interactive_plot(self):
         """Creates an interactive plot using Plotly."""
 
         if not self.graph:
-            print("Error: Graph not created.  Ensure data is loaded and graph is created first.")
+            print("Error: Graph not created. Ensure data is loaded and graph is created first.")
             return
 
         edge_x = []
@@ -100,17 +100,16 @@ class InteractiveJobGraph:
             x1, y1 = self.pos[edge[1]]
             edge_x.append(x0)
             edge_x.append(x1)
-            edge_x.append(None) # Add None to create disjointed segments
+            edge_x.append(None)  # Add None to create disjointed segments
             edge_y.append(y0)
             edge_y.append(y1)
-            edge_y.append(None) # Add None to create disjointed segments
+            edge_y.append(None)  # Add None to create disjointed segments
 
         edge_trace = go.Scatter(
             x=edge_x, y=edge_y,
             line=dict(width=0.5, color='#888'),
             hoverinfo='none',
-            mode='lines' # Show segments between points
-
+            mode='lines'  # Show segments between points
         )
 
         node_x = []
@@ -121,56 +120,63 @@ class InteractiveJobGraph:
             node_x.append(x)
             node_y.append(y)
             node_text.append(f"<b>{self.graph.nodes[node]['title']}</b><br>"  # Bold title
-                             f"Level: {self.graph.nodes[node]['level']}<br>" # Level info
+                             f"Level: {self.graph.nodes[node]['level']}<br>"  # Level info
                              f"Code: {self.graph.nodes[node]['onet_code']}<br>"
                              f"Description: {self.graph.nodes[node]['description']}")
-
 
         node_trace = go.Scatter(
             x=node_x, y=node_y,
             mode='markers',
             hoverinfo='text',
-            text=node_text, # Set hover text
+            text=node_text,  # Set hover text
             marker=dict(
                 showscale=False,
-                # colorscale options
-                #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
-                #'Reds' | 'Portland' | 'Jet' | 'Hot' | 'Blackbody' | 'Earth' |
-                #'Electric' | 'Viridis' |
                 colorscale='YlGnBu',
                 reversescale=True,
                 color=[],
                 size=10,
-                line_width=2)
+                line_width=2
+            )
         )
+
         node_adjacencies = []
         node_trace.marker.color = []
         for node, adjacencies in enumerate(self.graph.adjacency()):
-          node_adjacencies.append(len(adjacencies[1]))
+            node_adjacencies.append(len(adjacencies[1]))
 
         node_trace.marker.color = node_adjacencies
 
-
         fig = go.Figure(data=[edge_trace, node_trace],
-                     layout=go.Layout(
-                        title=dict(text='<br>Job Ontology Graph', font=dict(size=16)),
-                        showlegend=False,
-                        hovermode='closest',
-                        margin=dict(b=20,l=5,r=5,t=40),
-                        annotations=[ dict(
-                            text="Hover over nodes for information",
-                            showarrow=False,
-                            xref="paper", yref="paper",
-                            x=0.005, y=-0.002 ) ],
-                        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
-        )
-        pyo.plot(fig, filename='job_graph.html', auto_open=True)
-        # For displaying plot in offline mode.
+                        layout=go.Layout(
+                            title=dict(text='<br>Job Ontology Graph', font=dict(size=16)),
+                            showlegend=False,
+                            hovermode='closest',
+                            margin=dict(b=20, l=5, r=5, t=40),
+                            annotations=[dict(
+                                text="Hover over nodes for information",
+                                showarrow=False,
+                                xref="paper", yref="paper",
+                                x=0.005, y=-0.002
+                            )],
+                            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
+                        )
+
+        # Ensure the public/ directory exists
+        public_path = os.path.join(os.path.dirname(__file__), "..", "public")
+        os.makedirs(public_path, exist_ok=True)
+
+        # Save the job graph in the correct public/ folder
+        output_file = os.path.join(public_path, "job_graph.html")
+        pyo.plot(fig, filename=output_file, auto_open=False)
+
+        print(f"✅ Job graph saved at: {output_file}")
+
         return fig
 
+
 # Example Usage:
-json_file_path = "Occupation Data.json"
+json_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "Occupation Data.json")
 level_keywords = {
     'Executive': ['chief', 'executive', 'director'],
     'Manager': ['manager', 'supervisor', 'coordinator'],

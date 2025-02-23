@@ -1,11 +1,12 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, send_from_directory, render_template
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="public", template_folder="public")  # Use public as static and template
 
-json_file_path = "Occupation Data.json"
+json_file_path = "public/Occupation Data.json"  # Ensure this file exists under public
 
 # Define industry categories based on O*NET-SOC first two digits
 industry_colors = {
@@ -24,6 +25,9 @@ industry_colors = {
 
 
 def process_occupation_data():
+    if not os.path.exists(json_file_path):
+        return {"error": "Occupation Data.json not found"}
+
     with open(json_file_path, 'r') as f:
         data = json.load(f)
 
@@ -56,15 +60,19 @@ def process_occupation_data():
     return processed_data
 
 
-@app.route('/')
-def index():
-    return render_template("prettyChart.html")
+@app.route('/learn')
+def learn():
+    return send_from_directory("public", "prettyChart.html")  # Serve static HTML under /learn
 
 
 @app.route('/get_data')
 def get_data():
     return jsonify(process_occupation_data())
-
-
+@app.route('/')
+def home():
+    return "Flask server is running!"
+@app.route('/prettyChart')
+def show_chart():
+    return render_template("templates/prettyChart.html")
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
