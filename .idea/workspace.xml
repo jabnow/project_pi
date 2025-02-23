@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;upload resume stored in local storage and displayed&quot;">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/components/calendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/components/calendar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/components/navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/components/navbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/components/navbarUpgrade.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/components/upload_res.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/components/upload_res.js" afterDir="false" />
-    </list>
+    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;stylized part of the webpage, will continue tommorow&quot;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -126,7 +119,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740278884314</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="&quot;stylized part of the webpage, will continue tommorow&quot;">
+      <option name="closed" value="true" />
+      <created>1740292904632</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1740292904632</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -139,6 +140,7 @@
     <MESSAGE value="&quot;skeleton of frontend without calendar&quot;" />
     <MESSAGE value="&quot;upload resume fixed&quot;" />
     <MESSAGE value="&quot;upload resume stored in local storage and displayed&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;upload resume stored in local storage and displayed&quot;" />
+    <MESSAGE value="&quot;stylized part of the webpage, will continue tommorow&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;stylized part of the webpage, will continue tommorow&quot;" />
   </component>
 </project>
