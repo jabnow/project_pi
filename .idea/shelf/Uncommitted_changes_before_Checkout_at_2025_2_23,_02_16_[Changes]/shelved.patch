@@ -1,0 +1,890 @@
+Index: project_pi/src/pages/user.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\nimport \"./user.css\";\nimport ProfilePicture from \"./sample_user.jpg\";\n// import \"/upload_res.js\";\n\n// sample user data\nconst userData = {\n//   avatar: \"https://bootdey.com/img/Content/avatar/avatar7.png\",\n  avatar: ProfilePicture,\n  name: \"John Doe\",\n  title: \"Full Stack Developer\",\n  location: \"Bay Area, San Francisco, CA\",\n  website: \"https://bootdey.com\",\n  github: \"bootdey\",\n  twitter: \"@bootdey\",\n  instagram: \"bootdey\",\n  facebook: \"bootdey\",\n  email: \"fip@jukmuh.al\",\n  phone: \"(239) 816-9029\",\n  mobile: \"(320) 380-4539\",\n  address: \"Bobst Library, New York, NY 10012\",\n  assignments: [\n    { name: \"Web Design\", value: 70 },\n    { name: \"Website Markup\", value: 50 },\n    { name: \"One Page\", value: 60 },\n    { name: \"Mobile Template\", value: 40 },\n    { name: \"Backend API\", value: 30 },\n  ],\n};\n\nfunction UserProfile() {\n  return (\n    <div className=\"user-container\">\n      {/* page title */}\n      <div className=\"breadcrumb\">\n        <h2>Advanced Settings</h2>\n      </div>\n\n      <div className=\"user-main\">\n        {/* left side */}\n        <div className=\"user-left\">\n          <div className=\"user-avatar-section\">\n            <img\n            //   src={userData.avatar}\n              src={ProfilePicture}\n              alt=\"User Avatar\"\n              className=\"user-avatar\"\n            />\n            <h3>{userData.name}</h3>\n            <p>{userData.title}</p>\n            <p>{userData.location}</p>\n            <div className=\"user-actions\">\n            <a href=\"...\">\n            <button className=\"btn-resume\">Upload Resume\n                </button>\n              </a>\n            </div>\n          </div>\n\n          <div className=\"user-social\">\n            <div>\n              <strong>Website</strong>\n              <p>{userData.website}</p>\n            </div>\n            <div>\n              <strong>Github</strong>\n              <p>{userData.github}</p>\n            </div>\n            <div>\n              <strong>Twitter</strong>\n              <p>{userData.twitter}</p>\n            </div>\n            <div>\n              <strong>Instagram</strong>\n              <p>{userData.instagram}</p>\n            </div>\n            <div>\n              <strong>Facebook</strong>\n              <p>{userData.facebook}</p>\n            </div>\n          </div>\n        </div>\n\n        {/* right side */}\n        <div className=\"user-right\">\n          <div className=\"user-info\">\n            <h4>Full Name</h4>\n            <p>{userData.name}</p>\n            <h4>Email</h4>\n            <p>{userData.email}</p>\n            <h4>Phone</h4>\n            <p>{userData.phone}</p>\n            <h4>Mobile</h4>\n            <p>{userData.mobile}</p>\n            <h4>Address</h4>\n            <p>{userData.address}</p>\n          </div>\n\n          <div className=\"user-projects\">\n            <h3> Project Path Status</h3>\n            {userData.assignments.map((item, idx) => (\n              <div className=\"progress-container\" key={idx}>\n                <div className=\"progress-header\">\n                  <span>{item.name}</span>\n                  <span>{item.value}%</span>\n                </div>\n                <div className=\"progress-bar\">\n                  <div\n                    className=\"progress-fill\"\n                    style={{ width: `${item.value}%` }}\n                  ></div>\n                </div>\n              </div>\n            ))}\n          </div>\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default UserProfile;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/pages/user.js b/project_pi/src/pages/user.js
+--- a/project_pi/src/pages/user.js	(revision 3f97fe207108c1b23d5e11e147d395ac2883e17f)
++++ b/project_pi/src/pages/user.js	(date 1740294043694)
+@@ -1,11 +1,10 @@
+-import React from "react";
++import React, { useRef } from 'react';
+ import "./user.css";
+ import ProfilePicture from "./sample_user.jpg";
+-// import "/upload_res.js";
++import ResumeUploader from "../components/upload_res";
+ 
+-// sample user data
++// Sample user data
+ const userData = {
+-//   avatar: "https://bootdey.com/img/Content/avatar/avatar7.png",
+   avatar: ProfilePicture,
+   name: "John Doe",
+   title: "Full Stack Developer",
+@@ -29,94 +28,104 @@
+ };
+ 
+ function UserProfile() {
++  // Create a ref for the ResumeUploader component
++  const resumeUploaderRef = useRef(null);
++
++  // Handle button click
++  const handleButtonClick = () => {
++    if (resumeUploaderRef.current) {
++      resumeUploaderRef.current.triggerFileInput(); // Trigger file input
++    }
++  };
++
+   return (
+-    <div className="user-container">
+-      {/* page title */}
+-      <div className="breadcrumb">
+-        <h2>Advanced Settings</h2>
+-      </div>
++      <div className="user-container">
++        {/* Page title */}
++        <div className="breadcrumb">
++          <h2>Advanced Settings</h2>
++        </div>
+ 
+-      <div className="user-main">
+-        {/* left side */}
+-        <div className="user-left">
+-          <div className="user-avatar-section">
+-            <img
+-            //   src={userData.avatar}
+-              src={ProfilePicture}
+-              alt="User Avatar"
+-              className="user-avatar"
+-            />
+-            <h3>{userData.name}</h3>
+-            <p>{userData.title}</p>
+-            <p>{userData.location}</p>
+-            <div className="user-actions">
+-            <a href="...">
+-            <button className="btn-resume">Upload Resume
++        <div className="user-main">
++          {/* Left side */}
++          <div className="user-left">
++            <div className="user-avatar-section">
++              <img
++                  src={userData.avatar}
++                  alt="User Avatar"
++                  className="user-avatar"
++              />
++              <h3>{userData.name}</h3>
++              <p>{userData.title}</p>
++              <p>{userData.location}</p>
++              <div className="user-actions">
++                <button className="btn-resume" onClick={handleButtonClick}>
++                  Upload Resume
+                 </button>
+-              </a>
+-            </div>
+-          </div>
++              </div>
++            </div>
+ 
+-          <div className="user-social">
+-            <div>
+-              <strong>Website</strong>
+-              <p>{userData.website}</p>
+-            </div>
+-            <div>
+-              <strong>Github</strong>
+-              <p>{userData.github}</p>
+-            </div>
+-            <div>
+-              <strong>Twitter</strong>
+-              <p>{userData.twitter}</p>
+-            </div>
+-            <div>
+-              <strong>Instagram</strong>
+-              <p>{userData.instagram}</p>
+-            </div>
+-            <div>
+-              <strong>Facebook</strong>
+-              <p>{userData.facebook}</p>
+-            </div>
+-          </div>
+-        </div>
++            <div className="user-social">
++              <div>
++                <strong>Website</strong>
++                <p>{userData.website}</p>
++              </div>
++              <div>
++                <strong>Github</strong>
++                <p>{userData.github}</p>
++              </div>
++              <div>
++                <strong>Twitter</strong>
++                <p>{userData.twitter}</p>
++              </div>
++              <div>
++                <strong>Instagram</strong>
++                <p>{userData.instagram}</p>
++              </div>
++              <div>
++                <strong>Facebook</strong>
++                <p>{userData.facebook}</p>
++              </div>
++            </div>
++          </div>
+ 
+-        {/* right side */}
+-        <div className="user-right">
+-          <div className="user-info">
+-            <h4>Full Name</h4>
+-            <p>{userData.name}</p>
+-            <h4>Email</h4>
+-            <p>{userData.email}</p>
+-            <h4>Phone</h4>
+-            <p>{userData.phone}</p>
+-            <h4>Mobile</h4>
+-            <p>{userData.mobile}</p>
+-            <h4>Address</h4>
+-            <p>{userData.address}</p>
+-          </div>
++          {/* Right side */}
++          <div className="user-right">
++            <div className="user-info">
++              <h4>Full Name</h4>
++              <p>{userData.name}</p>
++              <h4>Email</h4>
++              <p>{userData.email}</p>
++              <h4>Phone</h4>
++              <p>{userData.phone}</p>
++              <h4>Mobile</h4>
++              <p>{userData.mobile}</p>
++              <h4>Address</h4>
++              <p>{userData.address}</p>
++            </div>
+ 
+-          <div className="user-projects">
+-            <h3> Project Path Status</h3>
+-            {userData.assignments.map((item, idx) => (
+-              <div className="progress-container" key={idx}>
+-                <div className="progress-header">
+-                  <span>{item.name}</span>
+-                  <span>{item.value}%</span>
+-                </div>
+-                <div className="progress-bar">
+-                  <div
+-                    className="progress-fill"
+-                    style={{ width: `${item.value}%` }}
+-                  ></div>
+-                </div>
+-              </div>
+-            ))}
+-          </div>
+-        </div>
+-      </div>
+-    </div>
++            <div className="user-projects">
++              <h3>Project Path Status</h3>
++              {userData.assignments.map((item, idx) => (
++                  <div className="progress-container" key={idx}>
++                    <div className="progress-header">
++                      <span>{item.name}</span>
++                      <span>{item.value}%</span>
++                    </div>
++                    <div className="progress-bar">
++                      <div
++                          className="progress-fill"
++                          style={{ width: `${item.value}%` }}
++                      ></div>
++                    </div>
++                  </div>
++              ))}
++            </div>
++          </div>
++        </div>
++
++        <ResumeUploader ref={resumeUploaderRef} />
++      </div>
+   );
+ }
+ 
+-export default UserProfile;
++export default UserProfile;
+\ No newline at end of file
+Index: project_pi/src/components/upload_res.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState, forwardRef, useImperativeHandle } from 'react';\n\nconst ResumeUploader = forwardRef((props, ref) => {\n    const [selectedFile, setSelectedFile] = useState(null);\n\n    const handleFileChange = (event) => {\n        const file = event.target.files[0];\n        if (file) {\n            setSelectedFile(file);\n            localStorage.setItem('uploadedResume', JSON.stringify({\n                name: file.name,\n                type: file.type,\n                data: URL.createObjectURL(file), \n                data: URL.createObjectURL(file),\n            }));\n        } else {\n            setSelectedFile(null);\n            localStorage.removeItem('uploadedResume');\n        }\n    };\n\n    const handleUpload = () => {\n        if (!selectedFile) {\n            console.error('No file selected');\n            return;\n        }\n\n        const formData = new FormData();\n        formData.append('resume', selectedFile);\n\n        fetch('http://localhost:5000/upload', {\n            method: 'POST',\n            body: formData,\n        })\n            .then((response) => response.json())\n            .then((response) => {\n                if (!response.ok) {\n                    throw new Error('Upload failed');\n                }\n                return response.json();\n            })\n            .then((data) => {\n                console.log('Successful upload:', data);\n            })\n            .catch((error) => {\n                console.error('Error uploading:', error);\n            });\n    };\n\n    useImperativeHandle(ref, () => ({\n        triggerFileInput: () => {\n            document.getElementById('file-input').click();\n        },\n        triggerUpload: handleUpload,\n    }));\n\n    return (\n        <div>\n            <input\n                id=\"file-input\"\n                type=\"file\"\n                accept=\".pdf,.doc,.docx\"\n                onChange={handleFileChange}\n                style={{ display: 'none' }} \n            />\n            <button onClick={handleUpload} disabled={!selectedFile}>\n                Upload Resume\n            </button>\n            {selectedFile && <p>Selected file: {selectedFile.name}</p>}\n        </div>\n    );\n});\n\nexport default ResumeUploader;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/components/upload_res.js b/project_pi/src/components/upload_res.js
+--- a/project_pi/src/components/upload_res.js	(revision 3f97fe207108c1b23d5e11e147d395ac2883e17f)
++++ b/project_pi/src/components/upload_res.js	(date 1740293767189)
+@@ -10,7 +10,6 @@
+             localStorage.setItem('uploadedResume', JSON.stringify({
+                 name: file.name,
+                 type: file.type,
+-                data: URL.createObjectURL(file), 
+                 data: URL.createObjectURL(file),
+             }));
+         } else {
+Index: project_pi/src/pages/plan.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\n\nconst Plan = () => {\n\n  return (\n    <div>\n      <h1>PLAN</h1>\n      <div style={{ display: \"flex\", justifyContent: \"space-around\" }}>\n\n        {/* Right: Job Node Visualization */}\n        <div style={{ width: \"45%\", background: \"#ddd\", padding: \"20px\" }}>\n          <h2>Job Node Visualization</h2>\n          <iframe\n            src=\"/job_graph.html\"\n            width=\"100%\"\n            height=\"400px\"\n            title=\"Job Ontology Graph\"\n          />\n        </div>\n      </div>\n    </div>\n  );\n};\n\nexport default Plan;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/pages/plan.js b/project_pi/src/pages/plan.js
+--- a/project_pi/src/pages/plan.js	(revision 3f97fe207108c1b23d5e11e147d395ac2883e17f)
++++ b/project_pi/src/pages/plan.js	(date 1740294992804)
+@@ -1,25 +1,27 @@
+ import React from "react";
+-
++import ResumeDisplay from "../components/resumeDisplay";
+ const Plan = () => {
+ 
+   return (
+-    <div>
+-      <h1>PLAN</h1>
+-      <div style={{ display: "flex", justifyContent: "space-around" }}>
++      <div>
++          <ResumeDisplay/>
++        <div>
++          <h1>PLAN</h1>
++          <div style={{ display: "flex", justifyContent: "space-around" }}>
+ 
+-        {/* Right: Job Node Visualization */}
+-        <div style={{ width: "45%", background: "#ddd", padding: "20px" }}>
+-          <h2>Job Node Visualization</h2>
+-          <iframe
+-            src="/job_graph.html"
+-            width="100%"
+-            height="400px"
+-            title="Job Ontology Graph"
+-          />
+-        </div>
+-      </div>
+-    </div>
+-  );
+-};
++            {/* Right: Job Node Visualization */}
++            <div style={{ width: "45%", background: "#ddd", padding: "20px" }}>
++              <h2>Job Node Visualization</h2>
++              <iframe
++                src="../../public/job_graph.html"
++                width="100%"
++                height="400px"
++                title="Job Ontology Graph"
++              />
++            </div>
++          </div>
++        </div>
++      </div>
++          ) };
+ 
+ export default Plan;
+Index: project_pi/package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"name\": \"project_pi\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@emotion/react\": \"^11.14.0\",\n    \"@emotion/styled\": \"^11.14.0\",\n    \"@testing-library/dom\": \"^10.4.0\",\n    \"@testing-library/jest-dom\": \"^6.6.3\",\n    \"@testing-library/react\": \"^16.2.0\",\n    \"@testing-library/user-event\": \"^13.5.0\",\n    \"antd\": \"^5.24.1\",\n    \"axios\": \"^1.7.9\",\n    \"bootstrap\": \"^5.3.3\",\n    \"fastapi\": \"^0.0.8\",\n    \"googleapis\": \"^144.0.0\",\n    \"mongodb\": \"^6.13.1\",\n    \"react\": \"^19.0.0\",\n    \"react-bootstrap\": \"^2.10.9\",\n    \"react-dom\": \"^19.0.0\",\n    \"react-router-dom\": \"^7.2.0\",\n    \"react-scripts\": \"5.0.1\",\n    \"recharts\": \"^2.15.1\",\n    \"web-vitals\": \"^2.1.4\"\n  },\n  \"scripts\": {\n    \"start\": \"react-scripts start\",\n    \"build\": \"react-scripts build\",\n    \"test\": \"react-scripts test\",\n    \"eject\": \"react-scripts eject\"\n  },\n  \"eslintConfig\": {\n    \"extends\": [\n      \"react-app\",\n      \"react-app/jest\"\n    ]\n  },\n  \"browserslist\": {\n    \"production\": [\n      \">0.2%\",\n      \"not dead\",\n      \"not op_mini all\"\n    ],\n    \"development\": [\n      \"last 1 chrome version\",\n      \"last 1 firefox version\",\n      \"last 1 safari version\"\n    ]\n  },\n  \"devDependencies\": {\n    \"@babel/preset-react\": \"^7.26.3\",\n    \"babel-loader\": \"^9.2.1\"\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/package.json b/project_pi/package.json
+--- a/project_pi/package.json	(revision 3f97fe207108c1b23d5e11e147d395ac2883e17f)
++++ b/project_pi/package.json	(date 1740294720586)
+@@ -15,6 +15,7 @@
+     "fastapi": "^0.0.8",
+     "googleapis": "^144.0.0",
+     "mongodb": "^6.13.1",
++    "pip": "^0.0.1",
+     "react": "^19.0.0",
+     "react-bootstrap": "^2.10.9",
+     "react-dom": "^19.0.0",
+Index: project_pi/package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/package-lock.json b/project_pi/package-lock.json
+--- a/project_pi/package-lock.json	(revision 3f97fe207108c1b23d5e11e147d395ac2883e17f)
++++ b/project_pi/package-lock.json	(date 1740294720763)
+@@ -20,6 +20,7 @@
+         "fastapi": "^0.0.8",
+         "googleapis": "^144.0.0",
+         "mongodb": "^6.13.1",
++        "pip": "^0.0.1",
+         "react": "^19.0.0",
+         "react-bootstrap": "^2.10.9",
+         "react-dom": "^19.0.0",
+@@ -3378,6 +3379,15 @@
+         }
+       }
+     },
++    "node_modules/@popperjs/core": {
++      "version": "2.11.8",
++      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
++      "integrity": "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==",
++      "funding": {
++        "type": "opencollective",
++        "url": "https://opencollective.com/popperjs"
++      }
++    },
+     "node_modules/@rc-component/async-validator": {
+       "version": "5.0.4",
+       "resolved": "https://registry.npmjs.org/@rc-component/async-validator/-/async-validator-5.0.4.tgz",
+@@ -3518,6 +3528,70 @@
+         "react-dom": ">=16.9.0"
+       }
+     },
++    "node_modules/@react-aria/ssr": {
++      "version": "3.9.7",
++      "resolved": "https://registry.npmjs.org/@react-aria/ssr/-/ssr-3.9.7.tgz",
++      "integrity": "sha512-GQygZaGlmYjmYM+tiNBA5C6acmiDWF52Nqd40bBp0Znk4M4hP+LTmI0lpI1BuKMw45T8RIhrAsICIfKwZvi2Gg==",
++      "dependencies": {
++        "@swc/helpers": "^0.5.0"
++      },
++      "engines": {
++        "node": ">= 12"
++      },
++      "peerDependencies": {
++        "react": "^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1"
++      }
++    },
++    "node_modules/@restart/hooks": {
++      "version": "0.4.16",
++      "resolved": "https://registry.npmjs.org/@restart/hooks/-/hooks-0.4.16.tgz",
++      "integrity": "sha512-f7aCv7c+nU/3mF7NWLtVVr0Ra80RqsO89hO72r+Y/nvQr5+q0UFGkocElTH6MJApvReVh6JHUFYn2cw1WdHF3w==",
++      "dependencies": {
++        "dequal": "^2.0.3"
++      },
++      "peerDependencies": {
++        "react": ">=16.8.0"
++      }
++    },
++    "node_modules/@restart/ui": {
++      "version": "1.9.4",
++      "resolved": "https://registry.npmjs.org/@restart/ui/-/ui-1.9.4.tgz",
++      "integrity": "sha512-N4C7haUc3vn4LTwVUPlkJN8Ach/+yIMvRuTVIhjilNHqegY60SGLrzud6errOMNJwSnmYFnt1J0H/k8FE3A4KA==",
++      "dependencies": {
++        "@babel/runtime": "^7.26.0",
++        "@popperjs/core": "^2.11.8",
++        "@react-aria/ssr": "^3.5.0",
++        "@restart/hooks": "^0.5.0",
++        "@types/warning": "^3.0.3",
++        "dequal": "^2.0.3",
++        "dom-helpers": "^5.2.0",
++        "uncontrollable": "^8.0.4",
++        "warning": "^4.0.3"
++      },
++      "peerDependencies": {
++        "react": ">=16.14.0",
++        "react-dom": ">=16.14.0"
++      }
++    },
++    "node_modules/@restart/ui/node_modules/@restart/hooks": {
++      "version": "0.5.1",
++      "resolved": "https://registry.npmjs.org/@restart/hooks/-/hooks-0.5.1.tgz",
++      "integrity": "sha512-EMoH04NHS1pbn07iLTjIjgttuqb7qu4+/EyhAx27MHpoENcB2ZdSsLTNxmKD+WEPnZigo62Qc8zjGnNxoSE/5Q==",
++      "dependencies": {
++        "dequal": "^2.0.3"
++      },
++      "peerDependencies": {
++        "react": ">=16.8.0"
++      }
++    },
++    "node_modules/@restart/ui/node_modules/uncontrollable": {
++      "version": "8.0.4",
++      "resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-8.0.4.tgz",
++      "integrity": "sha512-ulRWYWHvscPFc0QQXvyJjY6LIXU56f0h8pQFvhxiKk5V1fcI8gp9Ht9leVAhrVjzqMw0BgjspBINx9r6oyJUvQ==",
++      "peerDependencies": {
++        "react": ">=16.14.0"
++      }
++    },
+     "node_modules/@rollup/plugin-babel": {
+       "version": "5.3.1",
+       "resolved": "https://registry.npmjs.org/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz",
+@@ -3866,6 +3940,14 @@
+         "url": "https://github.com/sponsors/gregberge"
+       }
+     },
++    "node_modules/@swc/helpers": {
++      "version": "0.5.15",
++      "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.15.tgz",
++      "integrity": "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==",
++      "dependencies": {
++        "tslib": "^2.8.0"
++      }
++    },
+     "node_modules/@testing-library/dom": {
+       "version": "10.4.0",
+       "resolved": "https://registry.npmjs.org/@testing-library/dom/-/dom-10.4.0.tgz",
+@@ -4302,6 +4384,11 @@
+       "integrity": "sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==",
+       "license": "MIT"
+     },
++    "node_modules/@types/prop-types": {
++      "version": "15.7.14",
++      "resolved": "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.14.tgz",
++      "integrity": "sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ=="
++    },
+     "node_modules/@types/q": {
+       "version": "1.5.8",
+       "resolved": "https://registry.npmjs.org/@types/q/-/q-1.5.8.tgz",
+@@ -4328,6 +4415,14 @@
+         "csstype": "^3.0.2"
+       }
+     },
++    "node_modules/@types/react-transition-group": {
++      "version": "4.4.12",
++      "resolved": "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.12.tgz",
++      "integrity": "sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==",
++      "peerDependencies": {
++        "@types/react": "*"
++      }
++    },
+     "node_modules/@types/resolve": {
+       "version": "1.17.1",
+       "resolved": "https://registry.npmjs.org/@types/resolve/-/resolve-1.17.1.tgz",
+@@ -4400,6 +4495,24 @@
+       "integrity": "sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==",
+       "license": "MIT"
+     },
++    "node_modules/@types/warning": {
++      "version": "3.0.3",
++      "resolved": "https://registry.npmjs.org/@types/warning/-/warning-3.0.3.tgz",
++      "integrity": "sha512-D1XC7WK8K+zZEveUPY+cf4+kgauk8N4eHr/XIHXGlGYkHLud6hK9lYfZk1ry1TNh798cZUCgb6MqGEG8DkJt6Q=="
++    },
++    "node_modules/@types/webidl-conversions": {
++      "version": "7.0.3",
++      "resolved": "https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-7.0.3.tgz",
++      "integrity": "sha512-CiJJvcRtIgzadHCYXw7dqEnMNRjhGZlYK05Mj9OyktqV8uVT8fD2BFOB7S1uwBE3Kj2Z+4UyPmFw/Ixgw/LAlA=="
++    },
++    "node_modules/@types/whatwg-url": {
++      "version": "11.0.5",
++      "resolved": "https://registry.npmjs.org/@types/whatwg-url/-/whatwg-url-11.0.5.tgz",
++      "integrity": "sha512-coYR071JRaHa+xoEvvYqvnIHaVqaYrLPbsufM9BF63HkwI5Lgmy2QR8Q5K/lYDYo5AK82wOvSOS0UsLTpTG7uQ==",
++      "dependencies": {
++        "@types/webidl-conversions": "*"
++      }
++    },
+     "node_modules/@types/ws": {
+       "version": "8.5.14",
+       "resolved": "https://registry.npmjs.org/@types/ws/-/ws-8.5.14.tgz",
+@@ -5886,6 +5999,24 @@
+       "integrity": "sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==",
+       "license": "ISC"
+     },
++    "node_modules/bootstrap": {
++      "version": "5.3.3",
++      "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.3.tgz",
++      "integrity": "sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==",
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/twbs"
++        },
++        {
++          "type": "opencollective",
++          "url": "https://opencollective.com/bootstrap"
++        }
++      ],
++      "peerDependencies": {
++        "@popperjs/core": "^2.11.8"
++      }
++    },
+     "node_modules/brace-expansion": {
+       "version": "1.1.11",
+       "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz",
+@@ -9326,6 +9457,14 @@
+         "url": "https://github.com/sponsors/rawify"
+       }
+     },
++    "node_modules/freckle": {
++      "version": "0.0.2",
++      "resolved": "https://registry.npmjs.org/freckle/-/freckle-0.0.2.tgz",
++      "integrity": "sha512-+x+LoiQ4IDln6qgVyXEHAvu2uD/mRqdezrbx8tpwGwvEWH2gCho4eoe3uKzV4PAzBUjtViSbYLkilMRFy69B5g==",
++      "engines": {
++        "node": "*"
++      }
++    },
+     "node_modules/fresh": {
+       "version": "0.5.2",
+       "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz",
+@@ -10397,6 +10536,14 @@
+         "node": ">=12"
+       }
+     },
++    "node_modules/invariant": {
++      "version": "2.2.4",
++      "resolved": "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz",
++      "integrity": "sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==",
++      "dependencies": {
++        "loose-envify": "^1.0.0"
++      }
++    },
+     "node_modules/ipaddr.js": {
+       "version": "2.2.0",
+       "resolved": "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-2.2.0.tgz",
+@@ -12639,6 +12786,130 @@
+         "mkdirp": "bin/cmd.js"
+       }
+     },
++    "node_modules/mongodb": {
++      "version": "6.13.1",
++      "resolved": "https://registry.npmjs.org/mongodb/-/mongodb-6.13.1.tgz",
++      "integrity": "sha512-gdq40tX8StmhP6akMp1pPoEVv+9jTYFSrga/g23JxajPAQhH39ysZrHGzQCSd9PEOnuEQEdjIWqxO7ZSwC0w7Q==",
++      "dependencies": {
++        "@mongodb-js/saslprep": "^1.1.9",
++        "bson": "^6.10.3",
++        "mongodb-connection-string-url": "^3.0.0"
++      },
++      "engines": {
++        "node": ">=16.20.1"
++      },
++      "peerDependencies": {
++        "@aws-sdk/credential-providers": "^3.632.0",
++        "@mongodb-js/zstd": "^1.1.0 || ^2.0.0",
++        "gcp-metadata": "^5.2.0",
++        "kerberos": "^2.0.1",
++        "mongodb-client-encryption": ">=6.0.0 <7",
++        "snappy": "^7.2.2",
++        "socks": "^2.7.1"
++      },
++      "peerDependenciesMeta": {
++        "@aws-sdk/credential-providers": {
++          "optional": true
++        },
++        "@mongodb-js/zstd": {
++          "optional": true
++        },
++        "gcp-metadata": {
++          "optional": true
++        },
++        "kerberos": {
++          "optional": true
++        },
++        "mongodb-client-encryption": {
++          "optional": true
++        },
++        "snappy": {
++          "optional": true
++        },
++        "socks": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/mongodb-connection-string-url": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npmjs.org/mongodb-connection-string-url/-/mongodb-connection-string-url-3.0.2.tgz",
++      "integrity": "sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==",
++      "dependencies": {
++        "@types/whatwg-url": "^11.0.2",
++        "whatwg-url": "^14.1.0 || ^13.0.0"
++      }
++    },
++    "node_modules/mongodb-connection-string-url/node_modules/tr46": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npmjs.org/tr46/-/tr46-5.0.0.tgz",
++      "integrity": "sha512-tk2G5R2KRwBd+ZN0zaEXpmzdKyOYksXwywulIX95MBODjSzMIuQnQ3m8JxgbhnL1LeVo7lqQKsYa1O3Htl7K5g==",
++      "dependencies": {
++        "punycode": "^2.3.1"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
++    "node_modules/mongodb-connection-string-url/node_modules/webidl-conversions": {
++      "version": "7.0.0",
++      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-7.0.0.tgz",
++      "integrity": "sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==",
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/mongodb-connection-string-url/node_modules/whatwg-url": {
++      "version": "14.1.1",
++      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-14.1.1.tgz",
++      "integrity": "sha512-mDGf9diDad/giZ/Sm9Xi2YcyzaFpbdLpJPr+E9fSkyQ7KpQD4SdFcugkRQYzhmfI4KeV4Qpnn2sKPdo+kmsgRQ==",
++      "dependencies": {
++        "tr46": "^5.0.0",
++        "webidl-conversions": "^7.0.0"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
++    "node_modules/morgan": {
++      "version": "1.10.0",
++      "resolved": "https://registry.npmjs.org/morgan/-/morgan-1.10.0.tgz",
++      "integrity": "sha512-AbegBVI4sh6El+1gNwvD5YIck7nSA36weD7xvIxG4in80j/UoK8AEGaWnnz8v1GxonMCltmlNs5ZKbGvl9b1XQ==",
++      "dependencies": {
++        "basic-auth": "~2.0.1",
++        "debug": "2.6.9",
++        "depd": "~2.0.0",
++        "on-finished": "~2.3.0",
++        "on-headers": "~1.0.2"
++      },
++      "engines": {
++        "node": ">= 0.8.0"
++      }
++    },
++    "node_modules/morgan/node_modules/debug": {
++      "version": "2.6.9",
++      "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
++      "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
++      "dependencies": {
++        "ms": "2.0.0"
++      }
++    },
++    "node_modules/morgan/node_modules/ms": {
++      "version": "2.0.0",
++      "resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz",
++      "integrity": "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="
++    },
++    "node_modules/morgan/node_modules/on-finished": {
++      "version": "2.3.0",
++      "resolved": "https://registry.npmjs.org/on-finished/-/on-finished-2.3.0.tgz",
++      "integrity": "sha512-ikqdkGAAyf/X/gPhXGvfgAytDZtDbr+bkNUJ0N9h5MI/dmdgCs3l6hoHrcUv41sRKew3jIwrp4qQDXiK99Utww==",
++      "dependencies": {
++        "ee-first": "1.1.1"
++      },
++      "engines": {
++        "node": ">= 0.8"
++      }
++    },
+     "node_modules/ms": {
+       "version": "2.1.3",
+       "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+@@ -13055,6 +13326,20 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/optimist": {
++      "version": "0.6.1",
++      "resolved": "https://registry.npmjs.org/optimist/-/optimist-0.6.1.tgz",
++      "integrity": "sha512-snN4O4TkigujZphWLN0E//nQmm7790RYaE53DdL7ZYwee2D8DDo9/EyYiKUfN3rneWUjhJnueija3G9I2i0h3g==",
++      "dependencies": {
++        "minimist": "~0.0.1",
++        "wordwrap": "~0.0.2"
++      }
++    },
++    "node_modules/optimist/node_modules/minimist": {
++      "version": "0.0.10",
++      "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz",
++      "integrity": "sha512-iotkTvxc+TwOm5Ieim8VnSNvCDjCK9S8G3scJ50ZthspSxa7jx50jkhYduuAtAjvfDUwSgOwf8+If99AlOEhyw=="
++    },
+     "node_modules/optionator": {
+       "version": "0.9.4",
+       "resolved": "https://registry.npmjs.org/optionator/-/optionator-0.9.4.tgz",
+@@ -13312,6 +13597,21 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/pip": {
++      "version": "0.0.1",
++      "resolved": "https://registry.npmjs.org/pip/-/pip-0.0.1.tgz",
++      "integrity": "sha512-DMoVWIlQTKcVZAnTZXt4QXPkuA9EFDUhksMOI8OLXIBq3i+W+lFCE+kr5pGDb0vy0f+WZvq0M0Pg7a8K+vNxPA==",
++      "dependencies": {
++        "freckle": ">= 0.0.1",
++        "optimist": ">= 0.1.5"
++      },
++      "bin": {
++        "pip": "lib/cli.js"
++      },
++      "engines": {
++        "node": "*"
++      }
++    },
+     "node_modules/pirates": {
+       "version": "4.0.6",
+       "resolved": "https://registry.npmjs.org/pirates/-/pirates-4.0.6.tgz",
+@@ -14805,6 +15105,23 @@
+         "react-is": "^16.13.1"
+       }
+     },
++    "node_modules/prop-types-extra": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/prop-types-extra/-/prop-types-extra-1.1.1.tgz",
++      "integrity": "sha512-59+AHNnHYCdiC+vMwY52WmvP5dM3QLeoumYuEyceQDi9aEhtwN9zIQ2ZNo25sMyXnbh32h+P1ezDsUpUH3JAew==",
++      "dependencies": {
++        "react-is": "^16.3.2",
++        "warning": "^4.0.0"
++      },
++      "peerDependencies": {
++        "react": ">=0.14.0"
++      }
++    },
++    "node_modules/prop-types-extra/node_modules/react-is": {
++      "version": "16.13.1",
++      "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
++      "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
++    },
+     "node_modules/prop-types/node_modules/react-is": {
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+@@ -15574,6 +15891,36 @@
+       "integrity": "sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==",
+       "license": "MIT"
+     },
++    "node_modules/react-bootstrap": {
++      "version": "2.10.9",
++      "resolved": "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-2.10.9.tgz",
++      "integrity": "sha512-TJUCuHcxdgYpOqeWmRApM/Dy0+hVsxNRFvq2aRFQuxhNi/+ivOxC5OdWIeHS3agxvzJ4Ev4nDw2ZdBl9ymd/JQ==",
++      "dependencies": {
++        "@babel/runtime": "^7.24.7",
++        "@restart/hooks": "^0.4.9",
++        "@restart/ui": "^1.9.4",
++        "@types/prop-types": "^15.7.12",
++        "@types/react-transition-group": "^4.4.6",
++        "classnames": "^2.3.2",
++        "dom-helpers": "^5.2.1",
++        "invariant": "^2.2.4",
++        "prop-types": "^15.8.1",
++        "prop-types-extra": "^1.1.0",
++        "react-transition-group": "^4.4.5",
++        "uncontrollable": "^7.2.1",
++        "warning": "^4.0.3"
++      },
++      "peerDependencies": {
++        "@types/react": ">=16.14.8",
++        "react": ">=16.14.0",
++        "react-dom": ">=16.14.0"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/react-dev-utils": {
+       "version": "12.0.1",
+       "resolved": "https://registry.npmjs.org/react-dev-utils/-/react-dev-utils-12.0.1.tgz",
+@@ -15703,6 +16050,11 @@
+       "integrity": "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==",
+       "license": "MIT"
+     },
++    "node_modules/react-lifecycles-compat": {
++      "version": "3.0.4",
++      "resolved": "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz",
++      "integrity": "sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA=="
++    },
+     "node_modules/react-refresh": {
+       "version": "0.11.0",
+       "resolved": "https://registry.npmjs.org/react-refresh/-/react-refresh-0.11.0.tgz",
+@@ -18389,6 +18741,20 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/uncontrollable": {
++      "version": "7.2.1",
++      "resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-7.2.1.tgz",
++      "integrity": "sha512-svtcfoTADIB0nT9nltgjujTi7BzVmwjZClOmskKu/E8FW9BXzg9os8OLr4f8Dlnk0rYWJIWr4wv9eKUXiQvQwQ==",
++      "dependencies": {
++        "@babel/runtime": "^7.6.3",
++        "@types/react": ">=16.9.11",
++        "invariant": "^2.2.4",
++        "react-lifecycles-compat": "^3.0.4"
++      },
++      "peerDependencies": {
++        "react": ">=15.0.0"
++      }
++    },
+     "node_modules/underscore": {
+       "version": "1.12.1",
+       "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.12.1.tgz",
+@@ -18667,6 +19033,14 @@
+         "makeerror": "1.0.12"
+       }
+     },
++    "node_modules/warning": {
++      "version": "4.0.3",
++      "resolved": "https://registry.npmjs.org/warning/-/warning-4.0.3.tgz",
++      "integrity": "sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==",
++      "dependencies": {
++        "loose-envify": "^1.0.0"
++      }
++    },
+     "node_modules/watchpack": {
+       "version": "2.4.2",
+       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.2.tgz",
+@@ -19100,6 +19474,14 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/wordwrap": {
++      "version": "0.0.3",
++      "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.3.tgz",
++      "integrity": "sha512-1tMA907+V4QmxV7dbRvb4/8MaRALK6q9Abid3ndMYnbyo8piisCmeONVqVSXqQA3KaP4SLt5b7ud6E2sqP8TFw==",
++      "engines": {
++        "node": ">=0.4.0"
++      }
++    },
+     "node_modules/workbox-background-sync": {
+       "version": "6.6.0",
+       "resolved": "https://registry.npmjs.org/workbox-background-sync/-/workbox-background-sync-6.6.0.tgz",
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"d319764d-5ab1-434d-bd61-81fcc4c5a1c5\" name=\"Changes\" comment=\"&quot;stylized part of the webpage, will continue tommorow&quot;\" />\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"JavaScript File\" />\n        <option value=\"CSS File\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 7\n}</component>\n  <component name=\"ProjectId\" id=\"2tNcUGOLUS0ybfQHEIiK86Kn82A\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;Sally&quot;,\n    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\n  }\n}</component>\n  <component name=\"RecentsManager\">\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/project_pi/src/pages\" />\n    </key>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"d319764d-5ab1-434d-bd61-81fcc4c5a1c5\" name=\"Changes\" comment=\"\" />\n      <created>1740195988642</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1740195988642</updated>\n      <workItem from=\"1740195998913\" duration=\"1711000\" />\n      <workItem from=\"1740208751802\" duration=\"18071000\" />\n      <workItem from=\"1740256952529\" duration=\"2163000\" />\n      <workItem from=\"1740265827546\" duration=\"2350000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"&quot;skeleton of frontend&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740217934446</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740217934446</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"&quot;skeleton of frontend without calendar&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740238514818</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740238514819</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"&quot;skeleton of frontend without calendar&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740238566549</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740238566549</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"&quot;skeleton of frontend without calendar&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740277637710</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740277637710</updated>\n    </task>\n    <task id=\"LOCAL-00005\" summary=\"&quot;upload resume fixed&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740277678623</created>\n      <option name=\"number\" value=\"00005\" />\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740277678623</updated>\n    </task>\n    <task id=\"LOCAL-00006\" summary=\"&quot;upload resume stored in local storage and displayed&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740278884314</created>\n      <option name=\"number\" value=\"00006\" />\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740278884314</updated>\n    </task>\n    <task id=\"LOCAL-00007\" summary=\"&quot;stylized part of the webpage, will continue tommorow&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740292904632</created>\n      <option name=\"number\" value=\"00007\" />\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740292904632</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"8\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"&quot;skeleton of frontend&quot;\" />\n    <MESSAGE value=\"fixed selecting resume bug\" />\n    <MESSAGE value=\"&quot;fixed the resume upload bug and uploaded the right version of user.js&quot;\" />\n    <MESSAGE value=\"&quot;skeleton of frontend without calendar&quot;\" />\n    <MESSAGE value=\"&quot;upload resume fixed&quot;\" />\n    <MESSAGE value=\"&quot;upload resume stored in local storage and displayed&quot;\" />\n    <MESSAGE value=\"&quot;stylized part of the webpage, will continue tommorow&quot;\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"&quot;stylized part of the webpage, will continue tommorow&quot;\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 3f97fe207108c1b23d5e11e147d395ac2883e17f)
++++ b/.idea/workspace.xml	(date 1740294436980)
+@@ -4,7 +4,12 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;stylized part of the webpage, will continue tommorow&quot;" />
++    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;stylized part of the webpage, will continue tommorow&quot;">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/project_pi/src/components/upload_res.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/components/upload_res.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/project_pi/src/pages/plan.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/plan.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/project_pi/src/pages/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/user.js" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -37,22 +42,22 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;Sally&quot;,
+-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "WebServerToolWindowFactoryState": "false",
++    "git-widget-placeholder": "joy",
++    "list.type.of.created.stylesheet": "CSS",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "settings.editor.selected.configurable": "preferences.keymap",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
+       <recent name="$PROJECT_DIR$/project_pi/src/pages" />
