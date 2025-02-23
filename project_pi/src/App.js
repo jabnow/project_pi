@@ -2,6 +2,7 @@ import logo from './components/logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar.js';
+//import NavbarUpgrade from "./components/navbarUpgrade";
 import {PlanContextProvider} from "./components/planContextProvider";
 //import pages as components
 import Home from "./pages/home.js"
@@ -15,9 +16,9 @@ function App() {
       <Router>
           <PlanContextProvider>
               <div>
-                  <Navbar/>
+                  <Navbar />
                   <Routes>
-                      <Route path = "/Home" element={<Home />} />
+                      <Route path = "/" element={<Home />} />
                       <Route path = "/Learn" element={<Learn />} />
                       <Route path = "/Plan" element={<Plan />} />
                       <Route path = "/User" element={<User />} />
