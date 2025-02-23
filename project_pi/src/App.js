@@ -17,8 +17,8 @@ function App() {
   return (
       <Router>
           <PlanContextProvider>
-              <div style={{backgroundColor: "#F7F7F7",
-                  height: "780px",
+              <div style={{backgroundColor: "#D9EAFD",
+                  height: "900px",
               fontFamily: "Sans-Serif"}}>
                   <Navbar />
                   <Routes>
