@@ -11,6 +11,7 @@ const ResumeUploader = forwardRef((props, ref) => {
                 name: file.name,
                 type: file.type,
                 data: URL.createObjectURL(file), 
+                data: URL.createObjectURL(file),
             }));
         } else {
             setSelectedFile(null);

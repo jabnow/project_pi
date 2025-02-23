@@ -77,56 +77,59 @@ const AntdDatePicker = () => {
     const { planData } = usePlanData();
 
     return (
-        <div style={{ display: 'flex', padding: '10px', gap: '20px' }}>
-            <div style={{ flex: 1, padding: '10px' }}>
-                <h2>Select a Date</h2>
-                <Card style={{ maxWidth: '350px', width: '100%'}}>
-                    <Calendar
-                        fullscreen={false}
-                        onSelect={handleDateChange} />
-                    <p>Selected Date: {selectedDate ? selectedDate.format('YYYY-MM-DD') : 'None'}</p>
-                </Card>
-            </div>
-            <div style={{flex:2}}>
-                {selectedDate && (
-                    <div style={{ flex: 1 }}>
-                        <div style={{display: "flex", alignItems: 'center',justifyContent: 'space-between'}}>
-                            <h2>Tasks for {selectedDate.format('YYYY-MM-DD')}</h2>
-                            <Button
-                                onClick={()=>setIsModalVisible(true)}>
-                                add task
-                            </Button>
+        <div >
+            <div style={{ display: 'flex', padding: '10px', gap: '20px', height:'100%',
+            marginLeft: "154px", marginRight: "154px",fontFamily:"Sans-Serif"}}>
+                <div style={{ flex: 1, padding: '10px' }}>
+                    <Card style={{ maxWidth: '350px', width: '100%', fontSize:"20px"}}>
+
+                        <Calendar
+                            fullscreen={false}
+                            onSelect={handleDateChange} />
+                    </Card>
+                </div>
+                <div style={{flex:2}}>
+                    {selectedDate && (
+                        <div style={{ flex: 1 }}>
+                            <div style={{display: "flex", alignItems: 'center',justifyContent: 'space-between'}}>
+                                <h2 style={{fontFamily:"Sans-Serif"}}>Tasks for {selectedDate.format('YYYY-MM-DD')}</h2>
+                                <Button
+                                    onClick={()=>setIsModalVisible(true)}>
+                                    add task
+                                </Button>
+                            </div>
+                            <Table dataSource={tableData} columns={columns} rowKey="id" />
                         </div>
-                        <Table dataSource={tableData} columns={columns} rowKey="id" />
-                    </div>
-                )}
+                    )}
+
+                </div>
+                <Modal
+                    title="add task"
+                    open={isModalVisible}
+                    onOk={handleAddTask}
+                    onCancel={() =>{
+                        setIsModalVisible(false)
+                        setTaskContent('')
+                        setTaskDescription('')
+                    }}
+                >
+                    <Input
+                        placeholder = "content"
+                        value = {taskContent}
+                        onChange={(e) => setTaskContent(e.target.value)}
+                    >
+                    </Input>
+                    <Input
+                        placeholder = "description"
+                        value = {taskDescription}
+                        onChange={(e) => setTaskDescription(e.target.value)}
+                    >
+                    </Input>
+                </Modal>
 
             </div>
-            <Modal
-                title="add task"
-                open={isModalVisible}
-                onOk={handleAddTask}
-                onCancel={() =>{
-                    setIsModalVisible(false)
-                    setTaskContent('')
-                    setTaskDescription('')
-                }}
-            >
-                <Input
-                    placeholder = "content"
-                    value = {taskContent}
-                    onChange={(e) => setTaskContent(e.target.value)}
-                    >
-                </Input>
-                <Input
-                    placeholder = "description"
-                    value = {taskDescription}
-                    onChange={(e) => setTaskDescription(e.target.value)}
-                    >
-                </Input>
-            </Modal>
-
         </div>
+
     );
 };
 
