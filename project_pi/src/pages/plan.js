@@ -1,12 +1,9 @@
 import Charts from "../components/charts";
-// import ResumeUploader from './ResumeUploader';
-
+import ResumeDisplay from "../components/resumeDisplay";
 function Plan(){
     return(
         <div>
-            <Charts/>
-          {/* Other components */}
-          {/* <ResumeUploader /> */}
+            <ResumeDisplay />
         </div>
     )
 }

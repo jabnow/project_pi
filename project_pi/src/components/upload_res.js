@@ -7,8 +7,14 @@ const ResumeUploader = forwardRef((props, ref) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
+            localStorage.setItem('uploadedResume', JSON.stringify({
+                name: file.name,
+                type: file.type,
+                data: URL.createObjectURL(file), // Create a URL for the file
+            }));
         } else {
             setSelectedFile(null);
+            localStorage.removeItem('uploadedResume');
         }
     };
 
