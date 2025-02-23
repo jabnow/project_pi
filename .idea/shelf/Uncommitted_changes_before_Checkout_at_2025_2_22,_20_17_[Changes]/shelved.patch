@@ -1,0 +1,2569 @@
+Index: project_pi/src/components/calendar.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState } from 'react';\nimport { Modal, Button, Card, Calendar, Input, Table} from 'antd';\n\nconst AntdDatePicker = () => {\n    const [selectedDate, setSelectedDate] = useState(null);\n    const [isModalVisible, setIsModalVisible] = useState(false);\n    const [task, setTask] = useState({\n        '2025-02-22': [\n            {id: 1, content: \"hackathon morning\", description:\"go over the API and homepage\"},\n            {id: 2, content: \"hackathon night\", description: \"integrate the AI with the rest of webapp\"}\n        ]\n        }\n    )\n    const selectedDateTasks = selectedDate ? task[selectedDate.format('YYYY-MM-DD')] || [] : [];\n    const [taskContent, setTaskContent ]= useState('');\n    const [taskDescription, setTaskDescription]= useState('');\n\n    const handleDateChange = (date) => {\n        setSelectedDate(date);\n    };\n\n    const handleAddTask = () =>{\n        const DateFormatted = selectedDate.format('YYYY-MM-DD');\n        const newTaskList = {...task}\n        const newTask = {id: DateFormatted, content: taskContent, description: taskDescription}\n        newTaskList[DateFormatted] = [...(task[DateFormatted] || []), newTask]\n        setTask(newTaskList)\n        setIsModalVisible(false);\n        setTaskContent('');\n        setTaskDescription('');\n\n    }\n\n    const handleDeleteTask = (taskId) => {\n        const updatedTasks = { ...task };\n        for (const date in updatedTasks) {\n        updatedTasks[date] = updatedTasks[date].filter((task) => task.id !== taskId);\n        }\n        setTask(updatedTasks);\n  };\n\n    const columns = [\n        {\n            title: \"date\",\n            dataIndex: \"date\",\n            key: \"date\",\n        },\n        {\n            title: \"content\",\n            dataIndex: \"content\",\n            key: \"content\",\n        },\n        {\n            title: \"description\",\n            dataIndex: \"description\",\n            key: \"description\",\n        },\n        {\n            title: \"action\",\n            dataIndex: \"action\",\n            key: \"action\",\n            render: (_, selected) =>\n                <Button\n                onClick={()=>(handleDeleteTask(selected.id))}>\n                    delete\n                </Button>\n        }\n    ]\n\n    const tableData = selectedDateTasks.map((task) => ({\n        ...task,\n        date: selectedDate.format('YYYY-MM-DD'),\n    }));\n\n    return (\n        <div style={{ display: 'flex', padding: '10px', gap: '20px' }}>\n            <div style={{ flex: 1, padding: '10px' }}>\n                <h2>Select a Date</h2>\n                <Card style={{ maxWidth: '350px', width: '100%'}}>\n                    <Calendar\n                        fullscreen={false}\n                        onSelect={handleDateChange} />\n                    <p>Selected Date: {selectedDate ? selectedDate.format('YYYY-MM-DD') : 'None'}</p>\n                </Card>\n            </div>\n            <div style={{flex:2}}>\n                {selectedDate && (\n                    <div style={{ flex: 1 }}>\n                        <div style={{display: \"flex\", alignItems: 'center',justifyContent: 'space-between'}}>\n                            <h2>Tasks for {selectedDate.format('YYYY-MM-DD')}</h2>\n                            <Button\n                                onClick={()=>setIsModalVisible(true)}>\n                                add task\n                            </Button>\n                        </div>\n                        <Table dataSource={tableData} columns={columns} rowKey=\"id\" />\n                    </div>\n                )}\n            </div>\n            <Modal\n                title=\"add task\"\n                open={isModalVisible}\n                onOk={handleAddTask}\n                onCancel={() =>{\n                    setIsModalVisible(false)\n                    setTaskContent('')\n                    setTaskDescription('')\n                }}\n            >\n                <Input\n                    placeholder = \"content\"\n                    value = {taskContent}\n                    onChange={(e) => setTaskContent(e.target.value)}\n                    >\n                </Input>\n                <Input\n                    placeholder = \"description\"\n                    value = {taskDescription}\n                    onChange={(e) => setTaskDescription(e.target.value)}\n                    >\n                </Input>\n            </Modal>\n\n        </div>\n    );\n};\n\nexport default AntdDatePicker;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/components/calendar.js b/project_pi/src/components/calendar.js
+--- a/project_pi/src/components/calendar.js	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/src/components/calendar.js	(date 1740271620768)
+@@ -1,4 +1,5 @@
+ import React, { useState } from 'react';
++import {usePlanData} from "./planContextProvider";
+ import { Modal, Button, Card, Calendar, Input, Table} from 'antd';
+ 
+ const AntdDatePicker = () => {
+@@ -72,6 +73,9 @@
+         date: selectedDate.format('YYYY-MM-DD'),
+     }));
+ 
++    //for the context test
++    const { planData } = usePlanData();
++
+     return (
+         <div style={{ display: 'flex', padding: '10px', gap: '20px' }}>
+             <div style={{ flex: 1, padding: '10px' }}>
+@@ -96,6 +100,7 @@
+                         <Table dataSource={tableData} columns={columns} rowKey="id" />
+                     </div>
+                 )}
++
+             </div>
+             <Modal
+                 title="add task"
+Index: project_pi/src/pages/learn.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>function Learn(){\n    return(\n        <div>\n            Learn\n        </div>\n    )\n}\nexport default Learn;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/pages/learn.js b/project_pi/src/pages/learn.js
+--- a/project_pi/src/pages/learn.js	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/src/pages/learn.js	(date 1740271620769)
+@@ -1,7 +1,9 @@
++import Charts from "../components/charts";
++
+ function Learn(){
+     return(
+         <div>
+-            Learn
++            <Charts/>
+         </div>
+     )
+ }
+Index: project_pi/package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/package-lock.json b/project_pi/package-lock.json
+--- a/project_pi/package-lock.json	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/package-lock.json	(date 1740273449734)
+@@ -16,7 +16,6 @@
+         "@testing-library/user-event": "^13.5.0",
+         "antd": "^5.24.1",
+         "googleapis": "^144.0.0",
+-        "mongodb": "^6.13.1",
+         "react": "^19.0.0",
+         "react-dom": "^19.0.0",
+         "react-router-dom": "^7.2.0",
+@@ -3240,15 +3239,6 @@
+       "integrity": "sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==",
+       "license": "MIT"
+     },
+-    "node_modules/@mongodb-js/saslprep": {
+-      "version": "1.2.0",
+-      "resolved": "https://registry.npmjs.org/@mongodb-js/saslprep/-/saslprep-1.2.0.tgz",
+-      "integrity": "sha512-+ywrb0AqkfaYuhHs6LxKWgqbh3I72EpEgESCw37o+9qPx9WTCkgDm2B+eMrwehGtHBWHFU4GXvnSCNiFhhausg==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "sparse-bitfield": "^3.0.3"
+-      }
+-    },
+     "node_modules/@nicolo-ribaudo/eslint-scope-5-internals": {
+       "version": "5.1.1-v1",
+       "resolved": "https://registry.npmjs.org/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz",
+@@ -4397,21 +4387,6 @@
+       "integrity": "sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==",
+       "license": "MIT"
+     },
+-    "node_modules/@types/webidl-conversions": {
+-      "version": "7.0.3",
+-      "resolved": "https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-7.0.3.tgz",
+-      "integrity": "sha512-CiJJvcRtIgzadHCYXw7dqEnMNRjhGZlYK05Mj9OyktqV8uVT8fD2BFOB7S1uwBE3Kj2Z+4UyPmFw/Ixgw/LAlA==",
+-      "license": "MIT"
+-    },
+-    "node_modules/@types/whatwg-url": {
+-      "version": "11.0.5",
+-      "resolved": "https://registry.npmjs.org/@types/whatwg-url/-/whatwg-url-11.0.5.tgz",
+-      "integrity": "sha512-coYR071JRaHa+xoEvvYqvnIHaVqaYrLPbsufM9BF63HkwI5Lgmy2QR8Q5K/lYDYo5AK82wOvSOS0UsLTpTG7uQ==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "@types/webidl-conversions": "*"
+-      }
+-    },
+     "node_modules/@types/ws": {
+       "version": "8.5.14",
+       "resolved": "https://registry.npmjs.org/@types/ws/-/ws-8.5.14.tgz",
+@@ -5927,15 +5902,6 @@
+         "node-int64": "^0.4.0"
+       }
+     },
+-    "node_modules/bson": {
+-      "version": "6.10.3",
+-      "resolved": "https://registry.npmjs.org/bson/-/bson-6.10.3.tgz",
+-      "integrity": "sha512-MTxGsqgYTwfshYWTRdmZRC+M7FnG1b4y7RO7p2k3X24Wq0yv1m77Wsj0BzlPzd/IowgESfsruQCUToa7vbOpPQ==",
+-      "license": "Apache-2.0",
+-      "engines": {
+-        "node": ">=16.20.1"
+-      }
+-    },
+     "node_modules/buffer-equal-constant-time": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz",
+@@ -9412,35 +9378,16 @@
+       }
+     },
+     "node_modules/gcp-metadata": {
+-      "version": "5.3.0",
+-      "resolved": "https://registry.npmjs.org/gcp-metadata/-/gcp-metadata-5.3.0.tgz",
+-      "integrity": "sha512-FNTkdNEnBdlqF2oatizolQqNANMrcqJt6AAYt99B3y1aLLC8Hc5IOBb+ZnnzllodEEf6xMBp6wRcBbc16fa65w==",
+-      "license": "Apache-2.0",
+-      "optional": true,
+-      "peer": true,
++      "version": "6.1.1",
++      "resolved": "https://registry.npmjs.org/gcp-metadata/-/gcp-metadata-6.1.1.tgz",
++      "integrity": "sha512-a4tiq7E0/5fTjxPAaH4jpjkSv/uCaU2p5KC6HVGrvl0cDjA8iBZv4vv1gyzlmK0ZUKqwpOyQMKzZQe3lTit77A==",
+       "dependencies": {
+-        "gaxios": "^5.0.0",
++        "gaxios": "^6.1.1",
++        "google-logging-utils": "^0.0.2",
+         "json-bigint": "^1.0.0"
+       },
+       "engines": {
+-        "node": ">=12"
+-      }
+-    },
+-    "node_modules/gcp-metadata/node_modules/gaxios": {
+-      "version": "5.1.3",
+-      "resolved": "https://registry.npmjs.org/gaxios/-/gaxios-5.1.3.tgz",
+-      "integrity": "sha512-95hVgBRgEIRQQQHIbnxBXeHbW4TqFk4ZDJW7wmVtvYar72FdhRIo1UGOLS2eRAKCPEdPBWu+M7+A33D9CdX9rA==",
+-      "license": "Apache-2.0",
+-      "optional": true,
+-      "peer": true,
+-      "dependencies": {
+-        "extend": "^3.0.2",
+-        "https-proxy-agent": "^5.0.0",
+-        "is-stream": "^2.0.0",
+-        "node-fetch": "^2.6.9"
+-      },
+-      "engines": {
+-        "node": ">=12"
++        "node": ">=14"
+       }
+     },
+     "node_modules/gensync": {
+@@ -9680,25 +9627,10 @@
+         "node": ">=14"
+       }
+     },
+-    "node_modules/google-auth-library/node_modules/gcp-metadata": {
+-      "version": "6.1.1",
+-      "resolved": "https://registry.npmjs.org/gcp-metadata/-/gcp-metadata-6.1.1.tgz",
+-      "integrity": "sha512-a4tiq7E0/5fTjxPAaH4jpjkSv/uCaU2p5KC6HVGrvl0cDjA8iBZv4vv1gyzlmK0ZUKqwpOyQMKzZQe3lTit77A==",
+-      "license": "Apache-2.0",
+-      "dependencies": {
+-        "gaxios": "^6.1.1",
+-        "google-logging-utils": "^0.0.2",
+-        "json-bigint": "^1.0.0"
+-      },
+-      "engines": {
+-        "node": ">=14"
+-      }
+-    },
+     "node_modules/google-logging-utils": {
+       "version": "0.0.2",
+       "resolved": "https://registry.npmjs.org/google-logging-utils/-/google-logging-utils-0.0.2.tgz",
+       "integrity": "sha512-NEgUnEcBiP5HrPzufUkBzJOD/Sxsco3rLNo1F1TNf7ieU8ryUzBhqba8r756CjLX7rn3fHl6iLEwPYuqpoKgQQ==",
+-      "license": "Apache-2.0",
+       "engines": {
+         "node": ">=14"
+       }
+@@ -12419,12 +12351,6 @@
+         "node": ">= 4.0.0"
+       }
+     },
+-    "node_modules/memory-pager": {
+-      "version": "1.5.0",
+-      "resolved": "https://registry.npmjs.org/memory-pager/-/memory-pager-1.5.0.tgz",
+-      "integrity": "sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==",
+-      "license": "MIT"
+-    },
+     "node_modules/merge-descriptors": {
+       "version": "1.0.3",
+       "resolved": "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-1.0.3.tgz",
+@@ -12590,96 +12516,6 @@
+         "mkdirp": "bin/cmd.js"
+       }
+     },
+-    "node_modules/mongodb": {
+-      "version": "6.13.1",
+-      "resolved": "https://registry.npmjs.org/mongodb/-/mongodb-6.13.1.tgz",
+-      "integrity": "sha512-gdq40tX8StmhP6akMp1pPoEVv+9jTYFSrga/g23JxajPAQhH39ysZrHGzQCSd9PEOnuEQEdjIWqxO7ZSwC0w7Q==",
+-      "license": "Apache-2.0",
+-      "dependencies": {
+-        "@mongodb-js/saslprep": "^1.1.9",
+-        "bson": "^6.10.3",
+-        "mongodb-connection-string-url": "^3.0.0"
+-      },
+-      "engines": {
+-        "node": ">=16.20.1"
+-      },
+-      "peerDependencies": {
+-        "@aws-sdk/credential-providers": "^3.632.0",
+-        "@mongodb-js/zstd": "^1.1.0 || ^2.0.0",
+-        "gcp-metadata": "^5.2.0",
+-        "kerberos": "^2.0.1",
+-        "mongodb-client-encryption": ">=6.0.0 <7",
+-        "snappy": "^7.2.2",
+-        "socks": "^2.7.1"
+-      },
+-      "peerDependenciesMeta": {
+-        "@aws-sdk/credential-providers": {
+-          "optional": true
+-        },
+-        "@mongodb-js/zstd": {
+-          "optional": true
+-        },
+-        "gcp-metadata": {
+-          "optional": true
+-        },
+-        "kerberos": {
+-          "optional": true
+-        },
+-        "mongodb-client-encryption": {
+-          "optional": true
+-        },
+-        "snappy": {
+-          "optional": true
+-        },
+-        "socks": {
+-          "optional": true
+-        }
+-      }
+-    },
+-    "node_modules/mongodb-connection-string-url": {
+-      "version": "3.0.2",
+-      "resolved": "https://registry.npmjs.org/mongodb-connection-string-url/-/mongodb-connection-string-url-3.0.2.tgz",
+-      "integrity": "sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==",
+-      "license": "Apache-2.0",
+-      "dependencies": {
+-        "@types/whatwg-url": "^11.0.2",
+-        "whatwg-url": "^14.1.0 || ^13.0.0"
+-      }
+-    },
+-    "node_modules/mongodb-connection-string-url/node_modules/tr46": {
+-      "version": "5.0.0",
+-      "resolved": "https://registry.npmjs.org/tr46/-/tr46-5.0.0.tgz",
+-      "integrity": "sha512-tk2G5R2KRwBd+ZN0zaEXpmzdKyOYksXwywulIX95MBODjSzMIuQnQ3m8JxgbhnL1LeVo7lqQKsYa1O3Htl7K5g==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "punycode": "^2.3.1"
+-      },
+-      "engines": {
+-        "node": ">=18"
+-      }
+-    },
+-    "node_modules/mongodb-connection-string-url/node_modules/webidl-conversions": {
+-      "version": "7.0.0",
+-      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-7.0.0.tgz",
+-      "integrity": "sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==",
+-      "license": "BSD-2-Clause",
+-      "engines": {
+-        "node": ">=12"
+-      }
+-    },
+-    "node_modules/mongodb-connection-string-url/node_modules/whatwg-url": {
+-      "version": "14.1.1",
+-      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-14.1.1.tgz",
+-      "integrity": "sha512-mDGf9diDad/giZ/Sm9Xi2YcyzaFpbdLpJPr+E9fSkyQ7KpQD4SdFcugkRQYzhmfI4KeV4Qpnn2sKPdo+kmsgRQ==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "tr46": "^5.0.0",
+-        "webidl-conversions": "^7.0.0"
+-      },
+-      "engines": {
+-        "node": ">=18"
+-      }
+-    },
+     "node_modules/ms": {
+       "version": "2.1.3",
+       "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+@@ -15775,7 +15611,6 @@
+       "version": "7.2.0",
+       "resolved": "https://registry.npmjs.org/react-router-dom/-/react-router-dom-7.2.0.tgz",
+       "integrity": "sha512-cU7lTxETGtQRQbafJubvZKHEn5izNABxZhBY0Jlzdv0gqQhCPQt2J8aN5ZPjS6mQOXn5NnirWNh+FpE8TTYN0Q==",
+-      "license": "MIT",
+       "dependencies": {
+         "react-router": "7.2.0"
+       },
+@@ -17103,15 +16938,6 @@
+       "deprecated": "Please use @jridgewell/sourcemap-codec instead",
+       "license": "MIT"
+     },
+-    "node_modules/sparse-bitfield": {
+-      "version": "3.0.3",
+-      "resolved": "https://registry.npmjs.org/sparse-bitfield/-/sparse-bitfield-3.0.3.tgz",
+-      "integrity": "sha512-kvzhi7vqKTfkh0PZU+2D2PIllw2ymqJKujUcyPMd9Y75Nv4nPbGJZXNhxsgdQab2BmlDct1YnfQCguEvHr7VsQ==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "memory-pager": "^1.0.2"
+-      }
+-    },
+     "node_modules/spdy": {
+       "version": "4.0.2",
+       "resolved": "https://registry.npmjs.org/spdy/-/spdy-4.0.2.tgz",
+Index: project_pi/src/components/navbar.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\nimport { Link } from 'react-router-dom';\n\nfunction Navbar(){\n    return(\n        <nav style={style.nav}>\n            <ul style={style.ul}>\n                <li style={style.li}>\n                    <Link to=\"/Home\" style={style.link}>Home</Link>\n                </li>\n                <li style={style.li}>\n                    <Link to=\"/Learn\" style={style.link}>Learn</Link>\n                </li>\n                <li style={style.li}>\n                    <Link to=\"/Plan\" style={style.link}>Plan</Link>\n                </li>\n                <li style={style.li}>\n                    <Link to=\"/User\" style={style.link}>User</Link>\n                </li>\n            </ul>\n\n        </nav>\n    )\n}\n\nconst style = {\n    nav: {\n        backgroundColor: '#283739',\n        padding: '10px',\n        alignItems: \"center\",\n    },\n    ul: {\n        listStyleType: 'none',\n        justifyContent: 'space-evenly',\n        display: \"flex\",\n        textAlign: \"center\",\n    },\n    li: {\n        padding: '20px',\n    },\n    link: {\n        textDecoration: \"none\",\n        fontSize: '40px',\n        color: '#F5F5F5',\n    }\n\n}\nexport default Navbar;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/components/navbar.js b/project_pi/src/components/navbar.js
+--- a/project_pi/src/components/navbar.js	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/src/components/navbar.js	(date 1740271620769)
+@@ -5,6 +5,926 @@
+     return(
+         <nav style={style.nav}>
+             <ul style={style.ul}>
++                <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJz
++aW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lk
++dGg9IjUwMCIgaGVpZ2h0PSI1MDAiPgo8cGF0aCBkPSJNMCAwIEMxNjUgMCAzMzAg
++MCA1MDAgMCBDNTAwIDE2NSA1MDAgMzMwIDUwMCA1MDAgQzMzNSA1MDAgMTcwIDUw
++MCAwIDUwMCBDMCAzMzUgMCAxNzAgMCAwIFogIiBmaWxsPSIjRkVGRUZFIiB0cmFu
++c2Zvcm09InRyYW5zbGF0ZSgwLDApIi8+CjxwYXRoIGQ9Ik0wIDAgQzIuNDkxNjY3
++NTkgMS40MDk5NzE3MyAzLjk1NTU0OTQxIDIuOTA2ODcyMDEgNiA1IEM2LjYxODc1
++IDUuNTk4MTI1IDcuMjM3NSA2LjE5NjI1IDcuODc1IDYuODEyNSBDOC4yNDYyNSA3
++LjIwNDM3NSA4LjYxNzUgNy41OTYyNSA5IDggQzEwLjQ4NSA3LjAxIDEwLjQ4NSA3
++LjAxIDEyIDYgQzE2LjI1NTE1NDg5IDMuNTc5NTU3NjQgMTkuMTQ1NTIzNjggMy40
++NTE5MTM5NiAyNCA0IEMyNi44NzUgNSAyNi44NzUgNSAyOSA3IEMzMC4wMDg3ODk5
++NiA5LjY3Nzc4Mjc4IDMwLjQ4Nzg5ODc4IDEyLjE2MDE2NTk4IDMxIDE1IEMzMS42
++NiAxNC42NyAzMi4zMiAxNC4zNCAzMyAxNCBDMzcuOTQ0Mjg0ODUgMTIuMzUxOTA1
++MDUgNDIuMTc1NDk3MjUgMTIuMTQ1OTc3NDQgNDYuOTM3NSAxNC4zNzUgQzQ5IDE2
++IDQ5IDE2IDUwIDE4IEM1MC4xMzQxNTQ3MiAyMC42NzIzNjIxIDUwLjA0MzE4NTQx
++IDIzLjMyMjUwNDg4IDUwIDI2IEM1MC43ODM3NSAyNS41MDUgNTEuNTY3NSAyNS4w
++MSA1Mi4zNzUgMjQuNSBDNTcuMDM3MDAxNDcgMjIuNTcwODk1OTQgNjEuMDE2MjA3
++NzQgMjIuMjI3NTEyMiA2NiAyMyBDNjguOTM0MjMxOTUgMjQuNzk2NDY4NTQgNzAu
++NDcyMDUzNTUgMjUuOTQ0MTA3MSA3MiAyOSBDNzIuMzU0OTI1NDIgMzYuMjE2ODE2
++NzggNzIuMzU0OTI1NDIgMzYuMjE2ODE2NzggNzAuOTU4OTg0MzggMzkuMjk3MTE5
++MTQgQzY5Ljg2MzUyMTQxIDQyLjM4NDY2MjUzIDY5Ljk3MDI0MDY5IDQ0LjE5MTA2
++MzU3IDcwLjQyNTc4MTI1IDQ3LjQxNDA2MjUgQzcwLjU2MzA2NjQxIDQ4LjQyMjEw
++OTM3IDcwLjcwMDM1MTU2IDQ5LjQzMDE1NjI1IDcwLjg0MTc5Njg4IDUwLjQ2ODc1
++IEM3MS4wNzQ3OTQ5MiA1Mi4wMzEwOTM3NSA3MS4wNzQ3OTQ5MiA1Mi4wMzEwOTM3
++NSA3MS4zMTI1IDUzLjYyNSBDNzEuNDU2MjMwNDcgNTQuNjc0Mjk2ODggNzEuNTk5
++OTYwOTQgNTUuNzIzNTkzNzUgNzEuNzQ4MDQ2ODggNTYuODA0Njg3NSBDNzIuNTI3
++NzkzMzggNjIuNDgwMjEzMTMgNzIuNTI3NzkzMzggNjIuNDgwMjEzMTMgNzQgNjgg
++Qzc1LjIwMDc3MzI2IDc1LjMwODQxMDEyIDc1LjE2MTEyMDM2IDgyLjc5OTQ1NjM4
++IDc1LjI1IDkwLjE4NzUgQzc1LjI4MjAyNTE1IDkxLjU5NDc5MzcgNzUuMjgyMDI1
++MTUgOTEuNTk0NzkzNyA3NS4zMTQ2OTcyNyA5My4wMzA1MTc1OCBDNzUuMzQyNTcy
++NzMgOTguNzY1MjYxMTkgNzUuMDc0OTU5MDYgMTA0LjAxMDM2MDU1IDcyIDEwOSBD
++NjcuNDgyMjQ0NDggMTEzLjA2MzI2NjYgNjIuMzk0ODM4ODMgMTE0LjIxNTI5NzA2
++IDU2LjYyNSAxMTUuNTYyNSBDNTAuNTcwMDU0MDkgMTE3LjAxODU3MDMzIDQ0Ljc0
++MjQ0NDE5IDExOC41NTY1NDQ2MyAzOSAxMjEgQzM4LjY3IDEyMS42NiAzOC4zNCAx
++MjIuMzIgMzggMTIzIEMzNy4wMSAxMjMgMzYuMDIgMTIzIDM1IDEyMyBDMzUuNTk3
++NDgwNDcgMTI0LjQxNTM5MDYyIDM1LjU5NzQ4MDQ3IDEyNC40MTUzOTA2MiAzNi4y
++MDcwMzEyNSAxMjUuODU5Mzc1IEMzNi43NDI2MjI3OCAxMjcuMTU2MDcwMjkgMzcu
++Mjc3NzUzNzQgMTI4LjQ1Mjk1NTg5IDM3LjgxMjUgMTI5Ljc1IEMzOC4wNzM1MzUx
++NiAxMzAuMzY0ODgyODEgMzguMzM0NTcwMzEgMTMwLjk3OTc2NTYyIDM4LjYwMzUx
++NTYyIDEzMS42MTMyODEyNSBDNDIuNTQ2MTg3OTQgMTQxLjI1MDkyNDY4IDQ0LjQ4
++MTkxNzE4IDE1MC41OTgzNDE0NCA0NC4yNSAxNjEgQzQ0LjIyOTIxMzg3IDE2Mi41
++OTU2OTgyNCA0NC4yMjkyMTM4NyAxNjIuNTk1Njk4MjQgNDQuMjA4MDA3ODEgMTY0
++LjIyMzYzMjgxIEM0NC4xNzE5ODM1IDE2Ni42ODg5MTkwNCA0NC4xMjgxMDA1MyAx
++NjkuMTU0MDk3NzUgNDQuMDc4MTI1IDE3MS42MTkxNDA2MiBDNDMuOTk3MDA0MjIg
++MTc1Ljc3NjA5NzU4IDQzLjk2MzQxNDAzIDE3OS45MzI4NjczNCA0My45MzE0NTc1
++MiAxODQuMDkwNDU0MSBDNDMuODk3NDE2NDMgMTg3Ljk5ODUwMzM3IDQzLjg0NDcy
++NDUzIDE5MS45MDYxNzg2MiA0My43ODg0NTIxNSAxOTUuODEzOTY0ODQgQzQzLjc2
++MzA5OTY1IDE5Ny43NDk3Njg5NCA0My43NDM1MTY3NCAxOTkuNjg1NjU4NCA0My43
++MzAxMDI1NCAyMDEuNjIxNTgyMDMgQzQzLjY0MDA0OTU0IDIxMy4xMTQ1MzM1NyA0
++Mi45NDczMzYzNSAyMjMuMDk3NTYyODcgMzkgMjM0IEMzOC42ODk1Nzc2NCAyMzQu
++OTE5OTA3MjMgMzguMzc5MTU1MjcgMjM1LjgzOTgxNDQ1IDM4LjA1OTMyNjE3IDIz
++Ni43ODc1OTc2NiBDMjkuNjgwODI5MDkgMjYwLjk4NTQwNDkgNS42MTEzNDIzMyAy
++NzkuODY3MjcwNzQgLTE2LjUzMjQ3MDcgMjkwLjkwNjk4MjQyIEMtNDMuNjc5NTc1
++NzkgMzA0IC00My42Nzk1NzU3OSAzMDQgLTUzIDMwNCBDLTU1LjMwMTQyOTkyIDMw
++MS4xNzc4MDg1NiAtNTcuMDY1Njk1MTYgMjk4LjA5NDg4Nzc1IC01OSAyOTUgQy01
++OS4zMyAzMDEuNiAtNTkuNjYgMzA4LjIgLTYwIDMxNSBDLTY3LjQ5MzM3ODA5IDMx
++Ny4wOTgxNDU4NiAtNzQuODY1NzkzNTQgMzE4LjUzMTcyOTUgLTgyLjU2MjUgMzE5
++LjYyNSBDLTgzLjg1NDUwMzE3IDMxOS44MDkyOTU2NSAtODMuODU0NTAzMTcgMzE5
++LjgwOTI5NTY1IC04NS4xNzI2MDc0MiAzMTkuOTk3MzE0NDUgQy0xNDEuMzkzNDEx
++OTYgMzI3LjcxMjg1Mjg0IC0yMTAuNDI4MTk4NTQgMzE4LjcwMjIxNjE0IC0yNTYu
++ODQxMDY0NDUgMjgzLjYwNzkxMDE2IEMtMjcyLjgxODc1NjczIDI3MC4zODU1MTU4
++OCAtMjg0LjM4NjkwNjQgMjUxLjc1NTMyNDgxIC0yODcgMjMxIEMtMjg3LjEwNTc0
++NjcxIDIyOC42MTI4MDQxMSAtMjg3LjE2NzY0ODE2IDIyNi4yMjMzODgxNSAtMjg3
++LjE5Mjg3MTA5IDIyMy44MzM5ODQzOCBDLTI4Ny4yMDEwNDg1OCAyMjMuMTU0Nzk5
++NSAtMjg3LjIwOTIyNjA3IDIyMi40NzU2MTQ2MiAtMjg3LjIxNzY1MTM3IDIyMS43
++NzU4NDgzOSBDLTI4Ny4yNDIyNzIyNiAyMTkuNTQ4NDkwNjQgLTI4Ny4yNTg5NjYx
++IDIxNy4zMjExOTU4NSAtMjg3LjI3MzQzNzUgMjE1LjA5Mzc1IEMtMjg3LjI3ODc2
++MTE4IDIxNC4zMjQ1NDcyNyAtMjg3LjI4NDA4NDg1IDIxMy41NTUzNDQ1NCAtMjg3
++LjI4OTU2OTg1IDIxMi43NjI4MzI2NCBDLTI4Ny4zMTYyMDc5MiAyMDguNjg2NjI1
++MTkgLTI4Ny4zMzU2MDczNSAyMDQuNjEwNDQ3MjcgLTI4Ny4zNTAwOTc2NiAyMDAu
++NTM0MTc5NjkgQy0yODcuMzYzMzg4ODIgMTk3LjE5MjEwMTQ2IC0yODcuMzkxMTY0
++OCAxOTMuODUwNjQwNzUgLTI4Ny40MzIxMjg5MSAxOTAuNTA4Nzg5MDYgQy0yODcu
++NDgxOTU0MTQgMTg2LjQ0MTY2OTM1IC0yODcuNTA2Mjc4NTUgMTgyLjM3NTEwNTIg
++LTI4Ny41MTMzMjQ3NCAxNzguMzA3NjkzNDggQy0yODcuNTE5OTU2ODkgMTc2Ljc3
++Mzc2NzIgLTI4Ny41MzQ5NjMyMSAxNzUuMjM5ODQ5MzUgLTI4Ny41NTkyMTU1NSAx
++NzMuNzA2MTAwNDYgQy0yODcuODYzMTM0MDUgMTUzLjMxMzc5OTEgLTI4MC4zMDUy
++MjE0MiAxMzYuNDQyNjA2MzkgLTI2NyAxMjEgQy0yNjYuNDgxNzk2ODcgMTIwLjMz
++NzQyMTg4IC0yNjUuOTYzNTkzNzUgMTE5LjY3NDg0Mzc1IC0yNjUuNDI5Njg3NSAx
++MTguOTkyMTg3NSBDLTI0NS45MTMwMjcwNCA5NC43Njc5OTA4NSAtMjEyLjMyNzU0
++NTk5IDgyLjEzNzU2ODc3IC0xODMgNzUuMjUgQy0xODIuMTcxNjE2MjEgNzUuMDUx
++MzIzMjQgLTE4MS4zNDMyMzI0MiA3NC44NTI2NDY0OCAtMTgwLjQ4OTc0NjA5IDc0
++LjY0Nzk0OTIyIEMtMTY1LjMxNzQ0OTIgNzEuMjYwNTI0MjIgLTE1MC4wMDE4Mjc5
++IDcwLjY0ODkyNTQxIC0xMzQuNTE0NjQ4NDQgNzAuNjg0MzI2MTcgQy0xMzEuNjM0
++MzgwOTggNzAuNjg3NDg5NyAtMTI4Ljc1NTE0MjAyIDcwLjY2Mzg5NzYxIC0xMjUu
++ODc1IDcwLjYzODY3MTg4IEMtMTE1LjU1NDI0OTU0IDcwLjYwNjIzMzI4IC0xMDUu
++NjUzMzg5NDYgNzEuMTY4NjQ2NzYgLTk1LjQ4NzIxMzEzIDczLjAzNjU0NDggQy05
++MS4wNTMxMjg4MyA3My44MzA3NTM5NSAtODcuNDMwMDMxMzIgNzQuMjY2MjU0MDYg
++LTgzIDczIEMtODAuMTQ0NDU5ODMgNzAuNTYyNzIxMTggLTgwLjE0NDQ1OTgzIDcw
++LjU2MjcyMTE4IC03OCA2OCBDLTc2Ljg1NTMxMjUgNjguNDY0MDYyNSAtNzYuODU1
++MzEyNSA2OC40NjQwNjI1IC03NS42ODc1IDY4LjkzNzUgQy01OC40NDE0MjIzNCA3
++NS43NTU3MTY3NSAtMzcuNTk1MTcxNjkgNjcuOTU5NzE2MTEgLTIxLjUzMTI1IDYx
++LjA3ODEyNSBDLTE0LjE2MzI5OTg1IDU3Ljc3ODQwNTYgLTYuMTQ0MzIzODcgNTQu
++MDYyMTkzOTggLTEuNzQyMTg3NSA0Ni45NjA5Mzc1IEMtMC4yMzk2NDcyMSA0Mi45
++OTEwNjc5IC0wLjI1NDMzMTMyIDM5LjE0MDk5NSAtMSAzNSBDLTIuMjI0MzUxNTUg
++MzIuMzU3NjIxNTQgLTIuMjI0MzUxNTUgMzIuMzU3NjIxNTQgLTUgMzEgQy02LjY2
++NDUzODM1IDMwLjYxNTY2MzA3IC04LjMzMTQ4MzEyIDMwLjI0MTY3OTk2IC0xMCAy
++OS44NzUgQy0xMy4zMDk0MDUxNyAyOS4wMDc0Mzg3IC0xNC42MTAzOTEzIDI4LjU5
++NzA2MjY4IC0xNi41MDM5MDYyNSAyNS42OTUzMTI1IEMtMTcuNTA0MjI5MzMgMjMu
++MTQ4MzY0NDMgLTE4LjMwODA3NzQ3IDIwLjY0NTg0MjE0IC0xOSAxOCBDLTE5LjMz
++IDE3LjAxIC0xOS42NiAxNi4wMiAtMjAgMTUgQy0xOC41MTUgMTQuMDEgLTE4LjUx
++NSAxNC4wMSAtMTcgMTMgQy0xNi4xNzE1OTc1OCAxMC45NDg0NTI2NCAtMTYuMTcx
++NTk3NTggMTAuOTQ4NDUyNjQgLTE1LjYyNSA4LjYyNSBDLTE0LjY1MzY3NDE3IDUu
++NTQ3NDgyOTQgLTEzLjk3NjQzNDUxIDMuOTcxNTgyNzkgLTExLjg3NSAxLjQzNzUg
++Qy03LjgzNzY1NDI1IC0wLjU4MTE3Mjg3IC00LjQyNDQ3MjU5IC0wLjkyMDc4OTcx
++IDAgMCBaICIgZmlsbD0iI0Y3OTIxRiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzYz
++LDY2KSIvPgo8cGF0aCBkPSJNMCAwIEMtMy42MDQ2NDM0MyA0LjQxNTY4ODIgLTcu
++Mjc4NTU5OTEgOC4yNDI4ODgxNSAtMTEuNjEzMjgxMjUgMTEuOTMzNTkzNzUgQy0x
++NC41NTEyNTE0NyAxNC40NzcyNzAxIC0xNy40MDA3MzkzNSAxNy4xMDc4MjExMiAt
++MjAuMjUgMTkuNzUgQy0yMS4zNzUgMjAuNzkxNjY2NjcgLTIyLjUgMjEuODMzMzMz
++MzMgLTIzLjYyNSAyMi44NzUgQy0yNC4xODU3NDIxOSAyMy4zOTQ0OTIxOSAtMjQu
++NzQ2NDg0MzcgMjMuOTEzOTg0MzcgLTI1LjMyNDIxODc1IDI0LjQ0OTIxODc1IEMt
++MjcuNDU2ODg5NTkgMjYuNDIyODA5MjUgLTI5LjU5MzE1NzEyIDI4LjM5MjM5NjUx
++IC0zMS43MzQ2MTkxNCAzMC4zNTY0NDUzMSBDLTMyLjczNzU4NzM2IDMxLjI3ODc4
++MTggLTMzLjczNjg0NTkzIDMyLjIwNTE3MDA3IC0zNC43MzIxNzc3MyAzMy4xMzU3
++NDIxOSBDLTM3LjAwNzg4NTQxIDM1LjI1MDI5Mzc4IC0zOS4yOTM4Nzg0NyAzNy4y
++MTkyNzUzOCAtNDEuNzg1MTU2MjUgMzkuMDc4MTI1IEMtNDQuMjM3MTA2NDggNDAu
++OTQyNjY4MyAtNDYuMTI3Mjc0MjYgNDIuNTU3MzM3OTUgLTQ4IDQ1IEMtNDguMzE4
++MzU2ODkgNDcuMzkwNDk2NzggLTQ4LjMxODM1Njg5IDQ3LjM5MDQ5Njc4IC00Ny44
++Nzg5MDYyNSA0OS45NDUzMTI1IEMtNDcuNjkxMjI2ODEgNTEuNDAxNzkxOTkgLTQ3
++LjY5MTIyNjgxIDUxLjQwMTc5MTk5IC00Ny40OTk3NTU4NiA1Mi44ODc2OTUzMSBD
++LTQ2LjA4OTUwMTYyIDYxLjY3MDI2NTQzIC00NC4zMjk3MDQ2IDcwLjM3Mjk2NDQg
++LTQyLjU1OTU3MDMxIDc5LjA4ODg2NzE5IEMtNDIuMTIyNjU1NDEgODEuMzYxODky
++MjEgLTQxLjc3NDI4MzI2IDgzLjY1MTk4NDgzIC00MS40NjA5Mzc1IDg1Ljk0NTMx
++MjUgQy0zOS45NTIzOTMxNiA5NS45NDI2MTQ4NSAtMzMuNjc3ODU4NCAxMDIuOTUy
++NjMxNTUgLTI3LjY3OTE5OTIyIDExMC43NTQzOTQ1MyBDLTI0LjY5MzcyMjg1IDEx
++NC43NDY4OTQwNSAtMjIuMDExMTc2MTEgMTE4LjkzNzgzOTk2IC0xOS4zMzU2OTMz
++NiAxMjMuMTQyMDg5ODQgQy0xNy41NTc4MjgyOSAxMjUuODgxNzUwNzcgLTE1Ljc4
++MzIwNzI5IDEyOC4yMTY3OTI3MSAtMTMuNDY4NzUgMTMwLjUzMTI1IEMtMTAuNzc0
++NzY5NjIgMTMzLjIyNTIzMDM4IC04Ljk4NjQyNDQ2IDEzNS45NDAxNjE1NyAtNyAx
++MzkuMTg3NSBDLTMuNDc2ODcyMTIgMTQ0LjgyNjYxMzgyIDAuMjY3OTA2NjYgMTUw
++LjI1NDQ5MTE5IDQuMTg3NSAxNTUuNjI1IEMxMS4yNjMwNTkzNCAxNjUuMzIwOTgw
++MjEgMTguMTQzOTI5MzIgMTc1LjE0Nzk4NjI0IDI1IDE4NSBDMjQgMTg3IDI0IDE4
++NyAyMi4zMjAzMTI1IDE4Ny41NjI1IEMyMS4yMzM2MzI4MSAxODcuNzc5MDYyNSAy
++MS4yMzM2MzI4MSAxODcuNzc5MDYyNSAyMC4xMjUgMTg4IEMxOS4zMDI1NzgxMiAx
++ODguMTY1IDE4LjQ4MDE1NjI1IDE4OC4zMyAxNy42MzI4MTI1IDE4OC41IEMxNi43
++NjM5ODQzOCAxODguNjY1IDE1Ljg5NTE1NjI1IDE4OC44MyAxNSAxODkgQzE0LjE5
++MzA0Njg3IDE4OS4xNjUgMTMuMzg2MDkzNzUgMTg5LjMzIDEyLjU1NDY4NzUgMTg5
++LjUgQy0yLjI4OTQ0MjA5IDE5Mi40MDUyNzMwNyAtMTYuOTY5NDA2MDMgMTkzLjM4
++MzQ1MjY2IC0zMi4wNjI1IDE5My4zMTI1IEMtMzMuMzQxMzMwNTcgMTkzLjMwODc2
++ODc3IC0zMy4zNDEzMzA1NyAxOTMuMzA4NzY4NzcgLTM0LjY0NTk5NjA5IDE5My4z
++MDQ5NjIxNiBDLTgxLjQxNjg2NDE3IDE5My4wOTQ4Nzc0MSAtMTQwLjI2NDkwNTc2
++IDE4MS45ODIwMjk4NyAtMTc1IDE0OCBDLTE5MS4wNjQ5Mjg0NyAxMzEuMTQxNzQx
++NzMgLTE5Ny41Mzg5MjMwNiAxMTEuOTY4NzU4MjMgLTE5Ny4yMDMxMjUgODguOTQx
++NDA2MjUgQy0xOTYuNTg3ODY0OTYgNjkuMDE2NzM1MDYgLTE4NC4zNjIxMzcxNSA1
++MC4zNzk2MjAzMiAtMTcwLjIzMDQ2ODc1IDM2Ljk1MzEyNSBDLTE2MC41ODIwMTQz
++OSAyOC41MDQzOTA4OSAtMTUwLjM4NTkyOTY4IDIxLjg3MTU2NzY2IC0xMzkgMTYg
++Qy0xMzguMzc4NjcxODggMTUuNjc5MDIzNDQgLTEzNy43NTczNDM3NSAxNS4zNTgw
++NDY4OCAtMTM3LjExNzE4NzUgMTUuMDI3MzQzNzUgQy0xMDAuODQ1ODAzODIgLTMu
++NDE3MDQwNzIgLTM5LjQzMjcxMDc3IC0xNC45NDQyNDM4OSAwIDAgWiAiIGZpbGw9
++IiM5RUNDRkUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI3NSwxNDMpIi8+CjxwYXRo
++IGQ9Ik0wIDAgQzIuODgwMjY3NDYgMC4wMDMxNjM1MiA1Ljc1OTUwNjQyIC0wLjAy
++MDQyODU2IDguNjM5NjQ4NDQgLTAuMDQ1NjU0MyBDNDAuMzExMjMxNzcgLTAuMTUz
++MjcwNjEgNDAuMzExMjMxNzcgLTAuMTUzMjcwNjEgNDguNTE0NjQ4NDQgNS4zMTU2
++NzM4MyBDNDQuNDkzMjg0ODggNi4zNjkyNDE0IDQxLjQ2NDQ2OTg5IDYuMTcxNTM4
++NjEgMzcuMzg5NjQ4NDQgNS40NDA2NzM4MyBDMjUuOTk2Njc1MDIgMy40MjM0NjQw
++NyAxNC42NzY5NDU3NCAzLjEwOTU4MjIgMy4xMzk2NDg0NCAzLjEyODE3MzgzIEMy
++LjM4Nzk4NDAxIDMuMTI5MTEwNDEgMS42MzYzMTk1OCAzLjEzMDA0NyAwLjg2MTg3
++NzQ0IDMuMTMxMDExOTYgQy00Ni40NTg4Njg0OSAzLjI1ODQ3ODIxIC05My4yNjMz
++MjE3IDE0Ljk4NTk0NjMzIC0xMjguMDI0NDE0MDYgNDguNzg0NDIzODMgQy0xNDEu
++NDEzNzM3NjEgNjIuOTU1OTQxNTQgLTE0OS45NTUzMDQ5NyA4MC42Njk4MDA4MiAt
++MTQ5LjczNTM1MTU2IDEwMC4yNTMxNzM4MyBDLTE0OS43Mjc4NTg4OSAxMDEuMTM1
++NjE3NjggLTE0OS43MjAzNjYyMSAxMDIuMDE4MDYxNTIgLTE0OS43MTI2NDY0OCAx
++MDIuOTI3MjQ2MDkgQy0xNDkuNjEzMjQwMTggMTA4LjkyODgzMjE3IC0xNDkuMzE2
++NTcwNjQgMTE0LjU2MTc5MDcxIC0xNDcuNDg1MzUxNTYgMTIwLjMxNTY3MzgzIEMt
++MTQ3LjAyNTE1NjI1IDEyMS43OTQ4NzMwNSAtMTQ3LjAyNTE1NjI1IDEyMS43OTQ4
++NzMwNSAtMTQ2LjU1NTY2NDA2IDEyMy4zMDM5NTUwOCBDLTEzOC4yMjUxMTI5NyAx
++NDcuMjkwMTk3MDEgLTEyMC4yOTQyNDA2NiAxNjMuMDI3MzU5NzcgLTk4LjA5NDcy
++NjU2IDE3NC4xNTU1MTc1OCBDLTc2LjUwMjA1Mzk3IDE4NC41MjcyNzg4NSAtNTIu
++OTY4Nzc1MzkgMTkwLjk3NDc5ODUxIC0yOS40ODUzNTE1NiAxOTUuMzE1NjczODMg
++Qy0yOC41ODQ5NDE0MSAxOTUuNDgyMjg1MTYgLTI3LjY4NDUzMTI1IDE5NS42NDg4
++OTY0OCAtMjYuNzU2ODM1OTQgMTk1LjgyMDU1NjY0IEM0LjQ2NDg2MTY1IDIwMS4y
++ODgzMTU4NiAzOS45MDA0NTczOSAyMDAuNzQ2NTM1MDQgNzAuNTE0NjQ4NDQgMTky
++LjMxNTY3MzgzIEM2Ni4zOTgzNjIzNSAxODUuNTIwMDU5NyA2MS45Mzg5ODU3MiAx
++NzkuMDQ3MjQ5ODIgNTcuMjY0NjQ4NDQgMTcyLjYyODE3MzgzIEM0OS4xOTY3NDI3
++NSAxNjEuNTQ1MTE5NDEgNDEuMjE4MzgxNDggMTUwLjQwMTcyMjIyIDM0LjE0NzQ2
++MDk0IDEzOC42NDc3MDUwOCBDMzIuNTM0NDcwOTYgMTM2LjE5NDIzMjM4IDMyLjUz
++NDQ3MDk2IDEzNi4xOTQyMzIzOCAzMC4xNDM1NTQ2OSAxMzMuOTc5NzM2MzMgQzI3
++LjA2MTQzOTM1IDEzMC44NTY0MDQgMjQuNzUwNzQ5NyAxMjcuNTE5MDgyOTEgMjIu
++MzI3MTQ4NDQgMTIzLjg3ODE3MzgzIEMyMS4zNjk5NDQzNSAxMjIuNDYyMDQ1MyAy
++MC40MTE1ODQ1OSAxMjEuMDQ2Njk3MzIgMTkuNDUyMTQ4NDQgMTE5LjYzMjA4MDA4
++IEMxOC45Njg3NSAxMTguOTE4MTAwNTkgMTguNDg1MzUxNTYgMTE4LjIwNDEyMTA5
++IDE3Ljk4NzMwNDY5IDExNy40Njg1MDU4NiBDMTUuNjQ4NjkzODYgMTE0LjA0OTc2
++MDc5IDEzLjI0MjI5MjA0IDExMC42ODA2MDc3NCAxMC44MjcxNDg0NCAxMDcuMzE1
++NjczODMgQzEwLjM5MzEzNzIxIDEwNi43MTA1Mzk1NSA5Ljk1OTEyNTk4IDEwNi4x
++MDU0MDUyNyA5LjUxMTk2Mjg5IDEwNS40ODE5MzM1OSBDOC41MTQwNzY3NyAxMDQu
++MDkyMzA0MzkgNy41MTQ1NjQyNCAxMDIuNzAzODQzMjggNi41MTQ2NDg0NCAxMDEu
++MzE1NjczODMgQzguODg4MDMwODIgOTcuNzU1NjAwMjUgMTAuMTc2NTU0MTIgOTcu
++NDY0NTY2MSAxNC4xMzk2NDg0NCA5Ni4xMjgxNzM4MyBDMTUuMTQyNTM5MDYgOTUu
++NzgzOTk0MTQgMTYuMTQ1NDI5NjkgOTUuNDM5ODE0NDUgMTcuMTc4NzEwOTQgOTUu
++MDg1MjA1MDggQzE3Ljk0OTU3MDMxIDk0LjgzMTI1OTc3IDE4LjcyMDQyOTY5IDk0
++LjU3NzMxNDQ1IDE5LjUxNDY0ODQ0IDk0LjMxNTY3MzgzIEMxOC41MjQ2NDg0NCA4
++OS44NjA2NzM4MyAxOC41MjQ2NDg0NCA4OS44NjA2NzM4MyAxNy41MTQ2NDg0NCA4
++NS4zMTU2NzM4MyBDMjEuNjI3Mzk5NTIgODkuMTI3MzEyNzcgMjQuNTQ5NDUwNTEg
++OTMuMTM2NTA4NTkgMjcuNTE0NjQ4NDQgOTcuODc4MTczODMgQzI4LjQ4Mjk2OTQy
++IDk5LjQwMDU4MjIgMjkuNDUxNzM4MzEgMTAwLjkyMjcwNTc2IDMwLjQyMDg5ODQ0
++IDEwMi40NDQ1ODAwOCBDMzEuMTc2OTMzNTkgMTAzLjYzNzg0OTEyIDMxLjE3Njkz
++MzU5IDEwMy42Mzc4NDkxMiAzMS45NDgyNDIxOSAxMDQuODU1MjI0NjEgQzM0LjYw
++NTUyMjg0IDEwOS4wMjkxNzYzNiAzNy4zMTIxMjg1NiAxMTMuMTcwOTI4NDEgNDAu
++MDE0NjQ4NDQgMTE3LjMxNTY3MzgzIEM0My4xMzc5MDU2OCAxMjIuMTA4MzY4OTYg
++NDYuMjU4Mjk4MTYgMTI2LjkwMTk2NDA1IDQ5LjMyNzE0ODQ0IDEzMS43Mjk3MzYz
++MyBDNTUuMDAwOTc0ODEgMTQwLjYzNTY0NDgzIDYwLjk3OTMzNTE0IDE0OS4yNTEz
++NzU4NSA2Ny4yMDk5NjA5NCAxNTcuNzc2NjExMzMgQzcwLjYzMzY4NjAxIDE2Mi40
++NjIwMzExNSA3My45ODY4NTI4NSAxNjcuMTk1NTQzNjUgNzcuMzI3MTQ4NDQgMTcx
++Ljk0MDY3MzgzIEM3Ny44NDkxMzgxOCAxNzIuNjgxODg0NzcgNzguMzcxMTI3OTMg
++MTczLjQyMzA5NTcgNzguOTA4OTM1NTUgMTc0LjE4Njc2NzU4IEM4MC4xMTE2Nzk3
++OCAxNzUuODk1ODEyMiA4MS4zMTMzMDA2OCAxNzcuNjA1NjQ3MjkgODIuNTE0NjQ4
++NDQgMTc5LjMxNTY3MzgzIEM4OC4xODQ3ODU0IDE3OC43MjA3OTg5IDkzLjEyNDI5
++NTE1IDE3Ny4yNTI1NTM5NyA5OC40NTIxNDg0NCAxNzUuMjUzMTczODMgQzk5LjI4
++MDQ1MTY2IDE3NC45NDM3MTgyNiAxMDAuMTA4NzU0ODggMTc0LjYzNDI2MjcgMTAw
++Ljk2MjE1ODIgMTc0LjMxNTQyOTY5IEMxMzAuMjY1NDM1MjMgMTYzLjEwNzAzMTMz
++IDE1Ny4wNjcwMjIwNiAxNDQuMDUwMTMxIDE3MC4yNTc1NjgzNiAxMTQuODMwNTY2
++NDEgQzE3Ny4yMDMyNjA1MSA5OC42NzEwNzM3MiAxNzcuNjM2NTY2NSA4MS43OTIz
++MzQyMSAxNzEuNTE0NjQ4NDQgNjUuMzE1NjczODMgQzE2OS4xNTQ0MjM0MyA1OS44
++MjIzNDE4NCAxNjYuMzYyNjgxNzUgNTQuNTY3ODkxMSAxNjMuNTE0NjQ4NDQgNDku
++MzE1NjczODMgQzE2Mi44NDEyMTM2OCA0Ny45ODU3NDYwNyAxNjIuMTcwNDc1NCA0
++Ni42NTQzNzIxNiAxNjEuNTE0NjQ4NDQgNDUuMzE1NjczODMgQzE2NS41NDU4MjY3
++NCA0Ni42NTkzOTk5MyAxNjYuMzE1OTU0NDEgNDguNzY5MzkzMTQgMTY4LjUxNDY0
++ODQ0IDUyLjMxNTY3MzgzIEMxNjkuMTc0NjQ4NDQgNTMuMzA1NjczODMgMTY5Ljgz
++NDY0ODQ0IDU0LjI5NTY3MzgzIDE3MC41MTQ2NDg0NCA1NS4zMTU2NzM4MyBDMTcx
++LjM2NTY3MjU4IDU3LjExMDQwNzkxIDE3Mi4xNzMyMjk3NCA1OC45MjU5OTA3MSAx
++NzIuOTUyMTQ4NDQgNjAuNzUzMTczODMgQzE3My4zNjMzNTkzOCA2MS43MDA2MzQ3
++NyAxNzMuNzc0NTcwMzEgNjIuNjQ4MDk1NyAxNzQuMTk4MjQyMTkgNjMuNjI0MjY3
++NTggQzE3Ny4zODMxNTg1IDcyLjU1NTI2NDM2IDE3OC45NzU4MDYyNCA4MC44NDUw
++ODg4OCAxNzguNzY0NjQ4NDQgOTAuMzE1NjczODMgQzE3OC43NDM4NjIzIDkxLjkx
++MTM3MjA3IDE3OC43NDM4NjIzIDkxLjkxMTM3MjA3IDE3OC43MjI2NTYyNSA5My41
++MzkzMDY2NCBDMTc4LjY4NjYzMTk0IDk2LjAwNDU5Mjg3IDE3OC42NDI3NDg5NiA5
++OC40Njk3NzE1OCAxNzguNTkyNzczNDQgMTAwLjkzNDgxNDQ1IEMxNzguNTExNjUy
++NjYgMTA1LjA5MTc3MTQxIDE3OC40NzgwNjI0NyAxMDkuMjQ4NTQxMTcgMTc4LjQ0
++NjEwNTk2IDExMy40MDYxMjc5MyBDMTc4LjQxMjA2NDg2IDExNy4zMTQxNzcyIDE3
++OC4zNTkzNzI5NyAxMjEuMjIxODUyNDUgMTc4LjMwMzEwMDU5IDEyNS4xMjk2Mzg2
++NyBDMTc4LjI3Nzc0ODA5IDEyNy4wNjU0NDI3NiAxNzguMjU4MTY1MTcgMTI5LjAw
++MTMzMjIzIDE3OC4yNDQ3NTA5OCAxMzAuOTM3MjU1ODYgQzE3OC4xNTQ2OTc5OCAx
++NDIuNDMwMjA3NCAxNzcuNDYxOTg0NzkgMTUyLjQxMzIzNjcgMTczLjUxNDY0ODQ0
++IDE2My4zMTU2NzM4MyBDMTczLjIwNDIyNjA3IDE2NC4yMzU1ODEwNSAxNzIuODkz
++ODAzNzEgMTY1LjE1NTQ4ODI4IDE3Mi41NzM5NzQ2MSAxNjYuMTAzMjcxNDggQzE2
++NC4xOTU0Nzc1MyAxOTAuMzAxMDc4NzMgMTQwLjEyNTk5MDc3IDIwOS4xODI5NDQ1
++NiAxMTcuOTgyMTc3NzMgMjIwLjIyMjY1NjI1IEM5MC44MzUwNzI2NSAyMzMuMzE1
++NjczODMgOTAuODM1MDcyNjUgMjMzLjMxNTY3MzgzIDgxLjUxNDY0ODQ0IDIzMy4z
++MTU2NzM4MyBDNzkuMjEzMjE4NTEgMjMwLjQ5MzQ4MjM5IDc3LjQ0ODk1MzI4IDIy
++Ny40MTA1NjE1OCA3NS41MTQ2NDg0NCAyMjQuMzE1NjczODMgQzc1LjE4NDY0ODQ0
++IDIzMC45MTU2NzM4MyA3NC44NTQ2NDg0NCAyMzcuNTE1NjczODMgNzQuNTE0NjQ4
++NDQgMjQ0LjMxNTY3MzgzIEM2Ny4wMjEyNzAzNSAyNDYuNDEzODE5NjkgNTkuNjQ4
++ODU0ODkgMjQ3Ljg0NzQwMzMzIDUxLjk1MjE0ODQ0IDI0OC45NDA2NzM4MyBDNTAu
++NjYwMTQ1MjYgMjQ5LjEyNDk2OTQ4IDUwLjY2MDE0NTI2IDI0OS4xMjQ5Njk0OCA0
++OS4zNDIwNDEwMiAyNDkuMzEyOTg4MjggQy02Ljg3ODc2MzUyIDI1Ny4wMjg1MjY2
++NyAtNzUuOTEzNTUwMSAyNDguMDE3ODg5OTcgLTEyMi4zMjY0MTYwMiAyMTIuOTIz
++NTgzOTggQy0xMzguMzA0MTA4MjkgMTk5LjcwMTE4OTcxIC0xNDkuODcyMjU3OTYg
++MTgxLjA3MDk5ODY0IC0xNTIuNDg1MzUxNTYgMTYwLjMxNTY3MzgzIEMtMTUyLjU5
++MTA5ODI4IDE1Ny45Mjg0Nzc5NCAtMTUyLjY1Mjk5OTcyIDE1NS41MzkwNjE5NyAt
++MTUyLjY3ODIyMjY2IDE1My4xNDk2NTgyIEMtMTUyLjY4NjQwMDE1IDE1Mi40NzA0
++NzMzMyAtMTUyLjY5NDU3NzY0IDE1MS43OTEyODg0NSAtMTUyLjcwMzAwMjkzIDE1
++MS4wOTE1MjIyMiBDLTE1Mi43Mjc2MjM4MyAxNDguODY0MTY0NDcgLTE1Mi43NDQz
++MTc2NiAxNDYuNjM2ODY5NjggLTE1Mi43NTg3ODkwNiAxNDQuNDA5NDIzODMgQy0x
++NTIuNzY0MTEyNzQgMTQzLjY0MDIyMTEgLTE1Mi43Njk0MzY0MiAxNDIuODcxMDE4
++MzcgLTE1Mi43NzQ5MjE0MiAxNDIuMDc4NTA2NDcgQy0xNTIuODAxNTU5NDkgMTM4
++LjAwMjI5OTAxIC0xNTIuODIwOTU4OTEgMTMzLjkyNjEyMTEgLTE1Mi44MzU0NDky
++MiAxMjkuODQ5ODUzNTIgQy0xNTIuODQ4NzQwMzggMTI2LjUwNzc3NTI5IC0xNTIu
++ODc2NTE2MzYgMTIzLjE2NjMxNDU4IC0xNTIuOTE3NDgwNDcgMTE5LjgyNDQ2Mjg5
++IEMtMTUyLjk2NzMwNTcgMTE1Ljc1NzM0MzE4IC0xNTIuOTkxNjMwMTEgMTExLjY5
++MDc3OTAyIC0xNTIuOTk4Njc2MyAxMDcuNjIzMzY3MzEgQy0xNTMuMDA1MzA4NDUg
++MTA2LjA4OTQ0MTAzIC0xNTMuMDIwMzE0NzcgMTA0LjU1NTUyMzE3IC0xNTMuMDQ0
++NTY3MTEgMTAzLjAyMTc3NDI5IEMtMTUzLjM0ODQ4NTYyIDgyLjYyOTQ3MjkzIC0x
++NDUuNzkwNTcyOTggNjUuNzU4MjgwMjIgLTEzMi40ODUzNTE1NiA1MC4zMTU2NzM4
++MyBDLTEzMS45NjcxNDg0NCA0OS42NTMwOTU3IC0xMzEuNDQ4OTQ1MzEgNDguOTkw
++NTE3NTggLTEzMC45MTUwMzkwNiA0OC4zMDc4NjEzMyBDLTExMS4zOTgzNzg2IDI0
++LjA4MzY2NDY3IC03Ny44MTI4OTc1NiAxMS40NTMyNDI2IC00OC40ODUzNTE1NiA0
++LjU2NTY3MzgzIEMtNDcuNjU2OTY3NzcgNC4zNjY5OTcwNyAtNDYuODI4NTgzOTgg
++NC4xNjgzMjAzMSAtNDUuOTc1MDk3NjYgMy45NjM2MjMwNSBDLTMwLjgwMjgwMDc2
++IDAuNTc2MTk4MDUgLTE1LjQ4NzE3OTQ2IC0wLjAzNTQwMDc3IDAgMCBaICIgZmls
++bD0iIzI5MzgzQSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjI4LjQ4NTM1MTU2MjUs
++MTM2LjY4NDMyNjE3MTg3NSkiLz4KPHBhdGggZD0iTTAgMCBDMi40NTI1OTQ0NiAz
++LjA0ODQ5MzM3IDQuMTc0ODcwMzYgNi41NDczMDYzIDYgMTAgQzYuNDU4OTA2MjUg
++MTAuODYzNjcxODcgNi45MTc4MTI1IDExLjcyNzM0Mzc1IDcuMzkwNjI1IDEyLjYx
++NzE4NzUgQzE1LjAzNTE0NzEgMjguMTM2NDg4MzggMTYuNDA0MzgzODMgNDUuNjI2
++NzExMzMgMTEuNDUzMTI1IDYyLjEzNjcxODc1IEM3LjIwNzIyNTU5IDc0LjA1OTA4
++MTI0IDAuNTg3Njc3NzIgODQuNzM5MzUyNjUgLTggOTQgQy04Ljc0NjM2NzE5IDk0
++LjgyNjI4OTA2IC05LjQ5MjczNDM3IDk1LjY1MjU3ODEyIC0xMC4yNjE3MTg3NSA5
++Ni41MDM5MDYyNSBDLTI2LjE0MzgzMzA5IDExMy4yNzg1NjkxNyAtNDYuMjc3NDk2
++MyAxMjMuNjUwODQyOTEgLTY3LjgxMzQ3NjU2IDEzMS4yMjYwNzQyMiBDLTY5LjY1
++NjMwMjY5IDEzMS44NzgzNDc0MyAtNzEuNDgyNzUxMDMgMTMyLjU3NjYyNTQgLTcz
++LjMwNDY4NzUgMTMzLjI4NTE1NjI1IEMtNzYuNDA2NDQ0NSAxMzQuMTA3Nzk2MTUg
++LTc3Ljk0OTI2MjExIDEzMy45MjgyNjY4IC04MSAxMzMgQy04Mi42MDIyOTQ5MiAx
++MzEuNDU2Mjk4ODMgLTgyLjYwMjI5NDkyIDEzMS40NTYyOTg4MyAtODMuOTgwNDY4
++NzUgMTI5LjQ1NzAzMTI1IEMtODQuNDk5MzE2NDEgMTI4LjcyMDQ5MzE2IC04NS4w
++MTgxNjQwNiAxMjcuOTgzOTU1MDggLTg1LjU1MjczNDM4IDEyNy4yMjUwOTc2NiBD
++LTg2LjM2MTk0MzM2IDEyNi4wMzA4NjE4MiAtODYuMzYxOTQzMzYgMTI2LjAzMDg2
++MTgyIC04Ny4xODc1IDEyNC44MTI1IEMtODcuNzU5MTk5MjIgMTIzLjk5MzEzOTY1
++IC04OC4zMzA4OTg0NCAxMjMuMTczNzc5MyAtODguOTE5OTIxODggMTIyLjMyOTU4
++OTg0IEMtOTAuMDgxMTg1MTcgMTIwLjY2NTIyMDU5IC05MS4yMzczMjAzMiAxMTgu
++OTk3MjYxMDUgLTkyLjM4ODE4MzU5IDExNy4zMjU2ODM1OSBDLTkzLjc3MjA5NzI4
++IDExNS4zMjg4Mzk5NCAtOTUuMTc5MDMzMjcgMTEzLjM1NTMyNTA2IC05Ni42MTMy
++ODEyNSAxMTEuMzk0NTMxMjUgQy0xMDMuMjE3MDcwNDkgMTAyLjM2NjE0MzAxIC0x
++MDkuMjc1MzgwMTIgOTMuMDAxMTk0NDMgLTExNS4zMjY2NjAxNiA4My41OTY2Nzk2
++OSBDLTExNy41MDMyMzQ2OSA4MC4yMTkwODMxNCAtMTE5LjY5MzE1NTQgNzYuODUw
++Mjc1MzcgLTEyMS44ODQ3NjU2MiA3My40ODI0MjE4OCBDLTEyMi45NTYwODA5MiA3
++MS44MzU5Mzg1MSAtMTI0LjAyNjQwNDE5IDcwLjE4ODgwOTIxIC0xMjUuMDk1NzAz
++MTIgNjguNTQxMDE1NjIgQy0xMjcuOTUxODc2NzUgNjQuMTQwMjEyMTcgLTEzMC44
++MjEwMjY4MiA1OS43NDg0OTU5MiAtMTMzLjcwNzAzMTI1IDU1LjM2NzE4NzUgQy0x
++MzQuMzEwMzEyNSA1NC40NDgwODU5NCAtMTM0LjkxMzU5Mzc1IDUzLjUyODk4NDM3
++IC0xMzUuNTM1MTU2MjUgNTIuNTgyMDMxMjUgQy0xMzYuNjk5NDIzNzYgNTAuODA4
++NzYyMjcgLTEzNy44NjcyNjQzOCA0OS4wMzc4MzI5NCAtMTM5LjAzOTA2MjUgNDcu
++MjY5NTMxMjUgQy0xMzkuNTU4NTU0NjkgNDYuNDc2NzU3ODEgLTE0MC4wNzgwNDY4
++OCA0NS42ODM5ODQzNyAtMTQwLjYxMzI4MTI1IDQ0Ljg2NzE4NzUgQy0xNDEuMDc1
++MTY4NDYgNDQuMTY3MDY1NDMgLTE0MS41MzcwNTU2NiA0My40NjY5NDMzNiAtMTQy
++LjAxMjkzOTQ1IDQyLjc0NTYwNTQ3IEMtMTQzIDQxIC0xNDMgNDEgLTE0MyAzOSBD
++LTE0Mi4wMjA5NTcwMyAzOC43MjAyNzM0NCAtMTQxLjA0MTkxNDA2IDM4LjQ0MDU0
++Njg3IC0xNDAuMDMzMjAzMTIgMzguMTUyMzQzNzUgQy0xMzkuMzcwODgxODEgMzcu
++OTYzMTA4MzcgLTEzOC43MDg1NjA0OSAzNy43NzM4NzI5OSAtMTM4LjAyNjE2ODgy
++IDM3LjU3ODkwMzIgQy0xMzYuNDkwMzczMjMgMzcuMTQwMTA1OTUgLTEzNC45NTQ1
++NzYwMyAzNi43MDEzMTQzIC0xMzMuNDE4Nzc3NDcgMzYuMjYyNTI3NDcgQy0xMjgu
++OTA5NjAwODIgMzQuOTc0MjE4NzIgLTEyNC40MDA0NTU0NCAzMy42ODU4MDA3MSAt
++MTE5Ljg5MTM1NzQyIDMyLjM5NzIxNjggQy0xMTAuMDc0NjA4MzMgMjkuNTkxOTcw
++NzkgLTEwMC4yNTc1NTU5NyAyNi43ODc3OTUzOSAtOTAuNDM5Njk3MjcgMjMuOTg2
++NDM0OTQgQy01OC41MTc3OTUwMiAxNC44ODc2MjI0MSAtNTguNTE3Nzk1MDIgMTQu
++ODg3NjIyNDEgLTI2LjYyNSA1LjY4NzUgQy0yNS40NDU5MTA2NCA1LjM0NTAxMjIx
++IC0yNC4yNjY4MjEyOSA1LjAwMjUyNDQxIC0yMy4wNTIwMDE5NSA0LjY0OTY1ODIg
++Qy0yMS40MzY4NDY5MiA0LjE3OTE5MDY3IC0yMS40MzY4NDY5MiA0LjE3OTE5MDY3
++IC0xOS43ODkwNjI1IDMuNjk5MjE4NzUgQy0xOC44MDcxMTkxNCAzLjQxNDgxOTM0
++IC0xNy44MjUxNzU3OCAzLjEzMDQxOTkyIC0xNi44MTM0NzY1NiAyLjgzNzQwMjM0
++IEMtMTQuOTE3NTI0NzUgMi4yNzMwOTE4IC0xMy4wMjg3MTYzOSAxLjY4NDI3NDY0
++IC0xMS4xNDc0NjA5NCAxLjA3Mjc1MzkxIEMtMTAuMjYwOTA4MiAwLjc4NzA2NTQz
++IC05LjM3NDM1NTQ3IDAuNTAxMzc2OTUgLTguNDYwOTM3NSAwLjIwNzAzMTI1IEMt
++Ny4zMDkyNDA3MiAtMC4xNzgxMTY0NiAtNy4zMDkyNDA3MiAtMC4xNzgxMTY0NiAt
++Ni4xMzQyNzczNCAtMC41NzEwNDQ5MiBDLTMuNzAwMTk2OTcgLTEuMDYwMjU1NTQg
++LTIuMzA4NTY0MzEgLTAuODgyMDM4NDggMCAwIFogIiBmaWxsPSIjRUZGNkZEIiB0
++cmFuc2Zvcm09InRyYW5zbGF0ZSgzOTEsMTgzKSIvPgo8cGF0aCBkPSJNMCAwIEMy
++LjUwMDk1MTI1IDEuMzk4MzgxMzQgMy45NTQwNzEyOCAyLjkwNTM1ODY5IDYgNSBD
++Ni42MTg3NSA1LjU5ODEyNSA3LjIzNzUgNi4xOTYyNSA3Ljg3NSA2LjgxMjUgQzgu
++MjQ2MjUgNy4yMDQzNzUgOC42MTc1IDcuNTk2MjUgOSA4IEM5Ljk5IDcuMzQgMTAu
++OTggNi42OCAxMiA2IEMxNi4yNTUxNTQ4OSAzLjU3OTU1NzY0IDE5LjE0NTUyMzY4
++IDMuNDUxOTEzOTYgMjQgNCBDMjYuODc1IDUgMjYuODc1IDUgMjkgNyBDMzAuMDA4
++Nzg5OTYgOS42Nzc3ODI3OCAzMC40ODc4OTg3OCAxMi4xNjAxNjU5OCAzMSAxNSBD
++MzEuNjYgMTQuNjcgMzIuMzIgMTQuMzQgMzMgMTQgQzM3Ljk0NDI4NDg1IDEyLjM1
++MTkwNTA1IDQyLjE3NTQ5NzI1IDEyLjE0NTk3NzQ0IDQ2LjkzNzUgMTQuMzc1IEM0
++OSAxNiA0OSAxNiA1MCAxOCBDNTAuMTM0MTU0NzIgMjAuNjcyMzYyMSA1MC4wNDMx
++ODU0MSAyMy4zMjI1MDQ4OCA1MCAyNiBDNTAuNzgzNzUgMjUuNTA1IDUxLjU2NzUg
++MjUuMDEgNTIuMzc1IDI0LjUgQzU3LjAzNzAwMTQ3IDIyLjU3MDg5NTk0IDYxLjAx
++NjIwNzc0IDIyLjIyNzUxMjIgNjYgMjMgQzY4LjkzNDIzMTk1IDI0Ljc5NjQ2ODU0
++IDcwLjQ3MjA1MzU1IDI1Ljk0NDEwNzEgNzIgMjkgQzcyLjM1NDkyNTQyIDM2LjIx
++NjgxNjc4IDcyLjM1NDkyNTQyIDM2LjIxNjgxNjc4IDcwLjk1ODk4NDM4IDM5LjI5
++NzExOTE0IEM2OS44NjM1MjE0MSA0Mi4zODQ2NjI1MyA2OS45NzAyNDA2OSA0NC4x
++OTEwNjM1NyA3MC40MjU3ODEyNSA0Ny40MTQwNjI1IEM3MC41NjMwNjY0MSA0OC40
++MjIxMDkzNyA3MC43MDAzNTE1NiA0OS40MzAxNTYyNSA3MC44NDE3OTY4OCA1MC40
++Njg3NSBDNzEuMDc0Nzk0OTIgNTIuMDMxMDkzNzUgNzEuMDc0Nzk0OTIgNTIuMDMx
++MDkzNzUgNzEuMzEyNSA1My42MjUgQzcxLjQ1NjIzMDQ3IDU0LjY3NDI5Njg4IDcx
++LjU5OTk2MDk0IDU1LjcyMzU5Mzc1IDcxLjc0ODA0Njg4IDU2LjgwNDY4NzUgQzcy
++LjUyNzc5MzM4IDYyLjQ4MDIxMzEzIDcyLjUyNzc5MzM4IDYyLjQ4MDIxMzEzIDc0
++IDY4IEM3NS4yMDA3NzMyNiA3NS4zMDg0MTAxMiA3NS4xNjExMjAzNiA4Mi43OTk0
++NTYzOCA3NS4yNSA5MC4xODc1IEM3NS4yNzEzNTAxIDkxLjEyNTY5NTggNzUuMjky
++NzAwMiA5Mi4wNjM4OTE2IDc1LjMxNDY5NzI3IDkzLjAzMDUxNzU4IEM3NS4zNDI1
++NzI3MyA5OC43NjUyNjExOSA3NS4wNzQ5NTkwNiAxMDQuMDEwMzYwNTUgNzIgMTA5
++IEM2Ny40ODIyNDQ0OCAxMTMuMDYzMjY2NiA2Mi4zOTQ4Mzg4MyAxMTQuMjE1Mjk3
++MDYgNTYuNjI1IDExNS41NjI1IEM1MC41NzAwNTQwOSAxMTcuMDE4NTcwMzMgNDQu
++NzQyNDQ0MTkgMTE4LjU1NjU0NDYzIDM5IDEyMSBDMzguNjcgMTIxLjY2IDM4LjM0
++IDEyMi4zMiAzOCAxMjMgQzM1LjQzNzUgMTIzLjYyNSAzNS40Mzc1IDEyMy42MjUg
++MzMgMTI0IEMzMS4wMiAxMjAuNTM1IDMxLjAyIDEyMC41MzUgMjkgMTE3IEMyMi4x
++NTA1NjI0NCAxMTcuNjIxNzkyMTkgMTUuODY2NzY0OSAxMTkuMzEyMzI3OTcgOS4y
++ODEyNSAxMjEuMjUzOTA2MjUgQzguMTM0NDQyNiAxMjEuNTg2NTc1MDEgNi45ODc2
++MzUxOSAxMjEuOTE5MjQzNzcgNS44MDYwNzYwNSAxMjIuMjYxOTkzNDEgQzIuNjg1
++NDE1NDkgMTIzLjE2ODE2NjQyIC0wLjQzMzY3MzYxIDEyNC4wNzk1Mjg4NCAtMy41
++NTIyMTkzOSAxMjQuOTkyOTQ2NjIgQy02LjgzMzE0MjkyIDEyNS45NTIzMjYyNyAt
++MTAuMTE2MTc5NjQgMTI2LjkwNDQxMDgxIC0xMy4zOTkxNjk5MiAxMjcuODU2Njg5
++NDUgQy0xNC43NDM1MjAwNSAxMjguMjQ2NzMyNTQgLTE2LjA4Nzg2NTExIDEyOC42
++MzY3OTMwNyAtMTcuNDMyMjA1MiAxMjkuMDI2ODcwNzMgQy0xOC40Mzg5MTczOCAx
++MjkuMzE4OTgwMjggLTE4LjQzODkxNzM4IDEyOS4zMTg5ODAyOCAtMTkuNDY1OTY3
++MTggMTI5LjYxNjk5MTA0IEMtMjEuNTI0MzgzMTQgMTMwLjIxNDYxNDM3IC0yMy41
++ODI1NjI1MSAxMzAuODEzMDQ1ODQgLTI1LjY0MDY3MDc4IDEzMS40MTE3Mjc5MSBD
++LTM4LjY2Mzk0MTcxIDEzNS4xOTk0MjYxMSAtNTEuNjk5OTU5ODYgMTM4Ljk0MTYy
++MDk5IC02NC43NDEyMTA5NCAxNDIuNjY2OTYxNjcgQy02OC4yMDk0MjE5OSAxNDMu
++NjU4MDQ0MjMgLTcxLjY3NzAwODE5IDE0NC42NTEyODg4NyAtNzUuMTQ0NTMxMjUg
++MTQ1LjY0NDc3NTM5IEMtODguNzM1Njk2OTEgMTQ5LjUzMjkyMzQzIC0xMDIuMzUy
++MjExNTMgMTUzLjMxNTUzMTc4IC0xMTYgMTU3IEMtMTE1LjM0IDE1OS45NyAtMTE0
++LjY4IDE2Mi45NCAtMTE0IDE2NiBDLTExNS45NTcwODY4IDE2Ni42NzAzMTcxOSAt
++MTE3LjkxNTcxMTEzIDE2Ny4zMzYxNDY4MyAtMTE5Ljg3NSAxNjggQy0xMjAuOTY1
++NTQ2ODggMTY4LjM3MTI1IC0xMjIuMDU2MDkzNzUgMTY4Ljc0MjUgLTEyMy4xNzk2
++ODc1IDE2OS4xMjUgQy0xMjYgMTcwIC0xMjYgMTcwIC0xMjggMTcwIEMtMTI4LjY5
++OTUxMDYzIDE2Ny41ODYyMzggLTEyOS4zODQ4MzkxOSAxNjUuMTY5ODk3NjYgLTEz
++MC4wNjI1IDE2Mi43NSBDLTEzMC4yNjE2NjAxNiAxNjIuMDY4MDg1OTQgLTEzMC40
++NjA4MjAzMSAxNjEuMzg2MTcxODggLTEzMC42NjYwMTU2MiAxNjAuNjgzNTkzNzUg
++Qy0xMzIuNDAwMDkyNjkgMTU0LjQxNjU3ODM5IC0xMzIuNDAwMDkyNjkgMTU0LjQx
++NjU3ODM5IC0xMzEgMTUxIEMtMTMxIDE1MS42NiAtMTMxIDE1Mi4zMiAtMTMxIDE1
++MyBDLTY1LjExMjgyMzA3IDEzMS4wODIwOTI4IC02NS4xMTI4MjMwNyAxMzEuMDgy
++MDkyOCAtMC43NSAxMDUuMTI1IEMwLjAzMDc2OTA0IDEwNC43Nzk1MzEyNSAwLjgx
++MTUzODA5IDEwNC40MzQwNjI1IDEuNjE1OTY2OCAxMDQuMDc4MTI1IEMxMC43NjY0
++MDA4NCA5OS45MDkzODA3NCAxNy45NzIzNzY0MiA5NS43NDIwNDQ3MSAyMi44MTI1
++IDg2LjU2MjUgQzI1Ljk0MDExNTI1IDc3LjMwNDA0ODAzIDI0LjQ0MzY5MTA2IDY2
++LjI3MjkzNDg0IDIyIDU3IEMyOC43NjYyMzgyMyA1My41MDE1NDcyOCAzNS41OTk0
++NjkyMiA1MC4yMTA2MDAxMiA0Mi41NjI1IDQ3LjEyNSBDNDMuMjUyNzkyOTcgNDYu
++ODE0ODk5OSA0My45NDMwODU5NCA0Ni41MDQ3OTk4IDQ0LjY1NDI5Njg4IDQ2LjE4
++NTMwMjczIEM0Ny42MDQxNTkxMSA0NC44OTMwOTY3NiA0OS43NDM1MzQgNDQgNTMg
++NDQgQzUzIDQzLjM0IDUzIDQyLjY4IDUzIDQyIEM1MS45OTQ1MzEyNSA0MS42MDU1
++NDY4OCA1MS45OTQ1MzEyNSA0MS42MDU1NDY4OCA1MC45Njg3NSA0MS4yMDMxMjUg
++QzQ3LjQ1MjY0NzE2IDM5Ljc3ODE3ODA2IDQzLjk3NTE1MDUgMzguMjcxMjIzNDcg
++NDAuNSAzNi43NSBDMzkuODY4MzU5MzggMzYuNDc1NDI5NjkgMzkuMjM2NzE4NzUg
++MzYuMjAwODU5MzcgMzguNTg1OTM3NSAzNS45MTc5Njg3NSBDMzUuNDM2NjcwNiAz
++NC41NDA5MzYzNiAzMi4zMDMwMTY5NSAzMy4xNDI5OTE3MiAyOS4xOTQzMzU5NCAz
++MS42NzYwMjUzOSBDMjIuOTc0OTM0OTMgMjguNzQ0MTc1MiAxNi43MjQ5MTYyIDI2
++LjA0MzkyNzY1IDEwLjMyODEyNSAyMy41MjczNDM3NSBDOS41ODY1OTE4IDIzLjIz
++MzM0Njg2IDguODQ1MDU4NTkgMjIuOTM5MzQ5OTggOC4wODEwNTQ2OSAyMi42MzY0
++NDQwOSBDNS4wMjA2MzA1MSAyMS40MjMyMjIyMSAxLjk2MDQ3MDI1IDIwLjIxMDcx
++ODI1IC0xLjExMjMwNDY5IDE5LjAyOTA1MjczIEMtMy4zODk2ODI5OSAxOC4xNTA1
++MzM5MyAtNS42NTYwNDQ0MyAxNy4yNDc2NTczOSAtNy45MjE4NzUgMTYuMzM5ODQz
++NzUgQy04Ljk2ODUyMzI1IDE1Ljk0NzQzNzUyIC04Ljk2ODUyMzI1IDE1Ljk0NzQz
++NzUyIC0xMC4wMzYzMTU5MiAxNS41NDcxMDM4OCBDLTExLjk3MTY3OTY5IDE0Ljc1
++NzU2ODM2IC0xMS45NzE2Nzk2OSAxNC43NTc1NjgzNiAtMTUgMTMgQy0xNi4wNTE3
++NTc4MSAxMC40OTA0Nzg1MiAtMTYuMDUxNzU3ODEgMTAuNDkwNDc4NTIgLTE2IDgg
++Qy0xMi4wNjUwMDA5NiAwLjgzMjY4MDMyIC03Ljk0Mzc0MTg5IC0xLjM1NzkwNDYg
++MCAwIFogIiBmaWxsPSIjRTQ4MTIwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNjMs
++NjYpIi8+CjxwYXRoIGQ9Ik0wIDAgQzAuMzMgMCAwLjY2IDAgMSAwIEMxLjA0OTg0
++MDYyIDUuMjI4NjY0NjMgMS4wODU5MjYwNiAxMC40NTcxODc2NSAxLjEwOTg2MzI4
++IDE1LjY4NjAzNTE2IEMxLjExOTg1Mzc4IDE3LjQ2MDc5OTI4IDEuMTMzNDUwODEg
++MTkuMjM1NTQ3MjMgMS4xNTA4Nzg5MSAyMS4wMTAyNTM5MSBDMS40MDU4NzA1NyA0
++Ny42NjQzODIzMSAtNi41MjIwNDM2MyA2Ny4wNzc1MzAxMyAtMjUuMTI1IDg2LjUg
++Qy00Mi4zNTMyNzM2MiAxMDMuMzAyODg0MTUgLTY3LjA3NDUyNDczIDExNy41ODIw
++NzQ5NiAtOTEgMTIxIEMtOTEgMTA1LjE2IC05MSA4OS4zMiAtOTEgNzMgQy04Ni43
++MSA3MS42OCAtODIuNDIgNzAuMzYgLTc4IDY5IEMtNDUuOTM0ODE4ODkgNTcuODM4
++NDc4MjEgLTE4Ljc4NDQ2NzE0IDM4LjI2MDc3MzI3IC0yLjg2Mzc2OTUzIDcuODE3
++ODcxMDkgQy0xLjY2MDM4NjAxIDUuMjg1MjU1NTggLTAuNzk1MTMxMTkgMi42ODUx
++Mjg5IDAgMCBaICIgZmlsbD0iIzlEQ0JGRCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUo
++NDAzLDI0NikiLz4KPHBhdGggZD0iTTAgMCBDMC44ODYzOTE2IDAuMzc3MzczMDUg
++MS43NzI3ODMyIDAuNzU0NzQ2MDkgMi42ODYwMzUxNiAxLjE0MzU1NDY5IEM0LjE4
++OTY0NiAxLjc2NTU2NzYzIDQuMTg5NjQ2IDEuNzY1NTY3NjMgNS43MjM2MzI4MSAy
++LjQwMDE0NjQ4IEM2Ljc5NjYxNjIxIDIuODY3MTg5OTQgNy44Njk1OTk2MSAzLjMz
++NDIzMzQgOC45NzUwOTc2NiAzLjgxNTQyOTY5IEMxMC4wODU0NjM4NyA0LjI4MDUz
++OTU1IDExLjE5NTgzMDA4IDQuNzQ1NjQ5NDEgMTIuMzM5ODQzNzUgNS4yMjQ4NTM1
++MiBDMTQuNjQxMjc2MDIgNi4xODkyNjc5MSAxNi45Mzk2MDMyMiA3LjE2MTEyMzUx
++IDE5LjIzNDg2MzI4IDguMTQwMTM2NzIgQzIzLjI5MDAzNDE2IDkuODU3NjQxNjIg
++MjcuMzcyNTgyMzggMTEuNTAwMzM3MzMgMzEuNDU5NzE2OCAxMy4xMzk4OTI1OCBD
++NDMuNDk1OTA4NTQgMTcuOTg0MzM0OSA1NS4zNzQ4ODg5MiAyMy4wMjMzMDQyNCA2
++Ni42MDAwOTc2NiAyOS41NjU0Mjk2OSBDNjYuNjAwMDk3NjYgMzAuMjI1NDI5Njkg
++NjYuNjAwMDk3NjYgMzAuODg1NDI5NjkgNjYuNjAwMDk3NjYgMzEuNTY1NDI5Njkg
++QzYyLjYyMjk2OTE3IDMzLjMxMjQxNDQ1IDU4LjY0MzM1NTUgMzUuMDUzNTg2NzIg
++NTQuNjYxNjIxMDkgMzYuNzkwMDM5MDYgQzUzLjMxNTI2ODI0IDM3LjM3ODA3MTkx
++IDUxLjk2OTUzNTc3IDM3Ljk2NzUyNzgyIDUwLjYyNDUxMTcyIDM4LjU1ODU5Mzc1
++IEM0My41NDI4ODY0NCA0MS42Njk0MTI2NSAzNi40NjA3OTgzNyA0NC42NjA3NzY1
++OSAyOS4xOTM4NDc2NiA0Ny4zMTkzMzU5NCBDMTcuNjQ2MzAyNiA1MS41NTIwMzQx
++OSA2LjM5ODk2NzIgNTYuNTMwMzE0ODUgLTQuODk5OTAyMzQgNjEuMzc3OTI5Njkg
++Qy03LjI5NDIwMDM1IDYyLjQwMjI5MTg3IC05LjY4ODY1MTk5IDYzLjQyNjI5NTA0
++IC0xMi4wODMyNTE5NSA2NC40NDk5NTExNyBDLTE1LjcwNTgzNjQ2IDY1Ljk5ODYz
++MTU1IC0xOS4zMjgzMDI4NSA2Ny41NDc1ODE3MyAtMjIuOTUwMTgwMDUgNjkuMDk3
++OTE1NjUgQy0zMC40MTgyNTg1MiA3Mi4yOTQxNzA4OSAtMzcuODkyMDU1MyA3NS40
++NzY0OTI3MSAtNDUuMzcyNTU4NTkgNzguNjQzNTU0NjkgQy00Ni43NDM5NDQ4NSA3
++OS4yMjQ1MDE0MiAtNDYuNzQzOTQ0ODUgNzkuMjI0NTAxNDIgLTQ4LjE0MzAzNTg5
++IDc5LjgxNzE4NDQ1IEMtNTEuNTY0MDY0IDgxLjI2NjIzNDk2IC01NC45ODUxMDky
++NCA4Mi43MTUyMzE2NyAtNTguNDA3NzE0ODQgODQuMTYwNTUyOTggQy02Ni44NzI1
++ODc1OCA4Ny43MzU5MjcxNyAtNzUuMjg2MzIwNDggOTEuMzY3Njc2NjYgLTgzLjU5
++NTQ1ODk4IDk1LjI5NDY3NzczIEMtODYuNDUyMjI1MTIgOTYuNTg5MTM4MjMgLTg5
++LjMzNTgyNjA2IDk3LjcyMjI2NTA3IC05Mi4yNzQ5MDIzNCA5OC44MTU0Mjk2OSBD
++LTEwMi40ODgzOTg5NyAxMDIuNjQwNzU2NjEgLTExMi40MjEwODM3NyAxMDcuMTcy
++NjAxMDYgLTEyMi4zOTk5MDIzNCAxMTEuNTY1NDI5NjkgQy0xMjIuMzk5OTAyMzQg
++MTA4LjU2NTQyOTY5IC0xMjIuMzk5OTAyMzQgMTA4LjU2NTQyOTY5IC0xMjAuMzM3
++NDAyMzQgMTA2LjM5MzU1NDY5IEMtMTE4Ljg4MzMzOTg0IDEwNS4xMTczODI4MSAt
++MTE4Ljg4MzMzOTg0IDEwNS4xMTczODI4MSAtMTE3LjM5OTkwMjM0IDEwMy44MTU0
++Mjk2OSBDLTExNi4yOTcyNDkzOSAxMDIuODM0ODgzNzMgLTExNS4xOTU3NDg0IDEw
++MS44NTMwNDEzIC0xMTQuMDk1MjE0ODQgMTAwLjg3MDExNzE5IEMtMTEzLjIwMjM3
++NzkzIDEwMC4wNzY4NjAzNSAtMTEzLjIwMjM3NzkzIDEwMC4wNzY4NjAzNSAtMTEy
++LjI5MTUwMzkxIDk5LjI2NzU3ODEyIEMtMTA4Ljg5OTYwMDE1IDk2LjIxNTM5MDA4
++IC0xMDUuNTkzMjYxODMgOTMuMDcyMDgyNDMgLTEwMi4yNzQ5MDIzNCA4OS45NDA0
++Mjk2OSBDLTk3LjE3ODgzMjExIDg1LjE0ODA2NzA3IC05Mi4wNDk2MzkxMiA4MC40
++MDI3MzY5MSAtODYuODI5NTg5ODQgNzUuNzQ1MTE3MTkgQy04My45NTU5NzA4NCA3
++My4xNjcxNzYwMiAtODEuMTE1Mjc3NDYgNzAuNTU0ODY1ODcgLTc4LjI3NDkwMjM0
++IDY3Ljk0MDQyOTY5IEMtNzMuNzExNDY1NjQgNjMuNzQzNDM3NTMgLTY5LjA5NjYy
++OTYgNTkuNjEyOTAzNDcgLTY0LjM5OTkwMjM0IDU1LjU2NTQyOTY5IEMtNjMuNjM2
++Nzc3MzQgNTUuODc0ODA0NjkgLTYyLjg3MzY1MjM0IDU2LjE4NDE3OTY5IC02Mi4w
++ODc0MDIzNCA1Ni41MDI5Mjk2OSBDLTQ0Ljg0MTMyNDY4IDYzLjMyMTE0NjQ0IC0y
++My45OTUwNzQwNCA1NS41MjUxNDU4IC03LjkzMTE1MjM0IDQ4LjY0MzU1NDY5IEMt
++MC41NjMyMDIxOSA0NS4zNDM4MzUyOSA3LjQ1NTc3Mzc5IDQxLjYyNzYyMzY2IDEx
++Ljg1NzkxMDE2IDM0LjUyNjM2NzE5IEMxMy4zNjA0NTA0NCAzMC41NTY0OTc1OSAx
++My4zNDU3NjYzNCAyNi43MDY0MjQ2OCAxMi42MDAwOTc2NiAyMi41NjU0Mjk2OSBD
++MTEuMzc1NzQ2MSAxOS45MjMwNTEyMyAxMS4zNzU3NDYxIDE5LjkyMzA1MTIzIDgu
++NjAwMDk3NjYgMTguNTY1NDI5NjkgQzYuOTM1NTU5MzEgMTguMTgxMDkyNzYgNS4y
++Njg2MTQ1NCAxNy44MDcxMDk2NSAzLjYwMDA5NzY2IDE3LjQ0MDQyOTY5IEMwLjI5
++MDY5MjQ5IDE2LjU3Mjg2ODM5IC0xLjAxMDI5MzY0IDE2LjE2MjQ5MjM3IC0yLjkw
++MzgwODU5IDEzLjI2MDc0MjE5IEMtMy45MDQxMzE2NyAxMC43MTM3OTQxMiAtNC43
++MDc5Nzk4MSA4LjIxMTI3MTgzIC01LjM5OTkwMjM0IDUuNTY1NDI5NjkgQy01Ljg5
++NDkwMjM0IDQuMDgwNDI5NjkgLTUuODk0OTAyMzQgNC4wODA0Mjk2OSAtNi4zOTk5
++MDIzNCAyLjU2NTQyOTY5IEMtMy4xMDgyNDc5NCAtMC41NjI4MzYzNSAtMy4xMDgy
++NDc5NCAtMC41NjI4MzYzNSAwIDAgWiAiIGZpbGw9IiNGQUIwM0MiIHRyYW5zZm9y
++bT0idHJhbnNsYXRlKDM0OS4zOTk5MDIzNDM3NSw3OC40MzQ1NzAzMTI1KSIvPgo8
++cGF0aCBkPSJNMCAwIEMyLjUwMDk1MTI1IDEuMzk4MzgxMzQgMy45NTQwNzEyOCAy
++LjkwNTM1ODY5IDYgNSBDNi42MTg3NSA1LjU5ODEyNSA3LjIzNzUgNi4xOTYyNSA3
++Ljg3NSA2LjgxMjUgQzguMjQ2MjUgNy4yMDQzNzUgOC42MTc1IDcuNTk2MjUgOSA4
++IEM5Ljk5IDcuMzQgMTAuOTggNi42OCAxMiA2IEMxNi4yNTUxNTQ4OSAzLjU3OTU1
++NzY0IDE5LjE0NTUyMzY4IDMuNDUxOTEzOTYgMjQgNCBDMjYuODc1IDUgMjYuODc1
++IDUgMjkgNyBDMzAuMDA4Nzg5OTYgOS42Nzc3ODI3OCAzMC40ODc4OTg3OCAxMi4x
++NjAxNjU5OCAzMSAxNSBDMzEuNjYgMTQuNjcgMzIuMzIgMTQuMzQgMzMgMTQgQzM3
++Ljk0NDI4NDg1IDEyLjM1MTkwNTA1IDQyLjE3NTQ5NzI1IDEyLjE0NTk3NzQ0IDQ2
++LjkzNzUgMTQuMzc1IEM0OSAxNiA0OSAxNiA1MCAxOCBDNTAuMTM0MTU0NzIgMjAu
++NjcyMzYyMSA1MC4wNDMxODU0MSAyMy4zMjI1MDQ4OCA1MCAyNiBDNTAuNzgzNzUg
++MjUuNTA1IDUxLjU2NzUgMjUuMDEgNTIuMzc1IDI0LjUgQzU3LjAzNzAwMTQ3IDIy
++LjU3MDg5NTk0IDYxLjAxNjIwNzc0IDIyLjIyNzUxMjIgNjYgMjMgQzY4LjkzNDIz
++MTk1IDI0Ljc5NjQ2ODU0IDcwLjQ3MjA1MzU1IDI1Ljk0NDEwNzEgNzIgMjkgQzcy
++LjM1NDkyNTQyIDM2LjIxNjgxNjc4IDcyLjM1NDkyNTQyIDM2LjIxNjgxNjc4IDcw
++Ljk1ODk4NDM4IDM5LjI5NzExOTE0IEM2OS44NjM1MjE0MSA0Mi4zODQ2NjI1MyA2
++OS45NzAyNDA2OSA0NC4xOTEwNjM1NyA3MC40MjU3ODEyNSA0Ny40MTQwNjI1IEM3
++MC41NjMwNjY0MSA0OC40MjIxMDkzNyA3MC43MDAzNTE1NiA0OS40MzAxNTYyNSA3
++MC44NDE3OTY4OCA1MC40Njg3NSBDNzEuMDc0Nzk0OTIgNTIuMDMxMDkzNzUgNzEu
++MDc0Nzk0OTIgNTIuMDMxMDkzNzUgNzEuMzEyNSA1My42MjUgQzcxLjQ1NjIzMDQ3
++IDU0LjY3NDI5Njg4IDcxLjU5OTk2MDk0IDU1LjcyMzU5Mzc1IDcxLjc0ODA0Njg4
++IDU2LjgwNDY4NzUgQzcyLjUyNzc5MzM4IDYyLjQ4MDIxMzEzIDcyLjUyNzc5MzM4
++IDYyLjQ4MDIxMzEzIDc0IDY4IEM3NS4yMDA3NzMyNiA3NS4zMDg0MTAxMiA3NS4x
++NjExMjAzNiA4Mi43OTk0NTYzOCA3NS4yNSA5MC4xODc1IEM3NS4yNzEzNTAxIDkx
++LjEyNTY5NTggNzUuMjkyNzAwMiA5Mi4wNjM4OTE2IDc1LjMxNDY5NzI3IDkzLjAz
++MDUxNzU4IEM3NS4zNDI1NzI3MyA5OC43NjUyNjExOSA3NS4wNzQ5NTkwNiAxMDQu
++MDEwMzYwNTUgNzIgMTA5IEM2Ny40ODIyNDQ0OCAxMTMuMDYzMjY2NiA2Mi4zOTQ4
++Mzg4MyAxMTQuMjE1Mjk3MDYgNTYuNjI1IDExNS41NjI1IEM1MC41NzAwNTQwOSAx
++MTcuMDE4NTcwMzMgNDQuNzQyNDQ0MTkgMTE4LjU1NjU0NDYzIDM5IDEyMSBDMzgu
++NjcgMTIxLjY2IDM4LjM0IDEyMi4zMiAzOCAxMjMgQzM1LjQzNzUgMTIzLjYyNSAz
++NS40Mzc1IDEyMy42MjUgMzMgMTI0IEMzMS4wMiAxMjAuNTM1IDMxLjAyIDEyMC41
++MzUgMjkgMTE3IEMyMi4xNTA1NjI0NCAxMTcuNjIxNzkyMTkgMTUuODY2NzY0OSAx
++MTkuMzEyMzI3OTcgOS4yODEyNSAxMjEuMjUzOTA2MjUgQzguMTM0NDQyNiAxMjEu
++NTg2NTc1MDEgNi45ODc2MzUxOSAxMjEuOTE5MjQzNzcgNS44MDYwNzYwNSAxMjIu
++MjYxOTkzNDEgQzIuNjg1NDE1NDkgMTIzLjE2ODE2NjQyIC0wLjQzMzY3MzYxIDEy
++NC4wNzk1Mjg4NCAtMy41NTIyMTkzOSAxMjQuOTkyOTQ2NjIgQy02LjgzMzE0Mjky
++IDEyNS45NTIzMjYyNyAtMTAuMTE2MTc5NjQgMTI2LjkwNDQxMDgxIC0xMy4zOTkx
++Njk5MiAxMjcuODU2Njg5NDUgQy0xNC43NDM1MjAwNSAxMjguMjQ2NzMyNTQgLTE2
++LjA4Nzg2NTExIDEyOC42MzY3OTMwNyAtMTcuNDMyMjA1MiAxMjkuMDI2ODcwNzMg
++Qy0xOC40Mzg5MTczOCAxMjkuMzE4OTgwMjggLTE4LjQzODkxNzM4IDEyOS4zMTg5
++ODAyOCAtMTkuNDY1OTY3MTggMTI5LjYxNjk5MTA0IEMtMjEuNTI0MzgzMTQgMTMw
++LjIxNDYxNDM3IC0yMy41ODI1NjI1MSAxMzAuODEzMDQ1ODQgLTI1LjY0MDY3MDc4
++IDEzMS40MTE3Mjc5MSBDLTM4LjY2Mzk0MTcxIDEzNS4xOTk0MjYxMSAtNTEuNjk5
++OTU5ODYgMTM4Ljk0MTYyMDk5IC02NC43NDEyMTA5NCAxNDIuNjY2OTYxNjcgQy02
++OC4yMDk0MjE5OSAxNDMuNjU4MDQ0MjMgLTcxLjY3NzAwODE5IDE0NC42NTEyODg4
++NyAtNzUuMTQ0NTMxMjUgMTQ1LjY0NDc3NTM5IEMtODguNzM1Njk2OTEgMTQ5LjUz
++MjkyMzQzIC0xMDIuMzUyMjExNTMgMTUzLjMxNTUzMTc4IC0xMTYgMTU3IEMtMTE1
++LjM0IDE1OS45NyAtMTE0LjY4IDE2Mi45NCAtMTE0IDE2NiBDLTExNS45NTcwODY4
++IDE2Ni42NzAzMTcxOSAtMTE3LjkxNTcxMTEzIDE2Ny4zMzYxNDY4MyAtMTE5Ljg3
++NSAxNjggQy0xMjAuOTY1NTQ2ODggMTY4LjM3MTI1IC0xMjIuMDU2MDkzNzUgMTY4
++Ljc0MjUgLTEyMy4xNzk2ODc1IDE2OS4xMjUgQy0xMjYgMTcwIC0xMjYgMTcwIC0x
++MjggMTcwIEMtMTI5LjUwNTc2NTgyIDE2NS40ODI3MDI1NSAtMTMwLjEzOTA1NjI1
++IDE2Mi42MTE5ODMgLTEyOSAxNTggQy05MS41NTI3NTU0MSAxNDYuNTk4MTk5NiAt
++NTQuMDI0NzI4MDEgMTM1LjQ3NzMzMjk1IC0xNi40NzczOTIyIDEyNC40MTA0MTE4
++MyBDLTkuNDE0NTgxMDQgMTIyLjMyODM5ODg1IC0yLjM1Mjc1MTYgMTIwLjI0MzA3
++ODQ3IDQuNzA4MjQyNDIgMTE4LjE1NDkxMTA0IEM4LjY1NTEwMzM0IDExNi45ODc4
++MDEzNyAxMi42MDIzNzk2MyAxMTUuODIyMTY2NjYgMTYuNTUxMDg2NDMgMTE0LjY2
++MTMxNTkyIEMyMC4wMjA2NjUxNSAxMTMuNjQxMjgyNjEgMjMuNDg4NzUwODEgMTEy
++LjYxNjMzMDg0IDI2Ljk1NTcwNTY0IDExMS41ODc0MTU3IEMyOC43NTU1ODgzMyAx
++MTEuMDU0NTk4NTEgMzAuNTU3MDA4MzYgMTEwLjUyNjk4MjcgMzIuMzU4NTA1MjUg
++MTA5Ljk5OTY0OTA1IEMzNy45Nzg3NzUyIDEwOC4zMjYyNzE3NyA0My41NDkxNDQ2
++MyAxMDYuNTMzMTQwNzIgNDkuMDcyMDIxNDggMTA0LjU2MDc5MTAyIEM1MC42MzQy
++MzY4MyAxMDQuMDA2MjE5NzEgNTAuNjM0MjM2ODMgMTA0LjAwNjIxOTcxIDUyLjIy
++ODAxMjA4IDEwMy40NDA0NDQ5NSBDNTYuNDU4NzUxMDUgMTAxLjI0MTk2OTc5IDU4
++LjUwNTc4NTUxIDk4LjQ4MjY0MzQ3IDYwIDk0IEM2MC40NTYyOTI5NyA4Ny4yNDQ2
++OTQ5OCA1OS43MjI0NTM5MSA4MC42NjUwNTI0MiA1OC42ODc1IDc0IEM1OC41NTIx
++NDg0NCA3My4xMDI5NzM2MyA1OC40MTY3OTY4NyA3Mi4yMDU5NDcyNyA1OC4yNzcz
++NDM3NSA3MS4yODE3MzgyOCBDNTcuOTk2MjgyMDggNjkuNDMzNjkyNzIgNTcuNzEx
++NjE3ODQgNjcuNTg2MTkxNDQgNTcuNDIzMzM5ODQgNjUuNzM5MjU3ODEgQzU3LjAx
++MTcwNTQ3IDYzLjA3NTc0MTI3IDU2LjYyMzE2MTM0IDYwLjQwOTY4MzIyIDU2LjIz
++ODI4MTI1IDU3Ljc0MjE4NzUgQzU1Ljk5MzI3MzM5IDU2LjExOTYyNzMyIDU1Ljc0
++NzIyOTIxIDU0LjQ5NzIyMzE5IDU1LjUgNTIuODc1IEM1NS4zNDA4NDEwNiA1MS43
++NDc3MTQ4NCA1NS4zNDA4NDEwNiA1MS43NDc3MTQ4NCA1NS4xNzg0NjY4IDUwLjU5
++NzY1NjI1IEM1NC41NTI1MDQyNiA0Ni42NjAxNjQ2OCA1NC4xMTIyNDk5OCA0NC40
++OTcxNDA5NiA1MSA0MiBDNDguNjg3NjI4MTcgNDAuNjk3NjE1MDggNDYuMzk1NjIz
++MzggMzkuNDg4NjM0MTMgNDQuMDE1NjI1IDM4LjMyNDIxODc1IEM0My4zMTM2NzAw
++NCAzNy45Nzc0MzU3NiA0Mi42MTE3MTUwOSAzNy42MzA2NTI3NyA0MS44ODg0ODg3
++NyAzNy4yNzMzNjEyMSBDMzMuMzI2MzE4MDkgMzMuMTAzMDA4NzcgMjQuNTQ0NTQ3
++NTIgMjkuNDU4NjE2MzQgMTUuNzUgMjUuODEyNSBDMTQuMDkzNTM2OTkgMjUuMTIw
++OTUyNyAxMi40MzcyODYyMiAyNC40Mjg4OTY4MiAxMC43ODEyNSAyMy43MzYzMjgx
++MiBDOS45NzI0ODQxMyAyMy4zOTg3NDQ4MSA5LjE2MzcxODI2IDIzLjA2MTE2MTUg
++OC4zMzA0NDQzNCAyMi43MTMzNDgzOSBDNi43NDMyNTMwOSAyMi4wNTAyMDg3NyA1
++LjE1NjcyODAzIDIxLjM4NTQ3MjA3IDMuNTcwOTIyODUgMjAuNzE5MDI0NjYgQzAu
++MTMxMjI2ODUgMTkuMjc4NDIwNiAtMy4zMDgxMzQ0NiAxNy44Njc3Mzc2MiAtNi44
++MDY2NDA2MiAxNi41NzU2ODM1OSBDLTguNDQxNDk0MTQgMTUuOTU2MjA4NSAtOC40
++NDE0OTQxNCAxNS45NTYyMDg1IC0xMC4xMDkzNzUgMTUuMzI0MjE4NzUgQy0xMS4w
++NDIzMzM5OCAxNC45ODg2NTk2NyAtMTEuOTc1MjkyOTcgMTQuNjUzMTAwNTkgLTEy
++LjkzNjUyMzQ0IDE0LjMwNzM3MzA1IEMtMTUgMTMgLTE1IDEzIC0xNS45MTUwMzkw
++NiAxMC41NTM5NTUwOCBDLTE2LjA0MTc5ODY3IDYuNzQzNTE3NTYgLTE0LjMyODMx
++MTg5IDQuOTEwMzg5ODcgLTEyIDIgQy03Ljk3NTUyMzQxIC0wLjY4Mjk4NDM5IC00
++LjczMDY1NDYgLTAuODA4NjU4OTEgMCAwIFogIiBmaWxsPSIjOUI1NzI3IiB0cmFu
++c2Zvcm09InRyYW5zbGF0ZSgzNjMsNjYpIi8+CjxwYXRoIGQ9Ik0wIDAgQzEuMzI5
++NTg3NCAwLjU2NjA1OTU3IDEuMzI5NTg3NCAwLjU2NjA1OTU3IDIuNjg2MDM1MTYg
++MS4xNDM1NTQ2OSBDNC4xODk2NDYgMS43NjU1Njc2MyA0LjE4OTY0NiAxLjc2NTU2
++NzYzIDUuNzIzNjMyODEgMi40MDAxNDY0OCBDNi43OTY2MTYyMSAyLjg2NzE4OTk0
++IDcuODY5NTk5NjEgMy4zMzQyMzM0IDguOTc1MDk3NjYgMy44MTU0Mjk2OSBDMTAu
++NjQwNjQ2OTcgNC41MTMwOTQ0OCAxMC42NDA2NDY5NyA0LjUxMzA5NDQ4IDEyLjMz
++OTg0Mzc1IDUuMjI0ODUzNTIgQzE0LjY0MTI3NjAyIDYuMTg5MjY3OTEgMTYuOTM5
++NjAzMjIgNy4xNjExMjM1MSAxOS4yMzQ4NjMyOCA4LjE0MDEzNjcyIEMyMy4yOTAw
++MzQxNiA5Ljg1NzY0MTYyIDI3LjM3MjU4MjM4IDExLjUwMDMzNzMzIDMxLjQ1OTcx
++NjggMTMuMTM5ODkyNTggQzQzLjQ5NTkwODU0IDE3Ljk4NDMzNDkgNTUuMzc0ODg4
++OTIgMjMuMDIzMzA0MjQgNjYuNjAwMDk3NjYgMjkuNTY1NDI5NjkgQzY2LjYwMDA5
++NzY2IDMwLjIyNTQyOTY5IDY2LjYwMDA5NzY2IDMwLjg4NTQyOTY5IDY2LjYwMDA5
++NzY2IDMxLjU2NTQyOTY5IEM2Mi43ODg5NDg2MSAzMy4zMTk3OTI0NyA1OC45NjY0
++NTYxNyAzNS4wNDU2NDQyOCA1NS4xMzE1OTE4IDM2Ljc0NzMxNDQ1IEM1My44MzE2
++Njc2MiAzNy4zMjg2OTQwNiA1Mi41MzUwMDcwNSAzNy45MTc0MzM0OCA1MS4yNDE5
++NDMzNiAzOC41MTM5MTYwMiBDNDIuMjM4MDc4OTkgNDIuNjU5NjU1MTkgMzYuMTg1
++MTgxNDggNDQuNTQzNTIzNzkgMjYuNTk2MTkxNDEgNDEuNjYzMDg1OTQgQzI1Ljc1
++MTg1NTQ3IDQxLjMyMTQ4NDM3IDI0LjkwNzUxOTUzIDQwLjk3OTg4MjgxIDI0LjAz
++NzU5NzY2IDQwLjYyNzkyOTY5IEMxOS41ODkzMjQ1OSAzOC45MDUwMDcwMiAxNS4y
++NTAyMDAwMyAzNy42MTgyODMwNiAxMC42MDAwOTc2NiAzNi41NjU0Mjk2OSBDMTAu
++OTIyMzYzMjggMzYuMDA4NTU0NjkgMTEuMjQ0NjI4OTEgMzUuNDUxNjc5NjkgMTEu
++NTc2NjYwMTYgMzQuODc3OTI5NjkgQzEzLjM0NjgzNDE1IDMwLjg3ODE0NzI0IDEz
++LjE0Mzg3OTggMjYuODUxMjkxNTUgMTIuNjAwMDk3NjYgMjIuNTY1NDI5NjkgQzEx
++LjM3NTc0NjEgMTkuOTIzMDUxMjMgMTEuMzc1NzQ2MSAxOS45MjMwNTEyMyA4LjYw
++MDA5NzY2IDE4LjU2NTQyOTY5IEM2LjkzNTU1OTMxIDE4LjE4MTA5Mjc2IDUuMjY4
++NjE0NTQgMTcuODA3MTA5NjUgMy42MDAwOTc2NiAxNy40NDA0Mjk2OSBDMC4yOTA2
++OTI0OSAxNi41NzI4NjgzOSAtMS4wMTAyOTM2NCAxNi4xNjI0OTIzNyAtMi45MDM4
++MDg1OSAxMy4yNjA3NDIxOSBDLTMuOTA0MTMxNjcgMTAuNzEzNzk0MTIgLTQuNzA3
++OTc5ODEgOC4yMTEyNzE4MyAtNS4zOTk5MDIzNCA1LjU2NTQyOTY5IEMtNS43Mjk5
++MDIzNCA0LjU3NTQyOTY5IC02LjA1OTkwMjM0IDMuNTg1NDI5NjkgLTYuMzk5OTAy
++MzQgMi41NjU0Mjk2OSBDLTMuMTA4MjQ3OTQgLTAuNTYyODM2MzUgLTMuMTA4MjQ3
++OTQgLTAuNTYyODM2MzUgMCAwIFogIiBmaWxsPSIjRjhDRDU1IiB0cmFuc2Zvcm09
++InRyYW5zbGF0ZSgzNDkuMzk5OTAyMzQzNzUsNzguNDM0NTcwMzEyNSkiLz4KPHBh
++dGggZD0iTTAgMCBDNC4wMzExNzgzIDEuMzQzNzI2MSA0LjgwMTMwNTk3IDMuNDUz
++NzE5MzEgNyA3IEM3Ljk5IDguNDg1IDcuOTkgOC40ODUgOSAxMCBDOS44NTEwMjQx
++NCAxMS43OTQ3MzQwOCAxMC42NTg1ODEzIDEzLjYxMDMxNjg4IDExLjQzNzUgMTUu
++NDM3NSBDMTEuODQ4NzEwOTQgMTYuMzg0OTYwOTQgMTIuMjU5OTIxODggMTcuMzMy
++NDIxODcgMTIuNjgzNTkzNzUgMTguMzA4NTkzNzUgQzE1Ljg2ODUxMDA2IDI3LjIz
++OTU5MDU0IDE3LjQ2MTE1NzggMzUuNTI5NDE1MDUgMTcuMjUgNDUgQzE3LjIyOTIx
++Mzg3IDQ2LjU5NTY5ODI0IDE3LjIyOTIxMzg3IDQ2LjU5NTY5ODI0IDE3LjIwODAw
++NzgxIDQ4LjIyMzYzMjgxIEMxNy4xNzE5ODM1IDUwLjY4ODkxOTA0IDE3LjEyODEw
++MDUzIDUzLjE1NDA5Nzc1IDE3LjA3ODEyNSA1NS42MTkxNDA2MiBDMTYuOTk3MDA0
++MjIgNTkuNzc2MDk3NTggMTYuOTYzNDE0MDMgNjMuOTMyODY3MzQgMTYuOTMxNDU3
++NTIgNjguMDkwNDU0MSBDMTYuODk3NDE2NDMgNzEuOTk4NTAzMzcgMTYuODQ0NzI0
++NTMgNzUuOTA2MTc4NjIgMTYuNzg4NDUyMTUgNzkuODEzOTY0ODQgQzE2Ljc2MzA5
++OTY1IDgxLjc0OTc2ODk0IDE2Ljc0MzUxNjc0IDgzLjY4NTY1ODQgMTYuNzMwMTAy
++NTQgODUuNjIxNTgyMDMgQzE2LjY0MDA0OTU0IDk3LjExNDUzMzU3IDE1Ljk0NzMz
++NjM1IDEwNy4wOTc1NjI4NyAxMiAxMTggQzExLjY4OTU3NzY0IDExOC45MTk5MDcy
++MyAxMS4zNzkxNTUyNyAxMTkuODM5ODE0NDUgMTEuMDU5MzI2MTcgMTIwLjc4NzU5
++NzY2IEMyLjY0NTEyMjk4IDE0NS4wODg1MjcxOSAtMjEuNTM2MDU3NzYgMTYzLjk3
++NjA2ODI2IC00My43ODYzNzY5NSAxNzUuMDA5MDMzMiBDLTYzLjA5MTU1MjYzIDE4
++NC4yODIxMTc1OSAtNjMuMDkxNTUyNjMgMTg0LjI4MjExNzU5IC03MiAxODYgQy03
++Mi45OSAxODUuMzQgLTczLjk4IDE4NC42OCAtNzUgMTg0IEMtNzMuODg2MjUgMTgz
++LjY1OTY4NzUgLTcyLjc3MjUgMTgzLjMxOTM3NSAtNzEuNjI1IDE4Mi45Njg3NSBD
++LTYwLjgzNTkyMjY1IDE3OS41NzkxNTU3NCAtNTAuOTI0NDY1MTYgMTc1LjQwNzE5
++NzAyIC00MSAxNzAgQy0zOS45NDE2Nzk2OSAxNjkuNDM0MTAxNTYgLTM4Ljg4MzM1
++OTM3IDE2OC44NjgyMDMxMyAtMzcuNzkyOTY4NzUgMTY4LjI4NTE1NjI1IEMtMTQu
++ODM2MjM5NzEgMTU1LjQ5Nzk4NzM5IDMuMjgzOTI2NTYgMTM2LjQ2MDMwMjMyIDEx
++LjQ5MjE4NzUgMTExLjE2MDE1NjI1IEMxMi44NjQ0NDY2NiAxMDUuMzIyNzc2OTIg
++MTMuMTM5ODA3ODEgOTkuNjE3NTA3NjYgMTMuMDk3NjU2MjUgOTMuNjYwMTU2MjUg
++QzEzLjA5NjI0MTMgOTIuODkzMTk5MzEgMTMuMDk0ODI2MzUgOTIuMTI2MjQyMzcg
++MTMuMDkzMzY4NTMgOTEuMzM2MDQ0MzEgQzEzLjA4NzgxNzY2IDg4LjkxMTQ4ODEg
++MTMuMDc1Mjc0NjMgODYuNDg3MDI3ODEgMTMuMDYyNSA4NC4wNjI1IEMxMy4wNTc0
++Nzg2NCA4Mi40MDgyMDQ0NyAxMy4wNTI5MTY4NSA4MC43NTM5MDc0NyAxMy4wNDg4
++MjgxMiA3OS4wOTk2MDkzOCBDMTMuMDM3ODY0MzggNzUuMDY2MzY5ODggMTMuMDIw
++NjM0MjQgNzEuMDMzMjAxMTQgMTMgNjcgQzEyLjQ4ODg4NjcyIDY4LjA5NDY1NTc2
++IDExLjk3Nzc3MzQ0IDY5LjE4OTMxMTUyIDExLjQ1MTE3MTg4IDcwLjMxNzEzODY3
++IEMtNC42OTYwMzc3MyAxMDQuNjc1MTk4MiAtMzUuNTI1MDc3NjUgMTIzLjMwMTU2
++MDQ4IC02OS44Nzg5MDYyNSAxMzYuMjUgQy03My4zMDkzNTY3OSAxMzcuMDc0MzM4
++NTUgLTc1LjU5NjY2MjIxIDEzNi44MTg4NDgxOSAtNzkgMTM2IEMtNzYuMzEzODk3
++MTMgMTM0LjU5MzUzMjk4IC03My42Nzk1NDE2NSAxMzMuNDg5Mzc4MiAtNzAuNzk2
++ODc1IDEzMi41NTQ2ODc1IEMtMzkuOTYyMTczNTQgMTIyLjMyMTU3ODYzIC05LjU2
++ODA0MjA2IDEwNS4wMTUwMjE5IDYuMDE1NjI1IDc1LjI1MzkwNjI1IEMxNC42NDcz
++MTY3OSA1Ny45NjYxMzMxIDE2Ljc4Nzc0NjczIDQwLjQ5ODI0NDExIDEwLjc2MjY5
++NTMxIDIyLjA1MjczNDM4IEM4LjQyNzA0ODgzIDE1Ljc2NjUyNTggNS4xOTAxNjQ3
++OSA5Ljg4MzE2MTA1IDIgNCBDMS4zMjY1NjUyNCAyLjY3MDA3MjI0IDAuNjU1ODI2
++OTYgMS4zMzg2OTgzMyAwIDAgWiAiIGZpbGw9IiMzRDRENTIiIHRyYW5zZm9ybT0i
++dHJhbnNsYXRlKDM5MCwxODIpIi8+CjxwYXRoIGQ9Ik0wIDAgQzIuODgwMjY3NDYg
++MC4wMDMxNjM1MiA1Ljc1OTUwNjQyIC0wLjAyMDQyODU2IDguNjM5NjQ4NDQgLTAu
++MDQ1NjU0MyBDNDAuMzExMjMxNzcgLTAuMTUzMjcwNjEgNDAuMzExMjMxNzcgLTAu
++MTUzMjcwNjEgNDguNTE0NjQ4NDQgNS4zMTU2NzM4MyBDNDQuNDkzMjg0ODggNi4z
++NjkyNDE0IDQxLjQ2NDQ2OTg5IDYuMTcxNTM4NjEgMzcuMzg5NjQ4NDQgNS40NDA2
++NzM4MyBDMjUuOTk2Njc1MDIgMy40MjM0NjQwNyAxNC42NzY5NDU3NCAzLjEwOTU4
++MjIgMy4xMzk2NDg0NCAzLjEyODE3MzgzIEMyLjM4Nzk4NDAxIDMuMTI5MTEwNDEg
++MS42MzYzMTk1OCAzLjEzMDA0NyAwLjg2MTg3NzQ0IDMuMTMxMDExOTYgQy00Ni40
++NTg4Njg0OSAzLjI1ODQ3ODIxIC05My4yNjMzMjE3IDE0Ljk4NTk0NjMzIC0xMjgu
++MDI0NDE0MDYgNDguNzg0NDIzODMgQy0xNDMuODI2NDUxNjQgNjUuNTA5NjA0NDkg
++LTE0OS40NDgyNTk5NSA4NC4wNzI3ODc5MSAtMTUwLjQ4NTM1MTU2IDEwNi4zMTU2
++NzM4MyBDLTE1MS4xNDUzNTE1NiAxMDYuMzE1NjczODMgLTE1MS44MDUzNTE1NiAx
++MDYuMzE1NjczODMgLTE1Mi40ODUzNTE1NiAxMDYuMzE1NjczODMgQy0xNTMuNjE2
++NDkyMjkgODQuMzcxNTQzNjUgLTE0Ni45NDk1MDIzMiA2Ny4xMDMzODI5NCAtMTMy
++LjQ4NTM1MTU2IDUwLjMxNTY3MzgzIEMtMTMxLjk2NzE0ODQ0IDQ5LjY1MzA5NTcg
++LTEzMS40NDg5NDUzMSA0OC45OTA1MTc1OCAtMTMwLjkxNTAzOTA2IDQ4LjMwNzg2
++MTMzIEMtMTExLjM5ODM3ODYgMjQuMDgzNjY0NjcgLTc3LjgxMjg5NzU2IDExLjQ1
++MzI0MjYgLTQ4LjQ4NTM1MTU2IDQuNTY1NjczODMgQy00Ny42NTY5Njc3NyA0LjM2
++Njk5NzA3IC00Ni44Mjg1ODM5OCA0LjE2ODMyMDMxIC00NS45NzUwOTc2NiAzLjk2
++MzYyMzA1IEMtMzAuODAyODAwNzYgMC41NzYxOTgwNSAtMTUuNDg3MTc5NDYgLTAu
++MDM1NDAwNzcgMCAwIFogIiBmaWxsPSIjM0E0QjUwIiB0cmFuc2Zvcm09InRyYW5z
++bGF0ZSgyMjguNDg1MzUxNTYyNSwxMzYuNjg0MzI2MTcxODc1KSIvPgo8cGF0aCBk
++PSJNMCAwIEMwLjk5IDAuNjYgMS45OCAxLjMyIDMgMiBDMi4zMTcxNTQzOSAyLjE5
++Mjk5MTc5IDEuNjM0MzA4NzggMi4zODU5ODM1OCAwLjkzMDc3MDg3IDIuNTg0ODIz
++NjEgQy03LjAzNDg2Mzg5IDQuODM2NDAwMDMgLTE1LjAwMDA2Mjc5IDcuMDg5NTE0
++NzIgLTIyLjk2NDkyMzg2IDkuMzQzODI2MjkgQy0yNC4zNTk5NjI5MiA5LjczODY2
++MjAzIC0yNS43NTUwMTAzOSAxMC4xMzM0NjgwOCAtMjcuMTUwMDY2MzggMTAuNTI4
++MjQ0MDIgQy00NC4zMjMyOTMzNyAxNS4zODgxMzY1OCAtNjEuNDg3MjgxMDMgMjAu
++Mjc0NjI2NjggLTc4LjYxNTcyMjY2IDI1LjI5MDUyNzM0IEMtODguMDMyMzI1MzEg
++MjguMDM3MjA5MDcgLTk3LjQ5MjAxMzE0IDMwLjU4OTY5NTA1IC0xMDcgMzMgQy0x
++MDYuMzQgMzUuOTcgLTEwNS42OCAzOC45NCAtMTA1IDQyIEMtMTA2Ljk1NzA4Njgg
++NDIuNjcwMzE3MTkgLTEwOC45MTU3MTExMyA0My4zMzYxNDY4MyAtMTEwLjg3NSA0
++NCBDLTExMS45NjU1NDY4OCA0NC4zNzEyNSAtMTEzLjA1NjA5Mzc1IDQ0Ljc0MjUg
++LTExNC4xNzk2ODc1IDQ1LjEyNSBDLTExNyA0NiAtMTE3IDQ2IC0xMTkgNDYgQy0x
++MjAuNTA1NzY1ODIgNDEuNDgyNzAyNTUgLTEyMS4xMzkwNTYyNSAzOC42MTE5ODMg
++LTEyMCAzNCBDLTEwNC40MDc2MzE4NiAyOS4yNzE1ODg3OSAtODguODA5MDQ1NTIg
++MjQuNTYzOTQ1NzQgLTczLjIwNjYyNDk4IDE5Ljg2ODgyMTE0IEMtNjguOTYxMzgz
++NTQgMTguNTkxMTEwODMgLTY0LjcxNjc5ODc3IDE3LjMxMTI0MTExIC02MC40NzI1
++ODM3NyAxNi4wMzAxMjU2MiBDLTUzLjEwMTU1OTU0IDEzLjgwNTI2ODQyIC00NS43
++Mjg2NTU1IDExLjU4NjgzMjIxIC0zOC4zNTI1Mjc2MiA5LjM3ODk0OTE3IEMtMzQu
++NzUzNjA2NSA4LjMwMTUxNjkxIC0zMS4xNTU2NTIgNy4yMjEwNzU5NSAtMjcuNTU5
++ODE0NDUgNi4xMzMzOTIzMyBDLTI0LjE1NDc0NjYgNS4xMDM1NjI1MSAtMjAuNzQ3
++MzA3MTEgNC4wODIwMDIxIC0xNy4zMzc4NzkxOCAzLjA2NjcwMzggQy0xNS40NzE0
++MTQxOCAyLjUwODU3MTM1IC0xMy42MDc1NDIxNyAxLjk0MTc5MDgxIC0xMS43NDM3
++NDM5IDEuMzc0ODE2ODkgQy0xMC42MzE4OTcyOCAxLjA0NTQ0MTI4IC05LjUyMDA1
++MDY2IDAuNzE2MDY1NjcgLTguMzc0NTExNzIgMC4zNzY3MDg5OCBDLTcuNDA0MDc5
++MjggMC4wODUyMTQ2OSAtNi40MzM2NDY4NSAtMC4yMDYyNzk2IC01LjQzMzgwNzM3
++IC0wLjUwNjYwNzA2IEMtMyAtMSAtMyAtMSAwIDAgWiAiIGZpbGw9IiM5MjYxM0Ii
++IHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1NCwxOTApIi8+CjxwYXRoIGQ9Ik0wIDAg
++QzQuMDMxMTc4MyAxLjM0MzcyNjEgNC44MDEzMDU5NyAzLjQ1MzcxOTMxIDcgNyBD
++Ny45OSA4LjQ4NSA3Ljk5IDguNDg1IDkgMTAgQzkuODUxMDI0MTQgMTEuNzk0NzM0
++MDggMTAuNjU4NTgxMyAxMy42MTAzMTY4OCAxMS40Mzc1IDE1LjQzNzUgQzEyLjA1
++NDMxNjQxIDE2Ljg1ODY5MTQxIDEyLjA1NDMxNjQxIDE2Ljg1ODY5MTQxIDEyLjY4
++MzU5Mzc1IDE4LjMwODU5Mzc1IEMxNi4xNjc5ODI1NCAyOC4wNzkzNTc1NiAxNy40
++NjI1NDQxOSAzNy4wMTU5NDkyNyAxNy4zMTI1IDQ3LjM3NSBDMTcuMzE3MzMzOTgg
++NDkuMDc4NDk2MDkgMTcuMzE3MzMzOTggNDkuMDc4NDk2MDkgMTcuMzIyMjY1NjIg
++NTAuODE2NDA2MjUgQzE3LjI1NDI1NjI3IDYxLjM2NDAzODMzIDE3LjI1NDI1NjI3
++IDYxLjM2NDAzODMzIDE1IDY2IEMxNC4wMSA2Ni40OTUgMTQuMDEgNjYuNDk1IDEz
++IDY3IEMxMS45NDY0NzE1NyA2OS4zMDk2NTg0OCAxMC45NDI4MDkwNCA3MS42NDI5
++Nzc0IDEwIDc0IEM5LjAxIDczLjY3IDguMDIgNzMuMzQgNyA3MyBDNy4yNTM5NDUz
++MSA3Mi40ODk1MzEyNSA3LjUwNzg5MDYzIDcxLjk3OTA2MjUgNy43Njk1MzEyNSA3
++MS40NTMxMjUgQzE1LjMxOTUzOSA1NS41MDQ3OTQwMiAxNi4yMTc2MjE3OCAzOC43
++NTI4MjQxIDEwLjc2MjY5NTMxIDIyLjA1MjczNDM4IEM4LjQyNzA0ODgzIDE1Ljc2
++NjUyNTggNS4xOTAxNjQ3OSA5Ljg4MzE2MTA1IDIgNCBDMS4zMjY1NjUyNCAyLjY3
++MDA3MjI0IDAuNjU1ODI2OTYgMS4zMzg2OTgzMyAwIDAgWiAiIGZpbGw9IiM0NDUx
++NTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM5MCwxODIpIi8+CjxwYXRoIGQ9Ik0w
++IDAgQzAuNjYgMy4zIDEuMzIgNi42IDIgMTAgQzAuMDQyOTEzMiAxMC42NzAzMTcx
++OSAtMS45MTU3MTExMyAxMS4zMzYxNDY4MyAtMy44NzUgMTIgQy00Ljk2NTU0Njg4
++IDEyLjM3MTI1IC02LjA1NjA5Mzc1IDEyLjc0MjUgLTcuMTc5Njg3NSAxMy4xMjUg
++Qy0xMCAxNCAtMTAgMTQgLTEyIDE0IEMtMTMuNTA1NzY1ODIgOS40ODI3MDI1NSAt
++MTQuMTM5MDU2MjUgNi42MTE5ODMgLTEzIDIgQy0xMS4zOTkzNTE1NyAxLjQ2ODQ1
++MjU4IC05Ljc5NDMxMTI2IDAuOTUwMTE2NDcgLTguMTg3NSAwLjQzNzUgQy03LjI5
++NDE3OTY5IDAuMTQ3NDYwOTQgLTYuNDAwODU5MzggLTAuMTQyNTc4MTIgLTUuNDgw
++NDY4NzUgLTAuNDQxNDA2MjUgQy0zIC0xIC0zIC0xIDAgMCBaICIgZmlsbD0iIzk4
++NTUyNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQ3LDIyMikiLz4KPHBhdGggZD0i
++TTAgMCBDMC42NiAwLjMzIDEuMzIgMC42NiAyIDEgQzEuMTc1IDEuODQ1NjI1IDAu
++MzUgMi42OTEyNSAtMC41IDMuNTYyNSBDLTIuNzA0ODg5OTUgNi4yMDQ2MjAyNSAt
++My4wMDA0NTM0OCA3LjAwMzc1NzQzIC0zLjQzNzUgMTAuNjI1IEMtMy4wNTUwOTc1
++OSAxNC42OTg2MjYwMSAtMy4wNTUwOTc1OSAxNC42OTg2MjYwMSAtMSAxOCBDMy42
++NjA2NDc5MSAxOS4wOTY2MjMwNCA4LjIyODM3Mjc0IDE5LjA5NzM4MDE1IDEzIDE5
++IEMxMC4xNTg3NDUzOSAyMS4zNDQzNDA3OCA3Ljc3MzQxMjk4IDIyLjU3MTY2MzY4
++IDQuMjI2NTYyNSAyMy41MzUxNTYyNSBDMy4zMTkwNjI1IDIzLjc4NzE2Nzk3IDIu
++NDExNTYyNSAyNC4wMzkxNzk2OSAxLjQ3NjU2MjUgMjQuMjk4ODI4MTIgQzAuNTM1
++NTQ2ODggMjQuNTUwODM5ODQgLTAuNDA1NDY4NzUgMjQuODAyODUxNTYgLTEuMzc1
++IDI1LjA2MjUgQy0zLjIzNzI4OTk5IDI1LjU3MzA4NjQxIC01LjA5OTI3NzY5IDI2
++LjA4NDc3Njg4IC02Ljk2MDkzNzUgMjYuNTk3NjU2MjUgQy03LjgzMjAyMTQ4IDI2
++LjgzNjI5Mzk1IC04LjcwMzEwNTQ3IDI3LjA3NDkzMTY0IC05LjYwMDU4NTk0IDI3
++LjMyMDgwMDc4IEMtMTIuNDMzMjI0NzEgMjguMTIyNjMyMzkgLTE1LjIyMTA5MTQ1
++IDI5LjAyODc3NjExIC0xOCAzMCBDLTEzLjU2MzM4MDI4IDI1LjI5NDQ5NDI0IC0x
++My41NjMzODAyOCAyNS4yOTQ0OTQyNCAtMTEuMTA5Mzc1IDI0LjAxMTcxODc1IEMt
++OC44OTYxNTU3NyAyMi44NDY2Mjk3NiAtNy41MzEwMzcyNCAyMS45OTczODc2NiAt
++NiAyMCBDLTUuNzM3MDEzMyAxNi42Nzc2MDE0MSAtNS45NDQ4MTM3OSAxMy41MDc4
++NDYzMiAtNi4xNTIzNDM3NSAxMC4xODM1OTM3NSBDLTUuOTQzOTMyNDQgNS44Mjgz
++MzE4MiAtNC4zNzc3MzM0MSA0LjAwNDYzODY2IC0xLjMxMjUgMS4wNzQyMTg3NSBD
++LTAuNjYyODEyNSAwLjU0MjQ4MDQ3IC0wLjY2MjgxMjUgMC41NDI0ODA0NyAwIDAg
++WiAiIGZpbGw9IiNFMEUwRTAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwNiw2OCki
++Lz4KPHBhdGggZD0iTTAgMCBDMC45OSAwLjY2IDEuOTggMS4zMiAzIDIgQy0yLjkw
++NDU2ODU3IDMuNzM5OTY5NzYgLTguODEyNzMwMDggNS40NjY5MTg0OCAtMTQuNzI0
++NjA5MzggNy4xODE4ODQ3NyBDLTE2LjczNTQxNzk2IDcuNzY3MTgwNjUgLTE4Ljc0
++NTE5NjM1IDguMzU2MDI3OTIgLTIwLjc1MzkwNjI1IDguOTQ4NDg2MzMgQy0yMy42
++NDA1OTQ5NyA5Ljc5OTIzMjI5IC0yNi41MzA3NDE4MyAxMC42MzcxNTc1NCAtMjku
++NDIxODc1IDExLjQ3MjY1NjI1IEMtMzAuNzY4OTU1MzggMTEuODc0MTI2MjEgLTMw
++Ljc2ODk1NTM4IDExLjg3NDEyNjIxIC0zMi4xNDMyNDk1MSAxMi4yODM3MDY2NyBD
++LTMyLjk4MzgxODk3IDEyLjUyNDAzMTIyIC0zMy44MjQzODg0MyAxMi43NjQzNTU3
++NyAtMzQuNjkwNDI5NjkgMTMuMDExOTYyODkgQy0zNS40Mjc2NzI3MyAxMy4yMjcz
++NjIyMSAtMzYuMTY0OTE1NzcgMTMuNDQyNzYxNTQgLTM2LjkyNDQ5OTUxIDEzLjY2
++NDY4ODExIEMtMzkuMjUwNjQzNjQgMTQuMDQwNDkzMjcgLTQwLjc3NjQ1ODAyIDEz
++LjcyMTczOTU0IC00MyAxMyBDLTQxLjAyIDEyLjY3IC0zOS4wNCAxMi4zNCAtMzcg
++MTIgQy0zNi42NyAxMS4wMSAtMzYuMzQgMTAuMDIgLTM2IDkgQy0zMy41ODE3NTUy
++OSA4LjAwNDMxOTUgLTMxLjI4ODY0NjgyIDcuMjEzNzk1NjIgLTI4Ljc4OTA2MjUg
++Ni40ODQzNzUgQy0yOC4wNjUxMjI5OSA2LjI2NDI4NzcyIC0yNy4zNDExODM0NyA2
++LjA0NDIwMDQ0IC0yNi41OTUzMDY0IDUuODE3NDQzODUgQy0yNS4wNjIwNjYwMSA1
++LjM1NDQ0NDA5IC0yMy41MjY5Njk4OCA0Ljg5NzU1MjY2IC0yMS45OTAyMzQzOCA0
++LjQ0NjI4OTA2IEMtMTkuNjM2ODQzMTggMy43NTM0ODY0NSAtMTcuMjkxMDU5NDQg
++My4wMzg1MTg5NCAtMTQuOTQ1MzEyNSAyLjMyMDMxMjUgQy0xMy40NTYxMzA0MSAx
++Ljg3MzY2MDAxIC0xMS45NjY1NTg3NSAxLjQyODMwMzk1IC0xMC40NzY1NjI1IDAu
++OTg0Mzc1IEMtOS43NzMzNDg2OSAwLjc2OTg4NzA4IC05LjA3MDEzNDg5IDAuNTU1
++Mzk5MTcgLTguMzQ1NjExNTcgMC4zMzQ0MTE2MiBDLTMuMzQ2MjY2NTUgLTEuMTE1
++NDIyMTggLTMuMzQ2MjY2NTUgLTEuMTE1NDIyMTggMCAwIFogIiBmaWxsPSIjOTk2
++MTM4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNTQsMTkwKSIvPgo8cGF0aCBkPSJN
++MCAwIEMtMS41NTkxODkzMSAxLjgzMTcxOTM3IC0yLjUxMDgxMDY3IDIuODg0NzEw
++NTIgLTQuODg3NDUxMTcgMy40NDQ4MjQyMiBDLTUuNTk4NzcxOTcgMy40ODEwNzkx
++IC02LjMxMDA5Mjc3IDMuNTE3MzMzOTggLTcuMDQyOTY4NzUgMy41NTQ2ODc1IEMt
++Ny44NTgwNTkwOCAzLjYwOTQ3MjY2IC04LjY3MzE0OTQxIDMuNjY0MjU3ODEgLTku
++NTEyOTM5NDUgMy43MjA3MDMxMiBDLTEwLjM5NTU0NDQzIDMuNzcxNjIxMDkgLTEx
++LjI3ODE0OTQxIDMuODIyNTM5MDYgLTEyLjE4NzUgMy44NzUgQy0yNS44NzIzNTU5
++MiA0LjkwNDQ2MSAtMzkuMzYzNTc2NTMgNy41NzIxNjUzIC01Mi41NzQyMTg3NSAx
++MS4yODEyNSBDLTUzLjcwNDcyNjU2IDExLjUxODQzNzUgLTU0LjgzNTIzNDM3IDEx
++Ljc1NTYyNSAtNTYgMTIgQy01Ni42NiAxMS4zNCAtNTcuMzIgMTAuNjggLTU4IDEw
++IEMtMzkuMDIxNDgyMzQgNC4zNzA2NjEyIC0xOS45MzI4Mzk2NCAtMC4zOTg2NTY3
++OSAwIDAgWiAiIGZpbGw9IiM0ODU2NUIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIx
++NywxMzcpIi8+CjxwYXRoIGQ9Ik0wIDAgQzAuNjYgMCAxLjMyIDAgMiAwIEMtMy45
++Nzk5OTUxMyAxNS45OTQzNDEwNCAtMTkuMjAyNzI3NDQgMzIuNDkxNTY4MjggLTM0
++IDQxIEMtMzQuNjYgNDEgLTM1LjMyIDQxIC0zNiA0MSBDLTM0LjY5OTM2MDYgMzcu
++MDk4MDgxODEgLTMyLjI2NDUzOTUgMzUuNzQ4OTMyODUgLTI5LjA2MjUgMzMuNDM3
++NSBDLTE3LjQ0ODIxNDMzIDI0LjczMzE2MzcyIC04LjUxMzgwMzYxIDE0Ljc3MTQ2
++NDkxIC0xLjM3MTA5Mzc1IDIuMTEzMjgxMjUgQy0wLjkxODYzMjgxIDEuNDE1ODk4
++NDQgLTAuNDY2MTcxODcgMC43MTg1MTU2MyAwIDAgWiAiIGZpbGw9IiMzNzQ4NEQi
++IHRyYW5zZm9ybT0idHJhbnNsYXRlKDM5NywyNTYpIi8+CjxwYXRoIGQ9Ik0wIDAg
++QzAuMzMgMCAwLjY2IDAgMSAwIEMxLjE4NTYyNSAxLjA3MjUgMS4zNzEyNSAyLjE0
++NSAxLjU2MjUgMy4yNSBDMi41NDYzMzE0IDYuNjU1NTcwMjMgMy4wMzcyNTI1OCA3
++LjAyNzU2NjkxIDYuMTI1IDkuMzEyNSBDOS45NDQ4NDI3OCAxMS4xODYyMzM0IDEz
++Ljg0OTM5ODA4IDEyLjEyNjE4OTA3IDE4IDEzIEMxNy42NyAxMy42NiAxNy4zNCAx
++NC4zMiAxNyAxNSBDMTEuNTYxMDgzNSAxNS4yMTc1NTY2NiA3LjEyOTE5MTg2IDE1
++LjEwNDI4Mzg0IDIgMTMgQzEuMDEgMTUuOTcgMC4wMiAxOC45NCAtMSAyMiBDLTEu
++MzMgMjIgLTEuNjYgMjIgLTIgMjIgQy0yLjA5MDMxMjEzIDE2Ljg1MjIwODM5IC0x
++LjgzNDE3NDAxIDEyLjA5NzczMDA3IC0xIDcgQy0wLjgxNDM3NSA1LjcwMDYyNSAt
++MC42Mjg3NSA0LjQwMTI1IC0wLjQzNzUgMy4wNjI1IEMtMC4yOTMxMjUgMi4wNTE4
++NzUgLTAuMTQ4NzUgMS4wNDEyNSAwIDAgWiAiIGZpbGw9IiNFMEUwRTAiIHRyYW5z
++Zm9ybT0idHJhbnNsYXRlKDI4NCwxMDMpIi8+CjxwYXRoIGQ9Ik0wIDAgQzAuMzMg
++MCAwLjY2IDAgMSAwIEMxLjAyNDc2MjY2IDUuNDYyNjQzMTQgMS4wNDI4ODk3NCAx
++MC45MjUyNTM0MyAxLjA1NDkzMTY0IDE2LjM4NzkzOTQ1IEMxLjA1OTk1MzAzIDE4
++LjI0NTM2NzEyIDEuMDY2NzcxNDEgMjAuMTAyNzkwODUgMS4wNzU0Mzk0NSAyMS45
++NjAyMDUwOCBDMS4wODc2MDExNyAyNC42MzM2MzYyMSAxLjA5MzI1MDMzIDI3LjMw
++NzAxNDk2IDEuMDk3NjU2MjUgMjkuOTgwNDY4NzUgQzEuMTAyODE3NTQgMzAuODA3
++NzM5NzIgMS4xMDc5Nzg4MiAzMS42MzUwMTA2OCAxLjExMzI5NjUxIDMyLjQ4NzM1
++MDQ2IEMxLjExMzY4MTIgMzYuNDYyMjUzNCAwLjk4OTgwMTE5IDQwLjExOTU2ODMz
++IDAgNDQgQy0wLjY2IDQ0IC0xLjMyIDQ0IC0yIDQ0IEMtMS44ODIwNzk3NCAzNy44
++OTQzMDg5MyAtMS43NTc4NTYyNyAzMS43ODg3OTE4MSAtMS42Mjc2ODU1NSAyNS42
++ODMzNDk2MSBDLTEuNTg0MjY2NjYgMjMuNjA0NjA5NDMgLTEuNTQyNTk2ODggMjEu
++NTI1ODMxOTcgLTEuNTAyNjg1NTUgMTkuNDQ3MDIxNDggQy0xLjQ0NTE1MDc5IDE2
++LjQ2NTg2ODU1IC0xLjM4MTQwODgxIDEzLjQ4NDkwNDUxIC0xLjMxNjQwNjI1IDEw
++LjUwMzkwNjI1IEMtMS4yOTk2OTM3NiA5LjU2ODQ5NTAzIC0xLjI4Mjk4MTI2IDgu
++NjMzMDgzOCAtMS4yNjU3NjIzMyA3LjY2OTMyNjc4IEMtMS4yNDU4MTcxMSA2Ljgw
++ODUwOTk4IC0xLjIyNTg3MTg5IDUuOTQ3NjkzMTggLTEuMjA1MzIyMjcgNS4wNjA3
++OTEwMiBDLTEuMTg5Nzc3OTggNC4yOTkxMjEyNSAtMS4xNzQyMzM3IDMuNTM3NDUx
++NDggLTEuMTU4MjE4MzggMi43NTI3MDA4MSBDLTEgMSAtMSAxIDAgMCBaICIgZmls
++bD0iIzM2NDc0QyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDA1LDI0NykiLz4KPHBh
++dGggZD0iTTAgMCBDMy4xMjMwNDczNCAyLjkyOTE1NTI3IDUuNDg5OTAwOTEgNS45
++Njg1ODM1MSA3LjgxMjUgOS41NjI1IEM4LjQzNzY5NTMxIDEwLjUxMjUzOTA2IDku
++MDYyODkwNjMgMTEuNDYyNTc4MTIgOS43MDcwMzEyNSAxMi40NDE0MDYyNSBDMTAu
++MTMzNzEwOTQgMTMuMjg1NzQyMTkgMTAuNTYwMzkwNjMgMTQuMTMwMDc4MTMgMTEg
++MTUgQzEwLjY3IDE1Ljk5IDEwLjM0IDE2Ljk4IDEwIDE4IEM4LjM1IDE4LjMzIDYu
++NyAxOC42NiA1IDE5IEMyLjczMzgzMzg1IDEyLjc0NTM4MTQ0IDEuMTYyMDQ5OTMg
++Ni41NDg0OTMxMyAwIDAgWiAiIGZpbGw9IiM5NUMwRUYiIHRyYW5zZm9ybT0idHJh
++bnNsYXRlKDI2MCwyNzIpIi8+CjxwYXRoIGQ9Ik0wIDAgQy0wLjY4NDAwODc5IDAu
++MTkxMTAzNTIgLTEuMzY4MDE3NTggMC4zODIyMDcwMyAtMi4wNzI3NTM5MSAwLjU3
++OTEwMTU2IEMtMjAuNTUwMTQ0MjkgNS43NDA4ODMwNiAtMjAuNTUwMTQ0MjkgNS43
++NDA4ODMwNiAtMzkgMTEgQy0zOSAxMC4wMSAtMzkgOS4wMiAtMzkgOCBDLTMxLjk0
++NDY1ODAxIDUuNjg5MzQ3NDYgLTI1LjAzOTkxOTY3IDMuNjg4ODA0NzggLTE3Ljcw
++NzAzMTI1IDIuNTA3ODEyNSBDLTEzLjg1NTUwNjM0IDEuNzg1MzA0MjIgLTEwLjE0
++OTUxNTgxIDAuNjUwMjkxMzYgLTYuNDEwMTU2MjUgLTAuNTExNzE4NzUgQy0zLjgy
++NjAzOTkyIC0xLjAzNTI0MzEzIC0yLjQ4ODc1NzgzIC0wLjcxMzkzNjc0IDAgMCBa
++ICIgZmlsbD0iIzc1Njg1QiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjg2LDIxMiki
++Lz4KPHBhdGggZD0iTTAgMCBDLTIwLjQ3NTc4NDIyIDEwLjg0MzI4NjUyIC0yMC40
++NzU3ODQyMiAxMC44NDMyODY1MiAtMzEgMTMgQy0zMS45OSAxMi4zNCAtMzIuOTgg
++MTEuNjggLTM0IDExIEMtMzIuODUxNDQ1MzEgMTAuNjM2NDg0MzggLTMxLjcwMjg5
++MDYzIDEwLjI3Mjk2ODc1IC0zMC41MTk1MzEyNSA5Ljg5ODQzNzUgQy0yMS44NTI2
++ODI2MSA3LjEwNzQxODQ1IC0xMy42MzE2OTEzOSA0LjE0NTY1MTE3IC01LjUwMzkw
++NjI1IDAuMDAzOTA2MjUgQy0zIC0xIC0zIC0xIDAgMCBaICIgZmlsbD0iIzM4NDg0
++RSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQ5LDM1NSkiLz4KPHBhdGggZD0iTTAg
++MCBDLTMuNjcyMDEzMTQgMi40NDgwMDg3NiAtNy4yMzU4MDQ1NCAzLjQ0OTIxNjk2
++IC0xMS40Mzc1IDQuNjg3NSBDLTEyLjU4MzE1NDMgNS4wNDQyNDgwNSAtMTIuNTgz
++MTU0MyA1LjA0NDI0ODA1IC0xMy43NTE5NTMxMiA1LjQwODIwMzEyIEMtMTQuNDky
++NTE5NTMgNS42Mjc5ODgyOCAtMTUuMjMzMDg1OTQgNS44NDc3NzM0NCAtMTUuOTk2
++MDkzNzUgNi4wNzQyMTg3NSBDLTE2LjY2ODI1OTI4IDYuMjc2MTk4NzMgLTE3LjM0
++MDQyNDggNi40NzgxNzg3MSAtMTguMDMyOTU4OTggNi42ODYyNzkzIEMtMjAuMjk5
++NjEyODUgNy4wNDc3ODQ4NSAtMjEuODMwNDQ1MjYgNi42OTE3MDI2IC0yNCA2IEMt
++MjIuMDIgNS42NyAtMjAuMDQgNS4zNCAtMTggNSBDLTE3LjY3IDQuMDEgLTE3LjM0
++IDMuMDIgLTE3IDIgQy0xMS4zMjQxNjM2MSAtMC43NDAwNTg5NSAtNi4wNzU4Mjg0
++NyAtMS40NTI5MTU1IDAgMCBaICIgZmlsbD0iIzkyNkE0QyIgdHJhbnNmb3JtPSJ0
++cmFuc2xhdGUoMzM1LDE5NykiLz4KPHBhdGggZD0iTTAgMCBDLTIuOTg3NjU3ODEg
++MS4zNjI0MjcyOSAtNS45ODk0MjY5NiAyLjY4OTAxOTUyIC05IDQgQy05LjcxNTQy
++OTY5IDQuMzE5Njg3NSAtMTAuNDMwODU5MzggNC42MzkzNzUgLTExLjE2Nzk2ODc1
++IDQuOTY4NzUgQy0xNS41Mjc4MDI1IDYuNzkwMjY2NjIgLTE4LjQyNzA2OTYzIDcu
++MjU3NTU1ODUgLTIzIDYgQy0xOS4zMjUzMzgxMiA0LjAwMzMwODczIC0xNS40NDY1
++NzUwOCAyLjY1NzQwMDgzIC0xMS41IDEuMzEyNSBDLTEwLjgzNjEzMjgxIDEuMDc0
++NjY3OTcgLTEwLjE3MjI2NTYzIDAuODM2ODM1OTQgLTkuNDg4MjgxMjUgMC41OTE3
++OTY4OCBDLTMuNDY0NDIyMjcgLTEuNDU4MjM4OTcgLTMuNDY0NDIyMjcgLTEuNDU4
++MjM4OTcgMCAwIFogIiBmaWxsPSIjM0U0RDUxIiB0cmFuc2Zvcm09InRyYW5zbGF0
++ZSgzMzQsMzEyKSIvPgo8cGF0aCBkPSJNMCAwIEMyIDMgMiAzIDIgNSBDMy42NSA1
++IDUuMyA1IDcgNSBDNyA1LjMzIDcgNS42NiA3IDYgQzUuMzUgNiAzLjcgNiAyIDYg
++QzEuNzMxODc1IDYuNTk4MTI1IDEuNDYzNzUgNy4xOTYyNSAxLjE4NzUgNy44MTI1
++IEMwLjAxNTA2NTMzIDkuOTcyMjQ4MDggLTEuMTkzNjkyODIgMTEuMzU3OTAyNTYg
++LTMgMTMgQy0zLjY2IDEyLjY3IC00LjMyIDEyLjM0IC01IDEyIEMtMy4zNSA4LjA0
++IC0xLjcgNC4wOCAwIDAgWiAiIGZpbGw9IiNFM0RGRDQiIHRyYW5zZm9ybT0idHJh
++bnNsYXRlKDM0Niw4OSkiLz4KPHBhdGggZD0iTTAgMCBDNi42NDQwOTk1OCAtMC4y
++MTQzMjU3OSAxMi41MzIwNTg2NyAwLjQ4NzY2Mjk5IDE5IDIgQzE4LjY3IDIuNjYg
++MTguMzQgMy4zMiAxOCA0IEMxNS4xODU5NjY5OSAzLjcxOTQ5MTk0IDEyLjM3NDMy
++NzQ3IDMuNDI2MTg2OTYgOS41NjI1IDMuMTI1IEM4Ljc2MDA1ODU5IDMuMDQ2MzY3
++MTkgNy45NTc2MTcxOSAyLjk2NzczNDM3IDcuMTMwODU5MzggMi44ODY3MTg3NSBD
++NS4wNzgyOTAwNiAyLjY2MTU0MjM3IDMuMDM3MDY5OTEgMi4zMzc3NzQxMyAxIDIg
++QzAuNjcgMS4zNCAwLjM0IDAuNjggMCAwIFogIiBmaWxsPSIjM0E0QjUyIiB0cmFu
++c2Zvcm09InRyYW5zbGF0ZSgyNTgsMTM5KSIvPgo8cGF0aCBkPSJNMCAwIEMtMS4x
++MTMyODEyNSAxLjQ4ODI4MTI1IC0xLjExMzI4MTI1IDEuNDg4MjgxMjUgLTMgMyBD
++LTUuOTE3OTY4NzUgMy4yOTI5Njg3NSAtNS45MTc5Njg3NSAzLjI5Mjk2ODc1IC05
++LjE4NzUgMy4xODc1IEMtMTAuMjc0MTc5NjkgMy4xNjA0Mjk2OSAtMTEuMzYwODU5
++MzcgMy4xMzMzNTkzNyAtMTIuNDgwNDY4NzUgMy4xMDU0Njg3NSBDLTEzLjcyNzYz
++NjcyIDMuMDUzMjYxNzIgLTEzLjcyNzYzNjcyIDMuMDUzMjYxNzIgLTE1IDMgQy0x
++NSAyLjM0IC0xNSAxLjY4IC0xNSAxIEMtOS45MTkxMzIwNCAwLjE1MzE4ODY3IC01
++LjE1MTcxNjIzIC0wLjA5MDM4MDk5IDAgMCBaICIgZmlsbD0iIzQ5NUE2MSIgdHJh
++bnNmb3JtPSJ0cmFuc2xhdGUoMjE3LDEzNykiLz4KPHBhdGggZD0iTTAgMCBDLTEg
++MyAtMSAzIC0zLjUwMzkwNjI1IDQuMzg2NzE4NzUgQy00LjUxMzI0MjE5IDQuODE1
++OTc2NTYgLTUuNTIyNTc4MTIgNS4yNDUyMzQzNyAtNi41NjI1IDUuNjg3NSBDLTcu
++NTc0NDE0MDYgNi4xMjQ0OTIxOSAtOC41ODYzMjgxMiA2LjU2MTQ4NDM3IC05LjYy
++ODkwNjI1IDcuMDExNzE4NzUgQy0xMC40MTEzNjcxOSA3LjMzNzg1MTU2IC0xMS4x
++OTM4MjgxMyA3LjY2Mzk4NDM4IC0xMiA4IEMtMTIgNy4wMSAtMTIgNi4wMiAtMTIg
++NSBDLTEwLjM3NzUwMDU5IDQuMTYxODA4NDIgLTguNzUxOTE1MDMgMy4zMjk1ODg0
++IC03LjEyNSAyLjUgQy02LjIyMDA3ODEyIDIuMDM1OTM3NSAtNS4zMTUxNTYyNSAx
++LjU3MTg3NSAtNC4zODI4MTI1IDEuMDkzNzUgQy0yIDAgLTIgMCAwIDAgWiAiIGZp
++bGw9IiM0NDU0NTkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE0MywxNTQpIi8+Cjxw
++YXRoIGQ9Ik0wIDAgQzEuMDE1NjIwMTYgMy4xNzc0NDAyMiAwLjk2NjY2NjQzIDUu
++Mzc4MjgzODkgMC4yNSA4LjYyNSBDMC4wMTAyMzQzNyA5Ljc4OTAyMzQ0IDAuMDEw
++MjM0MzcgOS43ODkwMjM0NCAtMC4yMzQzNzUgMTAuOTc2NTYyNSBDLTEgMTMgLTEg
++MTMgLTQgMTUgQy0zLjUwMzQxNzAzIDkuMzM4OTU0MTEgLTIuNDU0ODkzMTYgNS4x
++MjMyNTUyOSAwIDAgWiAiIGZpbGw9IiM0QTU5NUQiIHRyYW5zZm9ybT0idHJhbnNs
++YXRlKDgwLDIxNCkiLz4KPHBhdGggZD0iTTAgMCBDMS44NjM1MTE5OSAyLjc5NTI2
++Nzk4IDIuMzQzMDg5MDcgMy44NDA0NTYyNyAyLjc1IDcgQzIuODQ3OTY4NzUgNy42
++ODA2MjUgMi45NDU5Mzc1IDguMzYxMjUgMy4wNDY4NzUgOS4wNjI1IEMzIDExIDMg
++MTEgMSAxNCBDMC42MzY1OTcxNCAxMi4yMzEwMzg5OCAwLjI4NDU5MTE3IDEwLjQ1
++OTczMzc0IC0wLjA2MjUgOC42ODc1IEMtMC4yNTk3MjY1NiA3LjcwMTM2NzE5IC0w
++LjQ1Njk1MzEyIDYuNzE1MjM0MzcgLTAuNjYwMTU2MjUgNS42OTkyMTg3NSBDLTEg
++MyAtMSAzIDAgMCBaICIgZmlsbD0iIzUyNUU2MSIgdHJhbnNmb3JtPSJ0cmFuc2xh
++dGUoNDAzLDIwNCkiLz4KPHBhdGggZD0iTTAgMCBDMyAxIDMgMSA2IDMgQy0xLjQy
++ODU3MTQzIDUuNDI4NTcxNDMgLTEuNDI4NTcxNDMgNS40Mjg1NzE0MyAtNSA0IEMt
++NC4wMSA0IC0zLjAyIDQgLTIgNCBDLTEuMzQgMi42OCAtMC42OCAxLjM2IDAgMCBa
++ICIgZmlsbD0iIzk0NzM1QSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzUxLDE4OSki
++Lz4KPHBhdGggZD0iTTAgMCBDMCAwLjY2IDAgMS4zMiAwIDIgQy0yLjc1OTI0MTg1
++IDMuODA0MTE5NjcgLTMuODg5NzIxMDMgNC4wMTI3MjQ1IC03LjI1IDMuNjI1IEMt
++OC4xNTc1IDMuNDE4NzUgLTkuMDY1IDMuMjEyNSAtMTAgMyBDLTYuNTk1Mzg1MzUg
++MS4yMzg5OTI0MiAtMy45MDY1MDMzOSAwIDAgMCBaICIgZmlsbD0iIzRBNUE2MCIg
++dHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzIxLDMxNSkiLz4KPHBhdGggZD0iTTAgMCBD
++MiAxIDIgMSAzIDMgQzEuMDIgMy42NiAtMC45NiA0LjMyIC0zIDUgQy0xLjEyNSAx
++LjEyNSAtMS4xMjUgMS4xMjUgMCAwIFogIiBmaWxsPSIjRURBRjUxIiB0cmFuc2Zv
++cm09InRyYW5zbGF0ZSgyMjksMTg1KSIvPgo8cGF0aCBkPSJNMCAwIEMyLjk3IDAu
++NDk1IDIuOTcgMC40OTUgNiAxIEMyLjU1NTQ5MjYzIDMuMjk2MzM4MjQgMC4wNjE4
++NzcxNyAzLjU0MDE2NDg1IC00IDQgQy0zLjAxIDMuNjcgLTIuMDIgMy4zNCAtMSAz
++IEMtMC42NyAyLjAxIC0wLjM0IDEuMDIgMCAwIFogIiBmaWxsPSIjOEI3NTY1IiB0
++cmFuc2Zvcm09InRyYW5zbGF0ZSgzMjksMTk2KSIvPgo8cGF0aCBkPSJNMCAwIEMt
++MS4xNTE3MzM1NSAyLjQ2ODAwMDQ3IC0yLjA0NzgzNTY1IDQuMDQ3ODM1NjUgLTQg
++NiBDLTQuOTkgNS42NyAtNS45OCA1LjM0IC03IDUgQy0yLjI1IDAgLTIuMjUgMCAw
++IDAgWiAiIGZpbGw9IiM0QjU5NUMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwNSwx
++NzkpIi8+Cjwvc3ZnPgo=
++" alt="Logo" style={{width:"50px", height:"50px", marginTop:"20px", borderRadius:"50%"}}/>
+                 <li style={style.li}>
+                     <Link to="/Home" style={style.link}>Home</Link>
+                 </li>
+Index: project_pi/src/pages/plan.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import Charts from \"../components/charts\";\n// import ResumeUploader from './ResumeUploader';\n\nfunction Plan(){\n    return(\n        <div>\n            <Charts/>\n          {/* Other components */}\n          {/* <ResumeUploader /> */}\n        </div>\n    )\n}\nexport default Plan;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/pages/plan.js b/project_pi/src/pages/plan.js
+--- a/project_pi/src/pages/plan.js	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/src/pages/plan.js	(date 1740273458250)
+@@ -1,12 +1,8 @@
+ import Charts from "../components/charts";
+-// import ResumeUploader from './ResumeUploader';
+-
+ function Plan(){
+     return(
+         <div>
+             <Charts/>
+-          {/* Other components */}
+-          {/* <ResumeUploader /> */}
+         </div>
+     )
+ }
+Index: project_pi/src/components/logo.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/components/logo.txt b/project_pi/src/components/logo.txt
+new file mode 100644
+--- /dev/null	(date 1740271620768)
++++ b/project_pi/src/components/logo.txt	(date 1740271620768)
+@@ -0,0 +1,919 @@
++PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJz
++aW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lk
++dGg9IjUwMCIgaGVpZ2h0PSI1MDAiPgo8cGF0aCBkPSJNMCAwIEMxNjUgMCAzMzAg
++MCA1MDAgMCBDNTAwIDE2NSA1MDAgMzMwIDUwMCA1MDAgQzMzNSA1MDAgMTcwIDUw
++MCAwIDUwMCBDMCAzMzUgMCAxNzAgMCAwIFogIiBmaWxsPSIjRkVGRUZFIiB0cmFu
++c2Zvcm09InRyYW5zbGF0ZSgwLDApIi8+CjxwYXRoIGQ9Ik0wIDAgQzIuNDkxNjY3
++NTkgMS40MDk5NzE3MyAzLjk1NTU0OTQxIDIuOTA2ODcyMDEgNiA1IEM2LjYxODc1
++IDUuNTk4MTI1IDcuMjM3NSA2LjE5NjI1IDcuODc1IDYuODEyNSBDOC4yNDYyNSA3
++LjIwNDM3NSA4LjYxNzUgNy41OTYyNSA5IDggQzEwLjQ4NSA3LjAxIDEwLjQ4NSA3
++LjAxIDEyIDYgQzE2LjI1NTE1NDg5IDMuNTc5NTU3NjQgMTkuMTQ1NTIzNjggMy40
++NTE5MTM5NiAyNCA0IEMyNi44NzUgNSAyNi44NzUgNSAyOSA3IEMzMC4wMDg3ODk5
++NiA5LjY3Nzc4Mjc4IDMwLjQ4Nzg5ODc4IDEyLjE2MDE2NTk4IDMxIDE1IEMzMS42
++NiAxNC42NyAzMi4zMiAxNC4zNCAzMyAxNCBDMzcuOTQ0Mjg0ODUgMTIuMzUxOTA1
++MDUgNDIuMTc1NDk3MjUgMTIuMTQ1OTc3NDQgNDYuOTM3NSAxNC4zNzUgQzQ5IDE2
++IDQ5IDE2IDUwIDE4IEM1MC4xMzQxNTQ3MiAyMC42NzIzNjIxIDUwLjA0MzE4NTQx
++IDIzLjMyMjUwNDg4IDUwIDI2IEM1MC43ODM3NSAyNS41MDUgNTEuNTY3NSAyNS4w
++MSA1Mi4zNzUgMjQuNSBDNTcuMDM3MDAxNDcgMjIuNTcwODk1OTQgNjEuMDE2MjA3
++NzQgMjIuMjI3NTEyMiA2NiAyMyBDNjguOTM0MjMxOTUgMjQuNzk2NDY4NTQgNzAu
++NDcyMDUzNTUgMjUuOTQ0MTA3MSA3MiAyOSBDNzIuMzU0OTI1NDIgMzYuMjE2ODE2
++NzggNzIuMzU0OTI1NDIgMzYuMjE2ODE2NzggNzAuOTU4OTg0MzggMzkuMjk3MTE5
++MTQgQzY5Ljg2MzUyMTQxIDQyLjM4NDY2MjUzIDY5Ljk3MDI0MDY5IDQ0LjE5MTA2
++MzU3IDcwLjQyNTc4MTI1IDQ3LjQxNDA2MjUgQzcwLjU2MzA2NjQxIDQ4LjQyMjEw
++OTM3IDcwLjcwMDM1MTU2IDQ5LjQzMDE1NjI1IDcwLjg0MTc5Njg4IDUwLjQ2ODc1
++IEM3MS4wNzQ3OTQ5MiA1Mi4wMzEwOTM3NSA3MS4wNzQ3OTQ5MiA1Mi4wMzEwOTM3
++NSA3MS4zMTI1IDUzLjYyNSBDNzEuNDU2MjMwNDcgNTQuNjc0Mjk2ODggNzEuNTk5
++OTYwOTQgNTUuNzIzNTkzNzUgNzEuNzQ4MDQ2ODggNTYuODA0Njg3NSBDNzIuNTI3
++NzkzMzggNjIuNDgwMjEzMTMgNzIuNTI3NzkzMzggNjIuNDgwMjEzMTMgNzQgNjgg
++Qzc1LjIwMDc3MzI2IDc1LjMwODQxMDEyIDc1LjE2MTEyMDM2IDgyLjc5OTQ1NjM4
++IDc1LjI1IDkwLjE4NzUgQzc1LjI4MjAyNTE1IDkxLjU5NDc5MzcgNzUuMjgyMDI1
++MTUgOTEuNTk0NzkzNyA3NS4zMTQ2OTcyNyA5My4wMzA1MTc1OCBDNzUuMzQyNTcy
++NzMgOTguNzY1MjYxMTkgNzUuMDc0OTU5MDYgMTA0LjAxMDM2MDU1IDcyIDEwOSBD
++NjcuNDgyMjQ0NDggMTEzLjA2MzI2NjYgNjIuMzk0ODM4ODMgMTE0LjIxNTI5NzA2
++IDU2LjYyNSAxMTUuNTYyNSBDNTAuNTcwMDU0MDkgMTE3LjAxODU3MDMzIDQ0Ljc0
++MjQ0NDE5IDExOC41NTY1NDQ2MyAzOSAxMjEgQzM4LjY3IDEyMS42NiAzOC4zNCAx
++MjIuMzIgMzggMTIzIEMzNy4wMSAxMjMgMzYuMDIgMTIzIDM1IDEyMyBDMzUuNTk3
++NDgwNDcgMTI0LjQxNTM5MDYyIDM1LjU5NzQ4MDQ3IDEyNC40MTUzOTA2MiAzNi4y
++MDcwMzEyNSAxMjUuODU5Mzc1IEMzNi43NDI2MjI3OCAxMjcuMTU2MDcwMjkgMzcu
++Mjc3NzUzNzQgMTI4LjQ1Mjk1NTg5IDM3LjgxMjUgMTI5Ljc1IEMzOC4wNzM1MzUx
++NiAxMzAuMzY0ODgyODEgMzguMzM0NTcwMzEgMTMwLjk3OTc2NTYyIDM4LjYwMzUx
++NTYyIDEzMS42MTMyODEyNSBDNDIuNTQ2MTg3OTQgMTQxLjI1MDkyNDY4IDQ0LjQ4
++MTkxNzE4IDE1MC41OTgzNDE0NCA0NC4yNSAxNjEgQzQ0LjIyOTIxMzg3IDE2Mi41
++OTU2OTgyNCA0NC4yMjkyMTM4NyAxNjIuNTk1Njk4MjQgNDQuMjA4MDA3ODEgMTY0
++LjIyMzYzMjgxIEM0NC4xNzE5ODM1IDE2Ni42ODg5MTkwNCA0NC4xMjgxMDA1MyAx
++NjkuMTU0MDk3NzUgNDQuMDc4MTI1IDE3MS42MTkxNDA2MiBDNDMuOTk3MDA0MjIg
++MTc1Ljc3NjA5NzU4IDQzLjk2MzQxNDAzIDE3OS45MzI4NjczNCA0My45MzE0NTc1
++MiAxODQuMDkwNDU0MSBDNDMuODk3NDE2NDMgMTg3Ljk5ODUwMzM3IDQzLjg0NDcy
++NDUzIDE5MS45MDYxNzg2MiA0My43ODg0NTIxNSAxOTUuODEzOTY0ODQgQzQzLjc2
++MzA5OTY1IDE5Ny43NDk3Njg5NCA0My43NDM1MTY3NCAxOTkuNjg1NjU4NCA0My43
++MzAxMDI1NCAyMDEuNjIxNTgyMDMgQzQzLjY0MDA0OTU0IDIxMy4xMTQ1MzM1NyA0
++Mi45NDczMzYzNSAyMjMuMDk3NTYyODcgMzkgMjM0IEMzOC42ODk1Nzc2NCAyMzQu
++OTE5OTA3MjMgMzguMzc5MTU1MjcgMjM1LjgzOTgxNDQ1IDM4LjA1OTMyNjE3IDIz
++Ni43ODc1OTc2NiBDMjkuNjgwODI5MDkgMjYwLjk4NTQwNDkgNS42MTEzNDIzMyAy
++NzkuODY3MjcwNzQgLTE2LjUzMjQ3MDcgMjkwLjkwNjk4MjQyIEMtNDMuNjc5NTc1
++NzkgMzA0IC00My42Nzk1NzU3OSAzMDQgLTUzIDMwNCBDLTU1LjMwMTQyOTkyIDMw
++MS4xNzc4MDg1NiAtNTcuMDY1Njk1MTYgMjk4LjA5NDg4Nzc1IC01OSAyOTUgQy01
++OS4zMyAzMDEuNiAtNTkuNjYgMzA4LjIgLTYwIDMxNSBDLTY3LjQ5MzM3ODA5IDMx
++Ny4wOTgxNDU4NiAtNzQuODY1NzkzNTQgMzE4LjUzMTcyOTUgLTgyLjU2MjUgMzE5
++LjYyNSBDLTgzLjg1NDUwMzE3IDMxOS44MDkyOTU2NSAtODMuODU0NTAzMTcgMzE5
++LjgwOTI5NTY1IC04NS4xNzI2MDc0MiAzMTkuOTk3MzE0NDUgQy0xNDEuMzkzNDEx
++OTYgMzI3LjcxMjg1Mjg0IC0yMTAuNDI4MTk4NTQgMzE4LjcwMjIxNjE0IC0yNTYu
++ODQxMDY0NDUgMjgzLjYwNzkxMDE2IEMtMjcyLjgxODc1NjczIDI3MC4zODU1MTU4
++OCAtMjg0LjM4NjkwNjQgMjUxLjc1NTMyNDgxIC0yODcgMjMxIEMtMjg3LjEwNTc0
++NjcxIDIyOC42MTI4MDQxMSAtMjg3LjE2NzY0ODE2IDIyNi4yMjMzODgxNSAtMjg3
++LjE5Mjg3MTA5IDIyMy44MzM5ODQzOCBDLTI4Ny4yMDEwNDg1OCAyMjMuMTU0Nzk5
++NSAtMjg3LjIwOTIyNjA3IDIyMi40NzU2MTQ2MiAtMjg3LjIxNzY1MTM3IDIyMS43
++NzU4NDgzOSBDLTI4Ny4yNDIyNzIyNiAyMTkuNTQ4NDkwNjQgLTI4Ny4yNTg5NjYx
++IDIxNy4zMjExOTU4NSAtMjg3LjI3MzQzNzUgMjE1LjA5Mzc1IEMtMjg3LjI3ODc2
++MTE4IDIxNC4zMjQ1NDcyNyAtMjg3LjI4NDA4NDg1IDIxMy41NTUzNDQ1NCAtMjg3
++LjI4OTU2OTg1IDIxMi43NjI4MzI2NCBDLTI4Ny4zMTYyMDc5MiAyMDguNjg2NjI1
++MTkgLTI4Ny4zMzU2MDczNSAyMDQuNjEwNDQ3MjcgLTI4Ny4zNTAwOTc2NiAyMDAu
++NTM0MTc5NjkgQy0yODcuMzYzMzg4ODIgMTk3LjE5MjEwMTQ2IC0yODcuMzkxMTY0
++OCAxOTMuODUwNjQwNzUgLTI4Ny40MzIxMjg5MSAxOTAuNTA4Nzg5MDYgQy0yODcu
++NDgxOTU0MTQgMTg2LjQ0MTY2OTM1IC0yODcuNTA2Mjc4NTUgMTgyLjM3NTEwNTIg
++LTI4Ny41MTMzMjQ3NCAxNzguMzA3NjkzNDggQy0yODcuNTE5OTU2ODkgMTc2Ljc3
++Mzc2NzIgLTI4Ny41MzQ5NjMyMSAxNzUuMjM5ODQ5MzUgLTI4Ny41NTkyMTU1NSAx
++NzMuNzA2MTAwNDYgQy0yODcuODYzMTM0MDUgMTUzLjMxMzc5OTEgLTI4MC4zMDUy
++MjE0MiAxMzYuNDQyNjA2MzkgLTI2NyAxMjEgQy0yNjYuNDgxNzk2ODcgMTIwLjMz
++NzQyMTg4IC0yNjUuOTYzNTkzNzUgMTE5LjY3NDg0Mzc1IC0yNjUuNDI5Njg3NSAx
++MTguOTkyMTg3NSBDLTI0NS45MTMwMjcwNCA5NC43Njc5OTA4NSAtMjEyLjMyNzU0
++NTk5IDgyLjEzNzU2ODc3IC0xODMgNzUuMjUgQy0xODIuMTcxNjE2MjEgNzUuMDUx
++MzIzMjQgLTE4MS4zNDMyMzI0MiA3NC44NTI2NDY0OCAtMTgwLjQ4OTc0NjA5IDc0
++LjY0Nzk0OTIyIEMtMTY1LjMxNzQ0OTIgNzEuMjYwNTI0MjIgLTE1MC4wMDE4Mjc5
++IDcwLjY0ODkyNTQxIC0xMzQuNTE0NjQ4NDQgNzAuNjg0MzI2MTcgQy0xMzEuNjM0
++MzgwOTggNzAuNjg3NDg5NyAtMTI4Ljc1NTE0MjAyIDcwLjY2Mzg5NzYxIC0xMjUu
++ODc1IDcwLjYzODY3MTg4IEMtMTE1LjU1NDI0OTU0IDcwLjYwNjIzMzI4IC0xMDUu
++NjUzMzg5NDYgNzEuMTY4NjQ2NzYgLTk1LjQ4NzIxMzEzIDczLjAzNjU0NDggQy05
++MS4wNTMxMjg4MyA3My44MzA3NTM5NSAtODcuNDMwMDMxMzIgNzQuMjY2MjU0MDYg
++LTgzIDczIEMtODAuMTQ0NDU5ODMgNzAuNTYyNzIxMTggLTgwLjE0NDQ1OTgzIDcw
++LjU2MjcyMTE4IC03OCA2OCBDLTc2Ljg1NTMxMjUgNjguNDY0MDYyNSAtNzYuODU1
++MzEyNSA2OC40NjQwNjI1IC03NS42ODc1IDY4LjkzNzUgQy01OC40NDE0MjIzNCA3
++NS43NTU3MTY3NSAtMzcuNTk1MTcxNjkgNjcuOTU5NzE2MTEgLTIxLjUzMTI1IDYx
++LjA3ODEyNSBDLTE0LjE2MzI5OTg1IDU3Ljc3ODQwNTYgLTYuMTQ0MzIzODcgNTQu
++MDYyMTkzOTggLTEuNzQyMTg3NSA0Ni45NjA5Mzc1IEMtMC4yMzk2NDcyMSA0Mi45
++OTEwNjc5IC0wLjI1NDMzMTMyIDM5LjE0MDk5NSAtMSAzNSBDLTIuMjI0MzUxNTUg
++MzIuMzU3NjIxNTQgLTIuMjI0MzUxNTUgMzIuMzU3NjIxNTQgLTUgMzEgQy02LjY2
++NDUzODM1IDMwLjYxNTY2MzA3IC04LjMzMTQ4MzEyIDMwLjI0MTY3OTk2IC0xMCAy
++OS44NzUgQy0xMy4zMDk0MDUxNyAyOS4wMDc0Mzg3IC0xNC42MTAzOTEzIDI4LjU5
++NzA2MjY4IC0xNi41MDM5MDYyNSAyNS42OTUzMTI1IEMtMTcuNTA0MjI5MzMgMjMu
++MTQ4MzY0NDMgLTE4LjMwODA3NzQ3IDIwLjY0NTg0MjE0IC0xOSAxOCBDLTE5LjMz
++IDE3LjAxIC0xOS42NiAxNi4wMiAtMjAgMTUgQy0xOC41MTUgMTQuMDEgLTE4LjUx
++NSAxNC4wMSAtMTcgMTMgQy0xNi4xNzE1OTc1OCAxMC45NDg0NTI2NCAtMTYuMTcx
++NTk3NTggMTAuOTQ4NDUyNjQgLTE1LjYyNSA4LjYyNSBDLTE0LjY1MzY3NDE3IDUu
++NTQ3NDgyOTQgLTEzLjk3NjQzNDUxIDMuOTcxNTgyNzkgLTExLjg3NSAxLjQzNzUg
++Qy03LjgzNzY1NDI1IC0wLjU4MTE3Mjg3IC00LjQyNDQ3MjU5IC0wLjkyMDc4OTcx
++IDAgMCBaICIgZmlsbD0iI0Y3OTIxRiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzYz
++LDY2KSIvPgo8cGF0aCBkPSJNMCAwIEMtMy42MDQ2NDM0MyA0LjQxNTY4ODIgLTcu
++Mjc4NTU5OTEgOC4yNDI4ODgxNSAtMTEuNjEzMjgxMjUgMTEuOTMzNTkzNzUgQy0x
++NC41NTEyNTE0NyAxNC40NzcyNzAxIC0xNy40MDA3MzkzNSAxNy4xMDc4MjExMiAt
++MjAuMjUgMTkuNzUgQy0yMS4zNzUgMjAuNzkxNjY2NjcgLTIyLjUgMjEuODMzMzMz
++MzMgLTIzLjYyNSAyMi44NzUgQy0yNC4xODU3NDIxOSAyMy4zOTQ0OTIxOSAtMjQu
++NzQ2NDg0MzcgMjMuOTEzOTg0MzcgLTI1LjMyNDIxODc1IDI0LjQ0OTIxODc1IEMt
++MjcuNDU2ODg5NTkgMjYuNDIyODA5MjUgLTI5LjU5MzE1NzEyIDI4LjM5MjM5NjUx
++IC0zMS43MzQ2MTkxNCAzMC4zNTY0NDUzMSBDLTMyLjczNzU4NzM2IDMxLjI3ODc4
++MTggLTMzLjczNjg0NTkzIDMyLjIwNTE3MDA3IC0zNC43MzIxNzc3MyAzMy4xMzU3
++NDIxOSBDLTM3LjAwNzg4NTQxIDM1LjI1MDI5Mzc4IC0zOS4yOTM4Nzg0NyAzNy4y
++MTkyNzUzOCAtNDEuNzg1MTU2MjUgMzkuMDc4MTI1IEMtNDQuMjM3MTA2NDggNDAu
++OTQyNjY4MyAtNDYuMTI3Mjc0MjYgNDIuNTU3MzM3OTUgLTQ4IDQ1IEMtNDguMzE4
++MzU2ODkgNDcuMzkwNDk2NzggLTQ4LjMxODM1Njg5IDQ3LjM5MDQ5Njc4IC00Ny44
++Nzg5MDYyNSA0OS45NDUzMTI1IEMtNDcuNjkxMjI2ODEgNTEuNDAxNzkxOTkgLTQ3
++LjY5MTIyNjgxIDUxLjQwMTc5MTk5IC00Ny40OTk3NTU4NiA1Mi44ODc2OTUzMSBD
++LTQ2LjA4OTUwMTYyIDYxLjY3MDI2NTQzIC00NC4zMjk3MDQ2IDcwLjM3Mjk2NDQg
++LTQyLjU1OTU3MDMxIDc5LjA4ODg2NzE5IEMtNDIuMTIyNjU1NDEgODEuMzYxODky
++MjEgLTQxLjc3NDI4MzI2IDgzLjY1MTk4NDgzIC00MS40NjA5Mzc1IDg1Ljk0NTMx
++MjUgQy0zOS45NTIzOTMxNiA5NS45NDI2MTQ4NSAtMzMuNjc3ODU4NCAxMDIuOTUy
++NjMxNTUgLTI3LjY3OTE5OTIyIDExMC43NTQzOTQ1MyBDLTI0LjY5MzcyMjg1IDEx
++NC43NDY4OTQwNSAtMjIuMDExMTc2MTEgMTE4LjkzNzgzOTk2IC0xOS4zMzU2OTMz
++NiAxMjMuMTQyMDg5ODQgQy0xNy41NTc4MjgyOSAxMjUuODgxNzUwNzcgLTE1Ljc4
++MzIwNzI5IDEyOC4yMTY3OTI3MSAtMTMuNDY4NzUgMTMwLjUzMTI1IEMtMTAuNzc0
++NzY5NjIgMTMzLjIyNTIzMDM4IC04Ljk4NjQyNDQ2IDEzNS45NDAxNjE1NyAtNyAx
++MzkuMTg3NSBDLTMuNDc2ODcyMTIgMTQ0LjgyNjYxMzgyIDAuMjY3OTA2NjYgMTUw
++LjI1NDQ5MTE5IDQuMTg3NSAxNTUuNjI1IEMxMS4yNjMwNTkzNCAxNjUuMzIwOTgw
++MjEgMTguMTQzOTI5MzIgMTc1LjE0Nzk4NjI0IDI1IDE4NSBDMjQgMTg3IDI0IDE4
++NyAyMi4zMjAzMTI1IDE4Ny41NjI1IEMyMS4yMzM2MzI4MSAxODcuNzc5MDYyNSAy
++MS4yMzM2MzI4MSAxODcuNzc5MDYyNSAyMC4xMjUgMTg4IEMxOS4zMDI1NzgxMiAx
++ODguMTY1IDE4LjQ4MDE1NjI1IDE4OC4zMyAxNy42MzI4MTI1IDE4OC41IEMxNi43
++NjM5ODQzOCAxODguNjY1IDE1Ljg5NTE1NjI1IDE4OC44MyAxNSAxODkgQzE0LjE5
++MzA0Njg3IDE4OS4xNjUgMTMuMzg2MDkzNzUgMTg5LjMzIDEyLjU1NDY4NzUgMTg5
++LjUgQy0yLjI4OTQ0MjA5IDE5Mi40MDUyNzMwNyAtMTYuOTY5NDA2MDMgMTkzLjM4
++MzQ1MjY2IC0zMi4wNjI1IDE5My4zMTI1IEMtMzMuMzQxMzMwNTcgMTkzLjMwODc2
++ODc3IC0zMy4zNDEzMzA1NyAxOTMuMzA4NzY4NzcgLTM0LjY0NTk5NjA5IDE5My4z
++MDQ5NjIxNiBDLTgxLjQxNjg2NDE3IDE5My4wOTQ4Nzc0MSAtMTQwLjI2NDkwNTc2
++IDE4MS45ODIwMjk4NyAtMTc1IDE0OCBDLTE5MS4wNjQ5Mjg0NyAxMzEuMTQxNzQx
++NzMgLTE5Ny41Mzg5MjMwNiAxMTEuOTY4NzU4MjMgLTE5Ny4yMDMxMjUgODguOTQx
++NDA2MjUgQy0xOTYuNTg3ODY0OTYgNjkuMDE2NzM1MDYgLTE4NC4zNjIxMzcxNSA1
++MC4zNzk2MjAzMiAtMTcwLjIzMDQ2ODc1IDM2Ljk1MzEyNSBDLTE2MC41ODIwMTQz
++OSAyOC41MDQzOTA4OSAtMTUwLjM4NTkyOTY4IDIxLjg3MTU2NzY2IC0xMzkgMTYg
++Qy0xMzguMzc4NjcxODggMTUuNjc5MDIzNDQgLTEzNy43NTczNDM3NSAxNS4zNTgw
++NDY4OCAtMTM3LjExNzE4NzUgMTUuMDI3MzQzNzUgQy0xMDAuODQ1ODAzODIgLTMu
++NDE3MDQwNzIgLTM5LjQzMjcxMDc3IC0xNC45NDQyNDM4OSAwIDAgWiAiIGZpbGw9
++IiM5RUNDRkUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI3NSwxNDMpIi8+CjxwYXRo
++IGQ9Ik0wIDAgQzIuODgwMjY3NDYgMC4wMDMxNjM1MiA1Ljc1OTUwNjQyIC0wLjAy
++MDQyODU2IDguNjM5NjQ4NDQgLTAuMDQ1NjU0MyBDNDAuMzExMjMxNzcgLTAuMTUz
++MjcwNjEgNDAuMzExMjMxNzcgLTAuMTUzMjcwNjEgNDguNTE0NjQ4NDQgNS4zMTU2
++NzM4MyBDNDQuNDkzMjg0ODggNi4zNjkyNDE0IDQxLjQ2NDQ2OTg5IDYuMTcxNTM4
++NjEgMzcuMzg5NjQ4NDQgNS40NDA2NzM4MyBDMjUuOTk2Njc1MDIgMy40MjM0NjQw
++NyAxNC42NzY5NDU3NCAzLjEwOTU4MjIgMy4xMzk2NDg0NCAzLjEyODE3MzgzIEMy
++LjM4Nzk4NDAxIDMuMTI5MTEwNDEgMS42MzYzMTk1OCAzLjEzMDA0NyAwLjg2MTg3
++NzQ0IDMuMTMxMDExOTYgQy00Ni40NTg4Njg0OSAzLjI1ODQ3ODIxIC05My4yNjMz
++MjE3IDE0Ljk4NTk0NjMzIC0xMjguMDI0NDE0MDYgNDguNzg0NDIzODMgQy0xNDEu
++NDEzNzM3NjEgNjIuOTU1OTQxNTQgLTE0OS45NTUzMDQ5NyA4MC42Njk4MDA4MiAt
++MTQ5LjczNTM1MTU2IDEwMC4yNTMxNzM4MyBDLTE0OS43Mjc4NTg4OSAxMDEuMTM1
++NjE3NjggLTE0OS43MjAzNjYyMSAxMDIuMDE4MDYxNTIgLTE0OS43MTI2NDY0OCAx
++MDIuOTI3MjQ2MDkgQy0xNDkuNjEzMjQwMTggMTA4LjkyODgzMjE3IC0xNDkuMzE2
++NTcwNjQgMTE0LjU2MTc5MDcxIC0xNDcuNDg1MzUxNTYgMTIwLjMxNTY3MzgzIEMt
++MTQ3LjAyNTE1NjI1IDEyMS43OTQ4NzMwNSAtMTQ3LjAyNTE1NjI1IDEyMS43OTQ4
++NzMwNSAtMTQ2LjU1NTY2NDA2IDEyMy4zMDM5NTUwOCBDLTEzOC4yMjUxMTI5NyAx
++NDcuMjkwMTk3MDEgLTEyMC4yOTQyNDA2NiAxNjMuMDI3MzU5NzcgLTk4LjA5NDcy
++NjU2IDE3NC4xNTU1MTc1OCBDLTc2LjUwMjA1Mzk3IDE4NC41MjcyNzg4NSAtNTIu
++OTY4Nzc1MzkgMTkwLjk3NDc5ODUxIC0yOS40ODUzNTE1NiAxOTUuMzE1NjczODMg
++Qy0yOC41ODQ5NDE0MSAxOTUuNDgyMjg1MTYgLTI3LjY4NDUzMTI1IDE5NS42NDg4
++OTY0OCAtMjYuNzU2ODM1OTQgMTk1LjgyMDU1NjY0IEM0LjQ2NDg2MTY1IDIwMS4y
++ODgzMTU4NiAzOS45MDA0NTczOSAyMDAuNzQ2NTM1MDQgNzAuNTE0NjQ4NDQgMTky
++LjMxNTY3MzgzIEM2Ni4zOTgzNjIzNSAxODUuNTIwMDU5NyA2MS45Mzg5ODU3MiAx
++NzkuMDQ3MjQ5ODIgNTcuMjY0NjQ4NDQgMTcyLjYyODE3MzgzIEM0OS4xOTY3NDI3
++NSAxNjEuNTQ1MTE5NDEgNDEuMjE4MzgxNDggMTUwLjQwMTcyMjIyIDM0LjE0NzQ2
++MDk0IDEzOC42NDc3MDUwOCBDMzIuNTM0NDcwOTYgMTM2LjE5NDIzMjM4IDMyLjUz
++NDQ3MDk2IDEzNi4xOTQyMzIzOCAzMC4xNDM1NTQ2OSAxMzMuOTc5NzM2MzMgQzI3
++LjA2MTQzOTM1IDEzMC44NTY0MDQgMjQuNzUwNzQ5NyAxMjcuNTE5MDgyOTEgMjIu
++MzI3MTQ4NDQgMTIzLjg3ODE3MzgzIEMyMS4zNjk5NDQzNSAxMjIuNDYyMDQ1MyAy
++MC40MTE1ODQ1OSAxMjEuMDQ2Njk3MzIgMTkuNDUyMTQ4NDQgMTE5LjYzMjA4MDA4
++IEMxOC45Njg3NSAxMTguOTE4MTAwNTkgMTguNDg1MzUxNTYgMTE4LjIwNDEyMTA5
++IDE3Ljk4NzMwNDY5IDExNy40Njg1MDU4NiBDMTUuNjQ4NjkzODYgMTE0LjA0OTc2
++MDc5IDEzLjI0MjI5MjA0IDExMC42ODA2MDc3NCAxMC44MjcxNDg0NCAxMDcuMzE1
++NjczODMgQzEwLjM5MzEzNzIxIDEwNi43MTA1Mzk1NSA5Ljk1OTEyNTk4IDEwNi4x
++MDU0MDUyNyA5LjUxMTk2Mjg5IDEwNS40ODE5MzM1OSBDOC41MTQwNzY3NyAxMDQu
++MDkyMzA0MzkgNy41MTQ1NjQyNCAxMDIuNzAzODQzMjggNi41MTQ2NDg0NCAxMDEu
++MzE1NjczODMgQzguODg4MDMwODIgOTcuNzU1NjAwMjUgMTAuMTc2NTU0MTIgOTcu
++NDY0NTY2MSAxNC4xMzk2NDg0NCA5Ni4xMjgxNzM4MyBDMTUuMTQyNTM5MDYgOTUu
++NzgzOTk0MTQgMTYuMTQ1NDI5NjkgOTUuNDM5ODE0NDUgMTcuMTc4NzEwOTQgOTUu
++MDg1MjA1MDggQzE3Ljk0OTU3MDMxIDk0LjgzMTI1OTc3IDE4LjcyMDQyOTY5IDk0
++LjU3NzMxNDQ1IDE5LjUxNDY0ODQ0IDk0LjMxNTY3MzgzIEMxOC41MjQ2NDg0NCA4
++OS44NjA2NzM4MyAxOC41MjQ2NDg0NCA4OS44NjA2NzM4MyAxNy41MTQ2NDg0NCA4
++NS4zMTU2NzM4MyBDMjEuNjI3Mzk5NTIgODkuMTI3MzEyNzcgMjQuNTQ5NDUwNTEg
++OTMuMTM2NTA4NTkgMjcuNTE0NjQ4NDQgOTcuODc4MTczODMgQzI4LjQ4Mjk2OTQy
++IDk5LjQwMDU4MjIgMjkuNDUxNzM4MzEgMTAwLjkyMjcwNTc2IDMwLjQyMDg5ODQ0
++IDEwMi40NDQ1ODAwOCBDMzEuMTc2OTMzNTkgMTAzLjYzNzg0OTEyIDMxLjE3Njkz
++MzU5IDEwMy42Mzc4NDkxMiAzMS45NDgyNDIxOSAxMDQuODU1MjI0NjEgQzM0LjYw
++NTUyMjg0IDEwOS4wMjkxNzYzNiAzNy4zMTIxMjg1NiAxMTMuMTcwOTI4NDEgNDAu
++MDE0NjQ4NDQgMTE3LjMxNTY3MzgzIEM0My4xMzc5MDU2OCAxMjIuMTA4MzY4OTYg
++NDYuMjU4Mjk4MTYgMTI2LjkwMTk2NDA1IDQ5LjMyNzE0ODQ0IDEzMS43Mjk3MzYz
++MyBDNTUuMDAwOTc0ODEgMTQwLjYzNTY0NDgzIDYwLjk3OTMzNTE0IDE0OS4yNTEz
++NzU4NSA2Ny4yMDk5NjA5NCAxNTcuNzc2NjExMzMgQzcwLjYzMzY4NjAxIDE2Mi40
++NjIwMzExNSA3My45ODY4NTI4NSAxNjcuMTk1NTQzNjUgNzcuMzI3MTQ4NDQgMTcx
++Ljk0MDY3MzgzIEM3Ny44NDkxMzgxOCAxNzIuNjgxODg0NzcgNzguMzcxMTI3OTMg
++MTczLjQyMzA5NTcgNzguOTA4OTM1NTUgMTc0LjE4Njc2NzU4IEM4MC4xMTE2Nzk3
++OCAxNzUuODk1ODEyMiA4MS4zMTMzMDA2OCAxNzcuNjA1NjQ3MjkgODIuNTE0NjQ4
++NDQgMTc5LjMxNTY3MzgzIEM4OC4xODQ3ODU0IDE3OC43MjA3OTg5IDkzLjEyNDI5
++NTE1IDE3Ny4yNTI1NTM5NyA5OC40NTIxNDg0NCAxNzUuMjUzMTczODMgQzk5LjI4
++MDQ1MTY2IDE3NC45NDM3MTgyNiAxMDAuMTA4NzU0ODggMTc0LjYzNDI2MjcgMTAw
++Ljk2MjE1ODIgMTc0LjMxNTQyOTY5IEMxMzAuMjY1NDM1MjMgMTYzLjEwNzAzMTMz
++IDE1Ny4wNjcwMjIwNiAxNDQuMDUwMTMxIDE3MC4yNTc1NjgzNiAxMTQuODMwNTY2
++NDEgQzE3Ny4yMDMyNjA1MSA5OC42NzEwNzM3MiAxNzcuNjM2NTY2NSA4MS43OTIz
++MzQyMSAxNzEuNTE0NjQ4NDQgNjUuMzE1NjczODMgQzE2OS4xNTQ0MjM0MyA1OS44
++MjIzNDE4NCAxNjYuMzYyNjgxNzUgNTQuNTY3ODkxMSAxNjMuNTE0NjQ4NDQgNDku
++MzE1NjczODMgQzE2Mi44NDEyMTM2OCA0Ny45ODU3NDYwNyAxNjIuMTcwNDc1NCA0
++Ni42NTQzNzIxNiAxNjEuNTE0NjQ4NDQgNDUuMzE1NjczODMgQzE2NS41NDU4MjY3
++NCA0Ni42NTkzOTk5MyAxNjYuMzE1OTU0NDEgNDguNzY5MzkzMTQgMTY4LjUxNDY0
++ODQ0IDUyLjMxNTY3MzgzIEMxNjkuMTc0NjQ4NDQgNTMuMzA1NjczODMgMTY5Ljgz
++NDY0ODQ0IDU0LjI5NTY3MzgzIDE3MC41MTQ2NDg0NCA1NS4zMTU2NzM4MyBDMTcx
++LjM2NTY3MjU4IDU3LjExMDQwNzkxIDE3Mi4xNzMyMjk3NCA1OC45MjU5OTA3MSAx
++NzIuOTUyMTQ4NDQgNjAuNzUzMTczODMgQzE3My4zNjMzNTkzOCA2MS43MDA2MzQ3
++NyAxNzMuNzc0NTcwMzEgNjIuNjQ4MDk1NyAxNzQuMTk4MjQyMTkgNjMuNjI0MjY3
++NTggQzE3Ny4zODMxNTg1IDcyLjU1NTI2NDM2IDE3OC45NzU4MDYyNCA4MC44NDUw
++ODg4OCAxNzguNzY0NjQ4NDQgOTAuMzE1NjczODMgQzE3OC43NDM4NjIzIDkxLjkx
++MTM3MjA3IDE3OC43NDM4NjIzIDkxLjkxMTM3MjA3IDE3OC43MjI2NTYyNSA5My41
++MzkzMDY2NCBDMTc4LjY4NjYzMTk0IDk2LjAwNDU5Mjg3IDE3OC42NDI3NDg5NiA5
++OC40Njk3NzE1OCAxNzguNTkyNzczNDQgMTAwLjkzNDgxNDQ1IEMxNzguNTExNjUy
++NjYgMTA1LjA5MTc3MTQxIDE3OC40NzgwNjI0NyAxMDkuMjQ4NTQxMTcgMTc4LjQ0
++NjEwNTk2IDExMy40MDYxMjc5MyBDMTc4LjQxMjA2NDg2IDExNy4zMTQxNzcyIDE3
++OC4zNTkzNzI5NyAxMjEuMjIxODUyNDUgMTc4LjMwMzEwMDU5IDEyNS4xMjk2Mzg2
++NyBDMTc4LjI3Nzc0ODA5IDEyNy4wNjU0NDI3NiAxNzguMjU4MTY1MTcgMTI5LjAw
++MTMzMjIzIDE3OC4yNDQ3NTA5OCAxMzAuOTM3MjU1ODYgQzE3OC4xNTQ2OTc5OCAx
++NDIuNDMwMjA3NCAxNzcuNDYxOTg0NzkgMTUyLjQxMzIzNjcgMTczLjUxNDY0ODQ0
++IDE2My4zMTU2NzM4MyBDMTczLjIwNDIyNjA3IDE2NC4yMzU1ODEwNSAxNzIuODkz
++ODAzNzEgMTY1LjE1NTQ4ODI4IDE3Mi41NzM5NzQ2MSAxNjYuMTAzMjcxNDggQzE2
++NC4xOTU0Nzc1MyAxOTAuMzAxMDc4NzMgMTQwLjEyNTk5MDc3IDIwOS4xODI5NDQ1
++NiAxMTcuOTgyMTc3NzMgMjIwLjIyMjY1NjI1IEM5MC44MzUwNzI2NSAyMzMuMzE1
++NjczODMgOTAuODM1MDcyNjUgMjMzLjMxNTY3MzgzIDgxLjUxNDY0ODQ0IDIzMy4z
++MTU2NzM4MyBDNzkuMjEzMjE4NTEgMjMwLjQ5MzQ4MjM5IDc3LjQ0ODk1MzI4IDIy
++Ny40MTA1NjE1OCA3NS41MTQ2NDg0NCAyMjQuMzE1NjczODMgQzc1LjE4NDY0ODQ0
++IDIzMC45MTU2NzM4MyA3NC44NTQ2NDg0NCAyMzcuNTE1NjczODMgNzQuNTE0NjQ4
++NDQgMjQ0LjMxNTY3MzgzIEM2Ny4wMjEyNzAzNSAyNDYuNDEzODE5NjkgNTkuNjQ4
++ODU0ODkgMjQ3Ljg0NzQwMzMzIDUxLjk1MjE0ODQ0IDI0OC45NDA2NzM4MyBDNTAu
++NjYwMTQ1MjYgMjQ5LjEyNDk2OTQ4IDUwLjY2MDE0NTI2IDI0OS4xMjQ5Njk0OCA0
++OS4zNDIwNDEwMiAyNDkuMzEyOTg4MjggQy02Ljg3ODc2MzUyIDI1Ny4wMjg1MjY2
++NyAtNzUuOTEzNTUwMSAyNDguMDE3ODg5OTcgLTEyMi4zMjY0MTYwMiAyMTIuOTIz
++NTgzOTggQy0xMzguMzA0MTA4MjkgMTk5LjcwMTE4OTcxIC0xNDkuODcyMjU3OTYg
++MTgxLjA3MDk5ODY0IC0xNTIuNDg1MzUxNTYgMTYwLjMxNTY3MzgzIEMtMTUyLjU5
++MTA5ODI4IDE1Ny45Mjg0Nzc5NCAtMTUyLjY1Mjk5OTcyIDE1NS41MzkwNjE5NyAt
++MTUyLjY3ODIyMjY2IDE1My4xNDk2NTgyIEMtMTUyLjY4NjQwMDE1IDE1Mi40NzA0
++NzMzMyAtMTUyLjY5NDU3NzY0IDE1MS43OTEyODg0NSAtMTUyLjcwMzAwMjkzIDE1
++MS4wOTE1MjIyMiBDLTE1Mi43Mjc2MjM4MyAxNDguODY0MTY0NDcgLTE1Mi43NDQz
++MTc2NiAxNDYuNjM2ODY5NjggLTE1Mi43NTg3ODkwNiAxNDQuNDA5NDIzODMgQy0x
++NTIuNzY0MTEyNzQgMTQzLjY0MDIyMTEgLTE1Mi43Njk0MzY0MiAxNDIuODcxMDE4
++MzcgLTE1Mi43NzQ5MjE0MiAxNDIuMDc4NTA2NDcgQy0xNTIuODAxNTU5NDkgMTM4
++LjAwMjI5OTAxIC0xNTIuODIwOTU4OTEgMTMzLjkyNjEyMTEgLTE1Mi44MzU0NDky
++MiAxMjkuODQ5ODUzNTIgQy0xNTIuODQ4NzQwMzggMTI2LjUwNzc3NTI5IC0xNTIu
++ODc2NTE2MzYgMTIzLjE2NjMxNDU4IC0xNTIuOTE3NDgwNDcgMTE5LjgyNDQ2Mjg5
++IEMtMTUyLjk2NzMwNTcgMTE1Ljc1NzM0MzE4IC0xNTIuOTkxNjMwMTEgMTExLjY5
++MDc3OTAyIC0xNTIuOTk4Njc2MyAxMDcuNjIzMzY3MzEgQy0xNTMuMDA1MzA4NDUg
++MTA2LjA4OTQ0MTAzIC0xNTMuMDIwMzE0NzcgMTA0LjU1NTUyMzE3IC0xNTMuMDQ0
++NTY3MTEgMTAzLjAyMTc3NDI5IEMtMTUzLjM0ODQ4NTYyIDgyLjYyOTQ3MjkzIC0x
++NDUuNzkwNTcyOTggNjUuNzU4MjgwMjIgLTEzMi40ODUzNTE1NiA1MC4zMTU2NzM4
++MyBDLTEzMS45NjcxNDg0NCA0OS42NTMwOTU3IC0xMzEuNDQ4OTQ1MzEgNDguOTkw
++NTE3NTggLTEzMC45MTUwMzkwNiA0OC4zMDc4NjEzMyBDLTExMS4zOTgzNzg2IDI0
++LjA4MzY2NDY3IC03Ny44MTI4OTc1NiAxMS40NTMyNDI2IC00OC40ODUzNTE1NiA0
++LjU2NTY3MzgzIEMtNDcuNjU2OTY3NzcgNC4zNjY5OTcwNyAtNDYuODI4NTgzOTgg
++NC4xNjgzMjAzMSAtNDUuOTc1MDk3NjYgMy45NjM2MjMwNSBDLTMwLjgwMjgwMDc2
++IDAuNTc2MTk4MDUgLTE1LjQ4NzE3OTQ2IC0wLjAzNTQwMDc3IDAgMCBaICIgZmls
++bD0iIzI5MzgzQSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjI4LjQ4NTM1MTU2MjUs
++MTM2LjY4NDMyNjE3MTg3NSkiLz4KPHBhdGggZD0iTTAgMCBDMi40NTI1OTQ0NiAz
++LjA0ODQ5MzM3IDQuMTc0ODcwMzYgNi41NDczMDYzIDYgMTAgQzYuNDU4OTA2MjUg
++MTAuODYzNjcxODcgNi45MTc4MTI1IDExLjcyNzM0Mzc1IDcuMzkwNjI1IDEyLjYx
++NzE4NzUgQzE1LjAzNTE0NzEgMjguMTM2NDg4MzggMTYuNDA0MzgzODMgNDUuNjI2
++NzExMzMgMTEuNDUzMTI1IDYyLjEzNjcxODc1IEM3LjIwNzIyNTU5IDc0LjA1OTA4
++MTI0IDAuNTg3Njc3NzIgODQuNzM5MzUyNjUgLTggOTQgQy04Ljc0NjM2NzE5IDk0
++LjgyNjI4OTA2IC05LjQ5MjczNDM3IDk1LjY1MjU3ODEyIC0xMC4yNjE3MTg3NSA5
++Ni41MDM5MDYyNSBDLTI2LjE0MzgzMzA5IDExMy4yNzg1NjkxNyAtNDYuMjc3NDk2
++MyAxMjMuNjUwODQyOTEgLTY3LjgxMzQ3NjU2IDEzMS4yMjYwNzQyMiBDLTY5LjY1
++NjMwMjY5IDEzMS44NzgzNDc0MyAtNzEuNDgyNzUxMDMgMTMyLjU3NjYyNTQgLTcz
++LjMwNDY4NzUgMTMzLjI4NTE1NjI1IEMtNzYuNDA2NDQ0NSAxMzQuMTA3Nzk2MTUg
++LTc3Ljk0OTI2MjExIDEzMy45MjgyNjY4IC04MSAxMzMgQy04Mi42MDIyOTQ5MiAx
++MzEuNDU2Mjk4ODMgLTgyLjYwMjI5NDkyIDEzMS40NTYyOTg4MyAtODMuOTgwNDY4
++NzUgMTI5LjQ1NzAzMTI1IEMtODQuNDk5MzE2NDEgMTI4LjcyMDQ5MzE2IC04NS4w
++MTgxNjQwNiAxMjcuOTgzOTU1MDggLTg1LjU1MjczNDM4IDEyNy4yMjUwOTc2NiBD
++LTg2LjM2MTk0MzM2IDEyNi4wMzA4NjE4MiAtODYuMzYxOTQzMzYgMTI2LjAzMDg2
++MTgyIC04Ny4xODc1IDEyNC44MTI1IEMtODcuNzU5MTk5MjIgMTIzLjk5MzEzOTY1
++IC04OC4zMzA4OTg0NCAxMjMuMTczNzc5MyAtODguOTE5OTIxODggMTIyLjMyOTU4
++OTg0IEMtOTAuMDgxMTg1MTcgMTIwLjY2NTIyMDU5IC05MS4yMzczMjAzMiAxMTgu
++OTk3MjYxMDUgLTkyLjM4ODE4MzU5IDExNy4zMjU2ODM1OSBDLTkzLjc3MjA5NzI4
++IDExNS4zMjg4Mzk5NCAtOTUuMTc5MDMzMjcgMTEzLjM1NTMyNTA2IC05Ni42MTMy
++ODEyNSAxMTEuMzk0NTMxMjUgQy0xMDMuMjE3MDcwNDkgMTAyLjM2NjE0MzAxIC0x
++MDkuMjc1MzgwMTIgOTMuMDAxMTk0NDMgLTExNS4zMjY2NjAxNiA4My41OTY2Nzk2
++OSBDLTExNy41MDMyMzQ2OSA4MC4yMTkwODMxNCAtMTE5LjY5MzE1NTQgNzYuODUw
++Mjc1MzcgLTEyMS44ODQ3NjU2MiA3My40ODI0MjE4OCBDLTEyMi45NTYwODA5MiA3
++MS44MzU5Mzg1MSAtMTI0LjAyNjQwNDE5IDcwLjE4ODgwOTIxIC0xMjUuMDk1NzAz
++MTIgNjguNTQxMDE1NjIgQy0xMjcuOTUxODc2NzUgNjQuMTQwMjEyMTcgLTEzMC44
++MjEwMjY4MiA1OS43NDg0OTU5MiAtMTMzLjcwNzAzMTI1IDU1LjM2NzE4NzUgQy0x
++MzQuMzEwMzEyNSA1NC40NDgwODU5NCAtMTM0LjkxMzU5Mzc1IDUzLjUyODk4NDM3
++IC0xMzUuNTM1MTU2MjUgNTIuNTgyMDMxMjUgQy0xMzYuNjk5NDIzNzYgNTAuODA4
++NzYyMjcgLTEzNy44NjcyNjQzOCA0OS4wMzc4MzI5NCAtMTM5LjAzOTA2MjUgNDcu
++MjY5NTMxMjUgQy0xMzkuNTU4NTU0NjkgNDYuNDc2NzU3ODEgLTE0MC4wNzgwNDY4
++OCA0NS42ODM5ODQzNyAtMTQwLjYxMzI4MTI1IDQ0Ljg2NzE4NzUgQy0xNDEuMDc1
++MTY4NDYgNDQuMTY3MDY1NDMgLTE0MS41MzcwNTU2NiA0My40NjY5NDMzNiAtMTQy
++LjAxMjkzOTQ1IDQyLjc0NTYwNTQ3IEMtMTQzIDQxIC0xNDMgNDEgLTE0MyAzOSBD
++LTE0Mi4wMjA5NTcwMyAzOC43MjAyNzM0NCAtMTQxLjA0MTkxNDA2IDM4LjQ0MDU0
++Njg3IC0xNDAuMDMzMjAzMTIgMzguMTUyMzQzNzUgQy0xMzkuMzcwODgxODEgMzcu
++OTYzMTA4MzcgLTEzOC43MDg1NjA0OSAzNy43NzM4NzI5OSAtMTM4LjAyNjE2ODgy
++IDM3LjU3ODkwMzIgQy0xMzYuNDkwMzczMjMgMzcuMTQwMTA1OTUgLTEzNC45NTQ1
++NzYwMyAzNi43MDEzMTQzIC0xMzMuNDE4Nzc3NDcgMzYuMjYyNTI3NDcgQy0xMjgu
++OTA5NjAwODIgMzQuOTc0MjE4NzIgLTEyNC40MDA0NTU0NCAzMy42ODU4MDA3MSAt
++MTE5Ljg5MTM1NzQyIDMyLjM5NzIxNjggQy0xMTAuMDc0NjA4MzMgMjkuNTkxOTcw
++NzkgLTEwMC4yNTc1NTU5NyAyNi43ODc3OTUzOSAtOTAuNDM5Njk3MjcgMjMuOTg2
++NDM0OTQgQy01OC41MTc3OTUwMiAxNC44ODc2MjI0MSAtNTguNTE3Nzk1MDIgMTQu
++ODg3NjIyNDEgLTI2LjYyNSA1LjY4NzUgQy0yNS40NDU5MTA2NCA1LjM0NTAxMjIx
++IC0yNC4yNjY4MjEyOSA1LjAwMjUyNDQxIC0yMy4wNTIwMDE5NSA0LjY0OTY1ODIg
++Qy0yMS40MzY4NDY5MiA0LjE3OTE5MDY3IC0yMS40MzY4NDY5MiA0LjE3OTE5MDY3
++IC0xOS43ODkwNjI1IDMuNjk5MjE4NzUgQy0xOC44MDcxMTkxNCAzLjQxNDgxOTM0
++IC0xNy44MjUxNzU3OCAzLjEzMDQxOTkyIC0xNi44MTM0NzY1NiAyLjgzNzQwMjM0
++IEMtMTQuOTE3NTI0NzUgMi4yNzMwOTE4IC0xMy4wMjg3MTYzOSAxLjY4NDI3NDY0
++IC0xMS4xNDc0NjA5NCAxLjA3Mjc1MzkxIEMtMTAuMjYwOTA4MiAwLjc4NzA2NTQz
++IC05LjM3NDM1NTQ3IDAuNTAxMzc2OTUgLTguNDYwOTM3NSAwLjIwNzAzMTI1IEMt
++Ny4zMDkyNDA3MiAtMC4xNzgxMTY0NiAtNy4zMDkyNDA3MiAtMC4xNzgxMTY0NiAt
++Ni4xMzQyNzczNCAtMC41NzEwNDQ5MiBDLTMuNzAwMTk2OTcgLTEuMDYwMjU1NTQg
++LTIuMzA4NTY0MzEgLTAuODgyMDM4NDggMCAwIFogIiBmaWxsPSIjRUZGNkZEIiB0
++cmFuc2Zvcm09InRyYW5zbGF0ZSgzOTEsMTgzKSIvPgo8cGF0aCBkPSJNMCAwIEMy
++LjUwMDk1MTI1IDEuMzk4MzgxMzQgMy45NTQwNzEyOCAyLjkwNTM1ODY5IDYgNSBD
++Ni42MTg3NSA1LjU5ODEyNSA3LjIzNzUgNi4xOTYyNSA3Ljg3NSA2LjgxMjUgQzgu
++MjQ2MjUgNy4yMDQzNzUgOC42MTc1IDcuNTk2MjUgOSA4IEM5Ljk5IDcuMzQgMTAu
++OTggNi42OCAxMiA2IEMxNi4yNTUxNTQ4OSAzLjU3OTU1NzY0IDE5LjE0NTUyMzY4
++IDMuNDUxOTEzOTYgMjQgNCBDMjYuODc1IDUgMjYuODc1IDUgMjkgNyBDMzAuMDA4
++Nzg5OTYgOS42Nzc3ODI3OCAzMC40ODc4OTg3OCAxMi4xNjAxNjU5OCAzMSAxNSBD
++MzEuNjYgMTQuNjcgMzIuMzIgMTQuMzQgMzMgMTQgQzM3Ljk0NDI4NDg1IDEyLjM1
++MTkwNTA1IDQyLjE3NTQ5NzI1IDEyLjE0NTk3NzQ0IDQ2LjkzNzUgMTQuMzc1IEM0
++OSAxNiA0OSAxNiA1MCAxOCBDNTAuMTM0MTU0NzIgMjAuNjcyMzYyMSA1MC4wNDMx
++ODU0MSAyMy4zMjI1MDQ4OCA1MCAyNiBDNTAuNzgzNzUgMjUuNTA1IDUxLjU2NzUg
++MjUuMDEgNTIuMzc1IDI0LjUgQzU3LjAzNzAwMTQ3IDIyLjU3MDg5NTk0IDYxLjAx
++NjIwNzc0IDIyLjIyNzUxMjIgNjYgMjMgQzY4LjkzNDIzMTk1IDI0Ljc5NjQ2ODU0
++IDcwLjQ3MjA1MzU1IDI1Ljk0NDEwNzEgNzIgMjkgQzcyLjM1NDkyNTQyIDM2LjIx
++NjgxNjc4IDcyLjM1NDkyNTQyIDM2LjIxNjgxNjc4IDcwLjk1ODk4NDM4IDM5LjI5
++NzExOTE0IEM2OS44NjM1MjE0MSA0Mi4zODQ2NjI1MyA2OS45NzAyNDA2OSA0NC4x
++OTEwNjM1NyA3MC40MjU3ODEyNSA0Ny40MTQwNjI1IEM3MC41NjMwNjY0MSA0OC40
++MjIxMDkzNyA3MC43MDAzNTE1NiA0OS40MzAxNTYyNSA3MC44NDE3OTY4OCA1MC40
++Njg3NSBDNzEuMDc0Nzk0OTIgNTIuMDMxMDkzNzUgNzEuMDc0Nzk0OTIgNTIuMDMx
++MDkzNzUgNzEuMzEyNSA1My42MjUgQzcxLjQ1NjIzMDQ3IDU0LjY3NDI5Njg4IDcx
++LjU5OTk2MDk0IDU1LjcyMzU5Mzc1IDcxLjc0ODA0Njg4IDU2LjgwNDY4NzUgQzcy
++LjUyNzc5MzM4IDYyLjQ4MDIxMzEzIDcyLjUyNzc5MzM4IDYyLjQ4MDIxMzEzIDc0
++IDY4IEM3NS4yMDA3NzMyNiA3NS4zMDg0MTAxMiA3NS4xNjExMjAzNiA4Mi43OTk0
++NTYzOCA3NS4yNSA5MC4xODc1IEM3NS4yNzEzNTAxIDkxLjEyNTY5NTggNzUuMjky
++NzAwMiA5Mi4wNjM4OTE2IDc1LjMxNDY5NzI3IDkzLjAzMDUxNzU4IEM3NS4zNDI1
++NzI3MyA5OC43NjUyNjExOSA3NS4wNzQ5NTkwNiAxMDQuMDEwMzYwNTUgNzIgMTA5
++IEM2Ny40ODIyNDQ0OCAxMTMuMDYzMjY2NiA2Mi4zOTQ4Mzg4MyAxMTQuMjE1Mjk3
++MDYgNTYuNjI1IDExNS41NjI1IEM1MC41NzAwNTQwOSAxMTcuMDE4NTcwMzMgNDQu
++NzQyNDQ0MTkgMTE4LjU1NjU0NDYzIDM5IDEyMSBDMzguNjcgMTIxLjY2IDM4LjM0
++IDEyMi4zMiAzOCAxMjMgQzM1LjQzNzUgMTIzLjYyNSAzNS40Mzc1IDEyMy42MjUg
++MzMgMTI0IEMzMS4wMiAxMjAuNTM1IDMxLjAyIDEyMC41MzUgMjkgMTE3IEMyMi4x
++NTA1NjI0NCAxMTcuNjIxNzkyMTkgMTUuODY2NzY0OSAxMTkuMzEyMzI3OTcgOS4y
++ODEyNSAxMjEuMjUzOTA2MjUgQzguMTM0NDQyNiAxMjEuNTg2NTc1MDEgNi45ODc2
++MzUxOSAxMjEuOTE5MjQzNzcgNS44MDYwNzYwNSAxMjIuMjYxOTkzNDEgQzIuNjg1
++NDE1NDkgMTIzLjE2ODE2NjQyIC0wLjQzMzY3MzYxIDEyNC4wNzk1Mjg4NCAtMy41
++NTIyMTkzOSAxMjQuOTkyOTQ2NjIgQy02LjgzMzE0MjkyIDEyNS45NTIzMjYyNyAt
++MTAuMTE2MTc5NjQgMTI2LjkwNDQxMDgxIC0xMy4zOTkxNjk5MiAxMjcuODU2Njg5
++NDUgQy0xNC43NDM1MjAwNSAxMjguMjQ2NzMyNTQgLTE2LjA4Nzg2NTExIDEyOC42
++MzY3OTMwNyAtMTcuNDMyMjA1MiAxMjkuMDI2ODcwNzMgQy0xOC40Mzg5MTczOCAx
++MjkuMzE4OTgwMjggLTE4LjQzODkxNzM4IDEyOS4zMTg5ODAyOCAtMTkuNDY1OTY3
++MTggMTI5LjYxNjk5MTA0IEMtMjEuNTI0MzgzMTQgMTMwLjIxNDYxNDM3IC0yMy41
++ODI1NjI1MSAxMzAuODEzMDQ1ODQgLTI1LjY0MDY3MDc4IDEzMS40MTE3Mjc5MSBD
++LTM4LjY2Mzk0MTcxIDEzNS4xOTk0MjYxMSAtNTEuNjk5OTU5ODYgMTM4Ljk0MTYy
++MDk5IC02NC43NDEyMTA5NCAxNDIuNjY2OTYxNjcgQy02OC4yMDk0MjE5OSAxNDMu
++NjU4MDQ0MjMgLTcxLjY3NzAwODE5IDE0NC42NTEyODg4NyAtNzUuMTQ0NTMxMjUg
++MTQ1LjY0NDc3NTM5IEMtODguNzM1Njk2OTEgMTQ5LjUzMjkyMzQzIC0xMDIuMzUy
++MjExNTMgMTUzLjMxNTUzMTc4IC0xMTYgMTU3IEMtMTE1LjM0IDE1OS45NyAtMTE0
++LjY4IDE2Mi45NCAtMTE0IDE2NiBDLTExNS45NTcwODY4IDE2Ni42NzAzMTcxOSAt
++MTE3LjkxNTcxMTEzIDE2Ny4zMzYxNDY4MyAtMTE5Ljg3NSAxNjggQy0xMjAuOTY1
++NTQ2ODggMTY4LjM3MTI1IC0xMjIuMDU2MDkzNzUgMTY4Ljc0MjUgLTEyMy4xNzk2
++ODc1IDE2OS4xMjUgQy0xMjYgMTcwIC0xMjYgMTcwIC0xMjggMTcwIEMtMTI4LjY5
++OTUxMDYzIDE2Ny41ODYyMzggLTEyOS4zODQ4MzkxOSAxNjUuMTY5ODk3NjYgLTEz
++MC4wNjI1IDE2Mi43NSBDLTEzMC4yNjE2NjAxNiAxNjIuMDY4MDg1OTQgLTEzMC40
++NjA4MjAzMSAxNjEuMzg2MTcxODggLTEzMC42NjYwMTU2MiAxNjAuNjgzNTkzNzUg
++Qy0xMzIuNDAwMDkyNjkgMTU0LjQxNjU3ODM5IC0xMzIuNDAwMDkyNjkgMTU0LjQx
++NjU3ODM5IC0xMzEgMTUxIEMtMTMxIDE1MS42NiAtMTMxIDE1Mi4zMiAtMTMxIDE1
++MyBDLTY1LjExMjgyMzA3IDEzMS4wODIwOTI4IC02NS4xMTI4MjMwNyAxMzEuMDgy
++MDkyOCAtMC43NSAxMDUuMTI1IEMwLjAzMDc2OTA0IDEwNC43Nzk1MzEyNSAwLjgx
++MTUzODA5IDEwNC40MzQwNjI1IDEuNjE1OTY2OCAxMDQuMDc4MTI1IEMxMC43NjY0
++MDA4NCA5OS45MDkzODA3NCAxNy45NzIzNzY0MiA5NS43NDIwNDQ3MSAyMi44MTI1
++IDg2LjU2MjUgQzI1Ljk0MDExNTI1IDc3LjMwNDA0ODAzIDI0LjQ0MzY5MTA2IDY2
++LjI3MjkzNDg0IDIyIDU3IEMyOC43NjYyMzgyMyA1My41MDE1NDcyOCAzNS41OTk0
++NjkyMiA1MC4yMTA2MDAxMiA0Mi41NjI1IDQ3LjEyNSBDNDMuMjUyNzkyOTcgNDYu
++ODE0ODk5OSA0My45NDMwODU5NCA0Ni41MDQ3OTk4IDQ0LjY1NDI5Njg4IDQ2LjE4
++NTMwMjczIEM0Ny42MDQxNTkxMSA0NC44OTMwOTY3NiA0OS43NDM1MzQgNDQgNTMg
++NDQgQzUzIDQzLjM0IDUzIDQyLjY4IDUzIDQyIEM1MS45OTQ1MzEyNSA0MS42MDU1
++NDY4OCA1MS45OTQ1MzEyNSA0MS42MDU1NDY4OCA1MC45Njg3NSA0MS4yMDMxMjUg
++QzQ3LjQ1MjY0NzE2IDM5Ljc3ODE3ODA2IDQzLjk3NTE1MDUgMzguMjcxMjIzNDcg
++NDAuNSAzNi43NSBDMzkuODY4MzU5MzggMzYuNDc1NDI5NjkgMzkuMjM2NzE4NzUg
++MzYuMjAwODU5MzcgMzguNTg1OTM3NSAzNS45MTc5Njg3NSBDMzUuNDM2NjcwNiAz
++NC41NDA5MzYzNiAzMi4zMDMwMTY5NSAzMy4xNDI5OTE3MiAyOS4xOTQzMzU5NCAz
++MS42NzYwMjUzOSBDMjIuOTc0OTM0OTMgMjguNzQ0MTc1MiAxNi43MjQ5MTYyIDI2
++LjA0MzkyNzY1IDEwLjMyODEyNSAyMy41MjczNDM3NSBDOS41ODY1OTE4IDIzLjIz
++MzM0Njg2IDguODQ1MDU4NTkgMjIuOTM5MzQ5OTggOC4wODEwNTQ2OSAyMi42MzY0
++NDQwOSBDNS4wMjA2MzA1MSAyMS40MjMyMjIyMSAxLjk2MDQ3MDI1IDIwLjIxMDcx
++ODI1IC0xLjExMjMwNDY5IDE5LjAyOTA1MjczIEMtMy4zODk2ODI5OSAxOC4xNTA1
++MzM5MyAtNS42NTYwNDQ0MyAxNy4yNDc2NTczOSAtNy45MjE4NzUgMTYuMzM5ODQz
++NzUgQy04Ljk2ODUyMzI1IDE1Ljk0NzQzNzUyIC04Ljk2ODUyMzI1IDE1Ljk0NzQz
++NzUyIC0xMC4wMzYzMTU5MiAxNS41NDcxMDM4OCBDLTExLjk3MTY3OTY5IDE0Ljc1
++NzU2ODM2IC0xMS45NzE2Nzk2OSAxNC43NTc1NjgzNiAtMTUgMTMgQy0xNi4wNTE3
++NTc4MSAxMC40OTA0Nzg1MiAtMTYuMDUxNzU3ODEgMTAuNDkwNDc4NTIgLTE2IDgg
++Qy0xMi4wNjUwMDA5NiAwLjgzMjY4MDMyIC03Ljk0Mzc0MTg5IC0xLjM1NzkwNDYg
++MCAwIFogIiBmaWxsPSIjRTQ4MTIwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNjMs
++NjYpIi8+CjxwYXRoIGQ9Ik0wIDAgQzAuMzMgMCAwLjY2IDAgMSAwIEMxLjA0OTg0
++MDYyIDUuMjI4NjY0NjMgMS4wODU5MjYwNiAxMC40NTcxODc2NSAxLjEwOTg2MzI4
++IDE1LjY4NjAzNTE2IEMxLjExOTg1Mzc4IDE3LjQ2MDc5OTI4IDEuMTMzNDUwODEg
++MTkuMjM1NTQ3MjMgMS4xNTA4Nzg5MSAyMS4wMTAyNTM5MSBDMS40MDU4NzA1NyA0
++Ny42NjQzODIzMSAtNi41MjIwNDM2MyA2Ny4wNzc1MzAxMyAtMjUuMTI1IDg2LjUg
++Qy00Mi4zNTMyNzM2MiAxMDMuMzAyODg0MTUgLTY3LjA3NDUyNDczIDExNy41ODIw
++NzQ5NiAtOTEgMTIxIEMtOTEgMTA1LjE2IC05MSA4OS4zMiAtOTEgNzMgQy04Ni43
++MSA3MS42OCAtODIuNDIgNzAuMzYgLTc4IDY5IEMtNDUuOTM0ODE4ODkgNTcuODM4
++NDc4MjEgLTE4Ljc4NDQ2NzE0IDM4LjI2MDc3MzI3IC0yLjg2Mzc2OTUzIDcuODE3
++ODcxMDkgQy0xLjY2MDM4NjAxIDUuMjg1MjU1NTggLTAuNzk1MTMxMTkgMi42ODUx
++Mjg5IDAgMCBaICIgZmlsbD0iIzlEQ0JGRCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUo
++NDAzLDI0NikiLz4KPHBhdGggZD0iTTAgMCBDMC44ODYzOTE2IDAuMzc3MzczMDUg
++MS43NzI3ODMyIDAuNzU0NzQ2MDkgMi42ODYwMzUxNiAxLjE0MzU1NDY5IEM0LjE4
++OTY0NiAxLjc2NTU2NzYzIDQuMTg5NjQ2IDEuNzY1NTY3NjMgNS43MjM2MzI4MSAy
++LjQwMDE0NjQ4IEM2Ljc5NjYxNjIxIDIuODY3MTg5OTQgNy44Njk1OTk2MSAzLjMz
++NDIzMzQgOC45NzUwOTc2NiAzLjgxNTQyOTY5IEMxMC4wODU0NjM4NyA0LjI4MDUz
++OTU1IDExLjE5NTgzMDA4IDQuNzQ1NjQ5NDEgMTIuMzM5ODQzNzUgNS4yMjQ4NTM1
++MiBDMTQuNjQxMjc2MDIgNi4xODkyNjc5MSAxNi45Mzk2MDMyMiA3LjE2MTEyMzUx
++IDE5LjIzNDg2MzI4IDguMTQwMTM2NzIgQzIzLjI5MDAzNDE2IDkuODU3NjQxNjIg
++MjcuMzcyNTgyMzggMTEuNTAwMzM3MzMgMzEuNDU5NzE2OCAxMy4xMzk4OTI1OCBD
++NDMuNDk1OTA4NTQgMTcuOTg0MzM0OSA1NS4zNzQ4ODg5MiAyMy4wMjMzMDQyNCA2
++Ni42MDAwOTc2NiAyOS41NjU0Mjk2OSBDNjYuNjAwMDk3NjYgMzAuMjI1NDI5Njkg
++NjYuNjAwMDk3NjYgMzAuODg1NDI5NjkgNjYuNjAwMDk3NjYgMzEuNTY1NDI5Njkg
++QzYyLjYyMjk2OTE3IDMzLjMxMjQxNDQ1IDU4LjY0MzM1NTUgMzUuMDUzNTg2NzIg
++NTQuNjYxNjIxMDkgMzYuNzkwMDM5MDYgQzUzLjMxNTI2ODI0IDM3LjM3ODA3MTkx
++IDUxLjk2OTUzNTc3IDM3Ljk2NzUyNzgyIDUwLjYyNDUxMTcyIDM4LjU1ODU5Mzc1
++IEM0My41NDI4ODY0NCA0MS42Njk0MTI2NSAzNi40NjA3OTgzNyA0NC42NjA3NzY1
++OSAyOS4xOTM4NDc2NiA0Ny4zMTkzMzU5NCBDMTcuNjQ2MzAyNiA1MS41NTIwMzQx
++OSA2LjM5ODk2NzIgNTYuNTMwMzE0ODUgLTQuODk5OTAyMzQgNjEuMzc3OTI5Njkg
++Qy03LjI5NDIwMDM1IDYyLjQwMjI5MTg3IC05LjY4ODY1MTk5IDYzLjQyNjI5NTA0
++IC0xMi4wODMyNTE5NSA2NC40NDk5NTExNyBDLTE1LjcwNTgzNjQ2IDY1Ljk5ODYz
++MTU1IC0xOS4zMjgzMDI4NSA2Ny41NDc1ODE3MyAtMjIuOTUwMTgwMDUgNjkuMDk3
++OTE1NjUgQy0zMC40MTgyNTg1MiA3Mi4yOTQxNzA4OSAtMzcuODkyMDU1MyA3NS40
++NzY0OTI3MSAtNDUuMzcyNTU4NTkgNzguNjQzNTU0NjkgQy00Ni43NDM5NDQ4NSA3
++OS4yMjQ1MDE0MiAtNDYuNzQzOTQ0ODUgNzkuMjI0NTAxNDIgLTQ4LjE0MzAzNTg5
++IDc5LjgxNzE4NDQ1IEMtNTEuNTY0MDY0IDgxLjI2NjIzNDk2IC01NC45ODUxMDky
++NCA4Mi43MTUyMzE2NyAtNTguNDA3NzE0ODQgODQuMTYwNTUyOTggQy02Ni44NzI1
++ODc1OCA4Ny43MzU5MjcxNyAtNzUuMjg2MzIwNDggOTEuMzY3Njc2NjYgLTgzLjU5
++NTQ1ODk4IDk1LjI5NDY3NzczIEMtODYuNDUyMjI1MTIgOTYuNTg5MTM4MjMgLTg5
++LjMzNTgyNjA2IDk3LjcyMjI2NTA3IC05Mi4yNzQ5MDIzNCA5OC44MTU0Mjk2OSBD
++LTEwMi40ODgzOTg5NyAxMDIuNjQwNzU2NjEgLTExMi40MjEwODM3NyAxMDcuMTcy
++NjAxMDYgLTEyMi4zOTk5MDIzNCAxMTEuNTY1NDI5NjkgQy0xMjIuMzk5OTAyMzQg
++MTA4LjU2NTQyOTY5IC0xMjIuMzk5OTAyMzQgMTA4LjU2NTQyOTY5IC0xMjAuMzM3
++NDAyMzQgMTA2LjM5MzU1NDY5IEMtMTE4Ljg4MzMzOTg0IDEwNS4xMTczODI4MSAt
++MTE4Ljg4MzMzOTg0IDEwNS4xMTczODI4MSAtMTE3LjM5OTkwMjM0IDEwMy44MTU0
++Mjk2OSBDLTExNi4yOTcyNDkzOSAxMDIuODM0ODgzNzMgLTExNS4xOTU3NDg0IDEw
++MS44NTMwNDEzIC0xMTQuMDk1MjE0ODQgMTAwLjg3MDExNzE5IEMtMTEzLjIwMjM3
++NzkzIDEwMC4wNzY4NjAzNSAtMTEzLjIwMjM3NzkzIDEwMC4wNzY4NjAzNSAtMTEy
++LjI5MTUwMzkxIDk5LjI2NzU3ODEyIEMtMTA4Ljg5OTYwMDE1IDk2LjIxNTM5MDA4
++IC0xMDUuNTkzMjYxODMgOTMuMDcyMDgyNDMgLTEwMi4yNzQ5MDIzNCA4OS45NDA0
++Mjk2OSBDLTk3LjE3ODgzMjExIDg1LjE0ODA2NzA3IC05Mi4wNDk2MzkxMiA4MC40
++MDI3MzY5MSAtODYuODI5NTg5ODQgNzUuNzQ1MTE3MTkgQy04My45NTU5NzA4NCA3
++My4xNjcxNzYwMiAtODEuMTE1Mjc3NDYgNzAuNTU0ODY1ODcgLTc4LjI3NDkwMjM0
++IDY3Ljk0MDQyOTY5IEMtNzMuNzExNDY1NjQgNjMuNzQzNDM3NTMgLTY5LjA5NjYy
++OTYgNTkuNjEyOTAzNDcgLTY0LjM5OTkwMjM0IDU1LjU2NTQyOTY5IEMtNjMuNjM2
++Nzc3MzQgNTUuODc0ODA0NjkgLTYyLjg3MzY1MjM0IDU2LjE4NDE3OTY5IC02Mi4w
++ODc0MDIzNCA1Ni41MDI5Mjk2OSBDLTQ0Ljg0MTMyNDY4IDYzLjMyMTE0NjQ0IC0y
++My45OTUwNzQwNCA1NS41MjUxNDU4IC03LjkzMTE1MjM0IDQ4LjY0MzU1NDY5IEMt
++MC41NjMyMDIxOSA0NS4zNDM4MzUyOSA3LjQ1NTc3Mzc5IDQxLjYyNzYyMzY2IDEx
++Ljg1NzkxMDE2IDM0LjUyNjM2NzE5IEMxMy4zNjA0NTA0NCAzMC41NTY0OTc1OSAx
++My4zNDU3NjYzNCAyNi43MDY0MjQ2OCAxMi42MDAwOTc2NiAyMi41NjU0Mjk2OSBD
++MTEuMzc1NzQ2MSAxOS45MjMwNTEyMyAxMS4zNzU3NDYxIDE5LjkyMzA1MTIzIDgu
++NjAwMDk3NjYgMTguNTY1NDI5NjkgQzYuOTM1NTU5MzEgMTguMTgxMDkyNzYgNS4y
++Njg2MTQ1NCAxNy44MDcxMDk2NSAzLjYwMDA5NzY2IDE3LjQ0MDQyOTY5IEMwLjI5
++MDY5MjQ5IDE2LjU3Mjg2ODM5IC0xLjAxMDI5MzY0IDE2LjE2MjQ5MjM3IC0yLjkw
++MzgwODU5IDEzLjI2MDc0MjE5IEMtMy45MDQxMzE2NyAxMC43MTM3OTQxMiAtNC43
++MDc5Nzk4MSA4LjIxMTI3MTgzIC01LjM5OTkwMjM0IDUuNTY1NDI5NjkgQy01Ljg5
++NDkwMjM0IDQuMDgwNDI5NjkgLTUuODk0OTAyMzQgNC4wODA0Mjk2OSAtNi4zOTk5
++MDIzNCAyLjU2NTQyOTY5IEMtMy4xMDgyNDc5NCAtMC41NjI4MzYzNSAtMy4xMDgy
++NDc5NCAtMC41NjI4MzYzNSAwIDAgWiAiIGZpbGw9IiNGQUIwM0MiIHRyYW5zZm9y
++bT0idHJhbnNsYXRlKDM0OS4zOTk5MDIzNDM3NSw3OC40MzQ1NzAzMTI1KSIvPgo8
++cGF0aCBkPSJNMCAwIEMyLjUwMDk1MTI1IDEuMzk4MzgxMzQgMy45NTQwNzEyOCAy
++LjkwNTM1ODY5IDYgNSBDNi42MTg3NSA1LjU5ODEyNSA3LjIzNzUgNi4xOTYyNSA3
++Ljg3NSA2LjgxMjUgQzguMjQ2MjUgNy4yMDQzNzUgOC42MTc1IDcuNTk2MjUgOSA4
++IEM5Ljk5IDcuMzQgMTAuOTggNi42OCAxMiA2IEMxNi4yNTUxNTQ4OSAzLjU3OTU1
++NzY0IDE5LjE0NTUyMzY4IDMuNDUxOTEzOTYgMjQgNCBDMjYuODc1IDUgMjYuODc1
++IDUgMjkgNyBDMzAuMDA4Nzg5OTYgOS42Nzc3ODI3OCAzMC40ODc4OTg3OCAxMi4x
++NjAxNjU5OCAzMSAxNSBDMzEuNjYgMTQuNjcgMzIuMzIgMTQuMzQgMzMgMTQgQzM3
++Ljk0NDI4NDg1IDEyLjM1MTkwNTA1IDQyLjE3NTQ5NzI1IDEyLjE0NTk3NzQ0IDQ2
++LjkzNzUgMTQuMzc1IEM0OSAxNiA0OSAxNiA1MCAxOCBDNTAuMTM0MTU0NzIgMjAu
++NjcyMzYyMSA1MC4wNDMxODU0MSAyMy4zMjI1MDQ4OCA1MCAyNiBDNTAuNzgzNzUg
++MjUuNTA1IDUxLjU2NzUgMjUuMDEgNTIuMzc1IDI0LjUgQzU3LjAzNzAwMTQ3IDIy
++LjU3MDg5NTk0IDYxLjAxNjIwNzc0IDIyLjIyNzUxMjIgNjYgMjMgQzY4LjkzNDIz
++MTk1IDI0Ljc5NjQ2ODU0IDcwLjQ3MjA1MzU1IDI1Ljk0NDEwNzEgNzIgMjkgQzcy
++LjM1NDkyNTQyIDM2LjIxNjgxNjc4IDcyLjM1NDkyNTQyIDM2LjIxNjgxNjc4IDcw
++Ljk1ODk4NDM4IDM5LjI5NzExOTE0IEM2OS44NjM1MjE0MSA0Mi4zODQ2NjI1MyA2
++OS45NzAyNDA2OSA0NC4xOTEwNjM1NyA3MC40MjU3ODEyNSA0Ny40MTQwNjI1IEM3
++MC41NjMwNjY0MSA0OC40MjIxMDkzNyA3MC43MDAzNTE1NiA0OS40MzAxNTYyNSA3
++MC44NDE3OTY4OCA1MC40Njg3NSBDNzEuMDc0Nzk0OTIgNTIuMDMxMDkzNzUgNzEu
++MDc0Nzk0OTIgNTIuMDMxMDkzNzUgNzEuMzEyNSA1My42MjUgQzcxLjQ1NjIzMDQ3
++IDU0LjY3NDI5Njg4IDcxLjU5OTk2MDk0IDU1LjcyMzU5Mzc1IDcxLjc0ODA0Njg4
++IDU2LjgwNDY4NzUgQzcyLjUyNzc5MzM4IDYyLjQ4MDIxMzEzIDcyLjUyNzc5MzM4
++IDYyLjQ4MDIxMzEzIDc0IDY4IEM3NS4yMDA3NzMyNiA3NS4zMDg0MTAxMiA3NS4x
++NjExMjAzNiA4Mi43OTk0NTYzOCA3NS4yNSA5MC4xODc1IEM3NS4yNzEzNTAxIDkx
++LjEyNTY5NTggNzUuMjkyNzAwMiA5Mi4wNjM4OTE2IDc1LjMxNDY5NzI3IDkzLjAz
++MDUxNzU4IEM3NS4zNDI1NzI3MyA5OC43NjUyNjExOSA3NS4wNzQ5NTkwNiAxMDQu
++MDEwMzYwNTUgNzIgMTA5IEM2Ny40ODIyNDQ0OCAxMTMuMDYzMjY2NiA2Mi4zOTQ4
++Mzg4MyAxMTQuMjE1Mjk3MDYgNTYuNjI1IDExNS41NjI1IEM1MC41NzAwNTQwOSAx
++MTcuMDE4NTcwMzMgNDQuNzQyNDQ0MTkgMTE4LjU1NjU0NDYzIDM5IDEyMSBDMzgu
++NjcgMTIxLjY2IDM4LjM0IDEyMi4zMiAzOCAxMjMgQzM1LjQzNzUgMTIzLjYyNSAz
++NS40Mzc1IDEyMy42MjUgMzMgMTI0IEMzMS4wMiAxMjAuNTM1IDMxLjAyIDEyMC41
++MzUgMjkgMTE3IEMyMi4xNTA1NjI0NCAxMTcuNjIxNzkyMTkgMTUuODY2NzY0OSAx
++MTkuMzEyMzI3OTcgOS4yODEyNSAxMjEuMjUzOTA2MjUgQzguMTM0NDQyNiAxMjEu
++NTg2NTc1MDEgNi45ODc2MzUxOSAxMjEuOTE5MjQzNzcgNS44MDYwNzYwNSAxMjIu
++MjYxOTkzNDEgQzIuNjg1NDE1NDkgMTIzLjE2ODE2NjQyIC0wLjQzMzY3MzYxIDEy
++NC4wNzk1Mjg4NCAtMy41NTIyMTkzOSAxMjQuOTkyOTQ2NjIgQy02LjgzMzE0Mjky
++IDEyNS45NTIzMjYyNyAtMTAuMTE2MTc5NjQgMTI2LjkwNDQxMDgxIC0xMy4zOTkx
++Njk5MiAxMjcuODU2Njg5NDUgQy0xNC43NDM1MjAwNSAxMjguMjQ2NzMyNTQgLTE2
++LjA4Nzg2NTExIDEyOC42MzY3OTMwNyAtMTcuNDMyMjA1MiAxMjkuMDI2ODcwNzMg
++Qy0xOC40Mzg5MTczOCAxMjkuMzE4OTgwMjggLTE4LjQzODkxNzM4IDEyOS4zMTg5
++ODAyOCAtMTkuNDY1OTY3MTggMTI5LjYxNjk5MTA0IEMtMjEuNTI0MzgzMTQgMTMw
++LjIxNDYxNDM3IC0yMy41ODI1NjI1MSAxMzAuODEzMDQ1ODQgLTI1LjY0MDY3MDc4
++IDEzMS40MTE3Mjc5MSBDLTM4LjY2Mzk0MTcxIDEzNS4xOTk0MjYxMSAtNTEuNjk5
++OTU5ODYgMTM4Ljk0MTYyMDk5IC02NC43NDEyMTA5NCAxNDIuNjY2OTYxNjcgQy02
++OC4yMDk0MjE5OSAxNDMuNjU4MDQ0MjMgLTcxLjY3NzAwODE5IDE0NC42NTEyODg4
++NyAtNzUuMTQ0NTMxMjUgMTQ1LjY0NDc3NTM5IEMtODguNzM1Njk2OTEgMTQ5LjUz
++MjkyMzQzIC0xMDIuMzUyMjExNTMgMTUzLjMxNTUzMTc4IC0xMTYgMTU3IEMtMTE1
++LjM0IDE1OS45NyAtMTE0LjY4IDE2Mi45NCAtMTE0IDE2NiBDLTExNS45NTcwODY4
++IDE2Ni42NzAzMTcxOSAtMTE3LjkxNTcxMTEzIDE2Ny4zMzYxNDY4MyAtMTE5Ljg3
++NSAxNjggQy0xMjAuOTY1NTQ2ODggMTY4LjM3MTI1IC0xMjIuMDU2MDkzNzUgMTY4
++Ljc0MjUgLTEyMy4xNzk2ODc1IDE2OS4xMjUgQy0xMjYgMTcwIC0xMjYgMTcwIC0x
++MjggMTcwIEMtMTI5LjUwNTc2NTgyIDE2NS40ODI3MDI1NSAtMTMwLjEzOTA1NjI1
++IDE2Mi42MTE5ODMgLTEyOSAxNTggQy05MS41NTI3NTU0MSAxNDYuNTk4MTk5NiAt
++NTQuMDI0NzI4MDEgMTM1LjQ3NzMzMjk1IC0xNi40NzczOTIyIDEyNC40MTA0MTE4
++MyBDLTkuNDE0NTgxMDQgMTIyLjMyODM5ODg1IC0yLjM1Mjc1MTYgMTIwLjI0MzA3
++ODQ3IDQuNzA4MjQyNDIgMTE4LjE1NDkxMTA0IEM4LjY1NTEwMzM0IDExNi45ODc4
++MDEzNyAxMi42MDIzNzk2MyAxMTUuODIyMTY2NjYgMTYuNTUxMDg2NDMgMTE0LjY2
++MTMxNTkyIEMyMC4wMjA2NjUxNSAxMTMuNjQxMjgyNjEgMjMuNDg4NzUwODEgMTEy
++LjYxNjMzMDg0IDI2Ljk1NTcwNTY0IDExMS41ODc0MTU3IEMyOC43NTU1ODgzMyAx
++MTEuMDU0NTk4NTEgMzAuNTU3MDA4MzYgMTEwLjUyNjk4MjcgMzIuMzU4NTA1MjUg
++MTA5Ljk5OTY0OTA1IEMzNy45Nzg3NzUyIDEwOC4zMjYyNzE3NyA0My41NDkxNDQ2
++MyAxMDYuNTMzMTQwNzIgNDkuMDcyMDIxNDggMTA0LjU2MDc5MTAyIEM1MC42MzQy
++MzY4MyAxMDQuMDA2MjE5NzEgNTAuNjM0MjM2ODMgMTA0LjAwNjIxOTcxIDUyLjIy
++ODAxMjA4IDEwMy40NDA0NDQ5NSBDNTYuNDU4NzUxMDUgMTAxLjI0MTk2OTc5IDU4
++LjUwNTc4NTUxIDk4LjQ4MjY0MzQ3IDYwIDk0IEM2MC40NTYyOTI5NyA4Ny4yNDQ2
++OTQ5OCA1OS43MjI0NTM5MSA4MC42NjUwNTI0MiA1OC42ODc1IDc0IEM1OC41NTIx
++NDg0NCA3My4xMDI5NzM2MyA1OC40MTY3OTY4NyA3Mi4yMDU5NDcyNyA1OC4yNzcz
++NDM3NSA3MS4yODE3MzgyOCBDNTcuOTk2MjgyMDggNjkuNDMzNjkyNzIgNTcuNzEx
++NjE3ODQgNjcuNTg2MTkxNDQgNTcuNDIzMzM5ODQgNjUuNzM5MjU3ODEgQzU3LjAx
++MTcwNTQ3IDYzLjA3NTc0MTI3IDU2LjYyMzE2MTM0IDYwLjQwOTY4MzIyIDU2LjIz
++ODI4MTI1IDU3Ljc0MjE4NzUgQzU1Ljk5MzI3MzM5IDU2LjExOTYyNzMyIDU1Ljc0
++NzIyOTIxIDU0LjQ5NzIyMzE5IDU1LjUgNTIuODc1IEM1NS4zNDA4NDEwNiA1MS43
++NDc3MTQ4NCA1NS4zNDA4NDEwNiA1MS43NDc3MTQ4NCA1NS4xNzg0NjY4IDUwLjU5
++NzY1NjI1IEM1NC41NTI1MDQyNiA0Ni42NjAxNjQ2OCA1NC4xMTIyNDk5OCA0NC40
++OTcxNDA5NiA1MSA0MiBDNDguNjg3NjI4MTcgNDAuNjk3NjE1MDggNDYuMzk1NjIz
++MzggMzkuNDg4NjM0MTMgNDQuMDE1NjI1IDM4LjMyNDIxODc1IEM0My4zMTM2NzAw
++NCAzNy45Nzc0MzU3NiA0Mi42MTE3MTUwOSAzNy42MzA2NTI3NyA0MS44ODg0ODg3
++NyAzNy4yNzMzNjEyMSBDMzMuMzI2MzE4MDkgMzMuMTAzMDA4NzcgMjQuNTQ0NTQ3
++NTIgMjkuNDU4NjE2MzQgMTUuNzUgMjUuODEyNSBDMTQuMDkzNTM2OTkgMjUuMTIw
++OTUyNyAxMi40MzcyODYyMiAyNC40Mjg4OTY4MiAxMC43ODEyNSAyMy43MzYzMjgx
++MiBDOS45NzI0ODQxMyAyMy4zOTg3NDQ4MSA5LjE2MzcxODI2IDIzLjA2MTE2MTUg
++OC4zMzA0NDQzNCAyMi43MTMzNDgzOSBDNi43NDMyNTMwOSAyMi4wNTAyMDg3NyA1
++LjE1NjcyODAzIDIxLjM4NTQ3MjA3IDMuNTcwOTIyODUgMjAuNzE5MDI0NjYgQzAu
++MTMxMjI2ODUgMTkuMjc4NDIwNiAtMy4zMDgxMzQ0NiAxNy44Njc3Mzc2MiAtNi44
++MDY2NDA2MiAxNi41NzU2ODM1OSBDLTguNDQxNDk0MTQgMTUuOTU2MjA4NSAtOC40
++NDE0OTQxNCAxNS45NTYyMDg1IC0xMC4xMDkzNzUgMTUuMzI0MjE4NzUgQy0xMS4w
++NDIzMzM5OCAxNC45ODg2NTk2NyAtMTEuOTc1MjkyOTcgMTQuNjUzMTAwNTkgLTEy
++LjkzNjUyMzQ0IDE0LjMwNzM3MzA1IEMtMTUgMTMgLTE1IDEzIC0xNS45MTUwMzkw
++NiAxMC41NTM5NTUwOCBDLTE2LjA0MTc5ODY3IDYuNzQzNTE3NTYgLTE0LjMyODMx
++MTg5IDQuOTEwMzg5ODcgLTEyIDIgQy03Ljk3NTUyMzQxIC0wLjY4Mjk4NDM5IC00
++LjczMDY1NDYgLTAuODA4NjU4OTEgMCAwIFogIiBmaWxsPSIjOUI1NzI3IiB0cmFu
++c2Zvcm09InRyYW5zbGF0ZSgzNjMsNjYpIi8+CjxwYXRoIGQ9Ik0wIDAgQzEuMzI5
++NTg3NCAwLjU2NjA1OTU3IDEuMzI5NTg3NCAwLjU2NjA1OTU3IDIuNjg2MDM1MTYg
++MS4xNDM1NTQ2OSBDNC4xODk2NDYgMS43NjU1Njc2MyA0LjE4OTY0NiAxLjc2NTU2
++NzYzIDUuNzIzNjMyODEgMi40MDAxNDY0OCBDNi43OTY2MTYyMSAyLjg2NzE4OTk0
++IDcuODY5NTk5NjEgMy4zMzQyMzM0IDguOTc1MDk3NjYgMy44MTU0Mjk2OSBDMTAu
++NjQwNjQ2OTcgNC41MTMwOTQ0OCAxMC42NDA2NDY5NyA0LjUxMzA5NDQ4IDEyLjMz
++OTg0Mzc1IDUuMjI0ODUzNTIgQzE0LjY0MTI3NjAyIDYuMTg5MjY3OTEgMTYuOTM5
++NjAzMjIgNy4xNjExMjM1MSAxOS4yMzQ4NjMyOCA4LjE0MDEzNjcyIEMyMy4yOTAw
++MzQxNiA5Ljg1NzY0MTYyIDI3LjM3MjU4MjM4IDExLjUwMDMzNzMzIDMxLjQ1OTcx
++NjggMTMuMTM5ODkyNTggQzQzLjQ5NTkwODU0IDE3Ljk4NDMzNDkgNTUuMzc0ODg4
++OTIgMjMuMDIzMzA0MjQgNjYuNjAwMDk3NjYgMjkuNTY1NDI5NjkgQzY2LjYwMDA5
++NzY2IDMwLjIyNTQyOTY5IDY2LjYwMDA5NzY2IDMwLjg4NTQyOTY5IDY2LjYwMDA5
++NzY2IDMxLjU2NTQyOTY5IEM2Mi43ODg5NDg2MSAzMy4zMTk3OTI0NyA1OC45NjY0
++NTYxNyAzNS4wNDU2NDQyOCA1NS4xMzE1OTE4IDM2Ljc0NzMxNDQ1IEM1My44MzE2
++Njc2MiAzNy4zMjg2OTQwNiA1Mi41MzUwMDcwNSAzNy45MTc0MzM0OCA1MS4yNDE5
++NDMzNiAzOC41MTM5MTYwMiBDNDIuMjM4MDc4OTkgNDIuNjU5NjU1MTkgMzYuMTg1
++MTgxNDggNDQuNTQzNTIzNzkgMjYuNTk2MTkxNDEgNDEuNjYzMDg1OTQgQzI1Ljc1
++MTg1NTQ3IDQxLjMyMTQ4NDM3IDI0LjkwNzUxOTUzIDQwLjk3OTg4MjgxIDI0LjAz
++NzU5NzY2IDQwLjYyNzkyOTY5IEMxOS41ODkzMjQ1OSAzOC45MDUwMDcwMiAxNS4y
++NTAyMDAwMyAzNy42MTgyODMwNiAxMC42MDAwOTc2NiAzNi41NjU0Mjk2OSBDMTAu
++OTIyMzYzMjggMzYuMDA4NTU0NjkgMTEuMjQ0NjI4OTEgMzUuNDUxNjc5NjkgMTEu
++NTc2NjYwMTYgMzQuODc3OTI5NjkgQzEzLjM0NjgzNDE1IDMwLjg3ODE0NzI0IDEz
++LjE0Mzg3OTggMjYuODUxMjkxNTUgMTIuNjAwMDk3NjYgMjIuNTY1NDI5NjkgQzEx
++LjM3NTc0NjEgMTkuOTIzMDUxMjMgMTEuMzc1NzQ2MSAxOS45MjMwNTEyMyA4LjYw
++MDA5NzY2IDE4LjU2NTQyOTY5IEM2LjkzNTU1OTMxIDE4LjE4MTA5Mjc2IDUuMjY4
++NjE0NTQgMTcuODA3MTA5NjUgMy42MDAwOTc2NiAxNy40NDA0Mjk2OSBDMC4yOTA2
++OTI0OSAxNi41NzI4NjgzOSAtMS4wMTAyOTM2NCAxNi4xNjI0OTIzNyAtMi45MDM4
++MDg1OSAxMy4yNjA3NDIxOSBDLTMuOTA0MTMxNjcgMTAuNzEzNzk0MTIgLTQuNzA3
++OTc5ODEgOC4yMTEyNzE4MyAtNS4zOTk5MDIzNCA1LjU2NTQyOTY5IEMtNS43Mjk5
++MDIzNCA0LjU3NTQyOTY5IC02LjA1OTkwMjM0IDMuNTg1NDI5NjkgLTYuMzk5OTAy
++MzQgMi41NjU0Mjk2OSBDLTMuMTA4MjQ3OTQgLTAuNTYyODM2MzUgLTMuMTA4MjQ3
++OTQgLTAuNTYyODM2MzUgMCAwIFogIiBmaWxsPSIjRjhDRDU1IiB0cmFuc2Zvcm09
++InRyYW5zbGF0ZSgzNDkuMzk5OTAyMzQzNzUsNzguNDM0NTcwMzEyNSkiLz4KPHBh
++dGggZD0iTTAgMCBDNC4wMzExNzgzIDEuMzQzNzI2MSA0LjgwMTMwNTk3IDMuNDUz
++NzE5MzEgNyA3IEM3Ljk5IDguNDg1IDcuOTkgOC40ODUgOSAxMCBDOS44NTEwMjQx
++NCAxMS43OTQ3MzQwOCAxMC42NTg1ODEzIDEzLjYxMDMxNjg4IDExLjQzNzUgMTUu
++NDM3NSBDMTEuODQ4NzEwOTQgMTYuMzg0OTYwOTQgMTIuMjU5OTIxODggMTcuMzMy
++NDIxODcgMTIuNjgzNTkzNzUgMTguMzA4NTkzNzUgQzE1Ljg2ODUxMDA2IDI3LjIz
++OTU5MDU0IDE3LjQ2MTE1NzggMzUuNTI5NDE1MDUgMTcuMjUgNDUgQzE3LjIyOTIx
++Mzg3IDQ2LjU5NTY5ODI0IDE3LjIyOTIxMzg3IDQ2LjU5NTY5ODI0IDE3LjIwODAw
++NzgxIDQ4LjIyMzYzMjgxIEMxNy4xNzE5ODM1IDUwLjY4ODkxOTA0IDE3LjEyODEw
++MDUzIDUzLjE1NDA5Nzc1IDE3LjA3ODEyNSA1NS42MTkxNDA2MiBDMTYuOTk3MDA0
++MjIgNTkuNzc2MDk3NTggMTYuOTYzNDE0MDMgNjMuOTMyODY3MzQgMTYuOTMxNDU3
++NTIgNjguMDkwNDU0MSBDMTYuODk3NDE2NDMgNzEuOTk4NTAzMzcgMTYuODQ0NzI0
++NTMgNzUuOTA2MTc4NjIgMTYuNzg4NDUyMTUgNzkuODEzOTY0ODQgQzE2Ljc2MzA5
++OTY1IDgxLjc0OTc2ODk0IDE2Ljc0MzUxNjc0IDgzLjY4NTY1ODQgMTYuNzMwMTAy
++NTQgODUuNjIxNTgyMDMgQzE2LjY0MDA0OTU0IDk3LjExNDUzMzU3IDE1Ljk0NzMz
++NjM1IDEwNy4wOTc1NjI4NyAxMiAxMTggQzExLjY4OTU3NzY0IDExOC45MTk5MDcy
++MyAxMS4zNzkxNTUyNyAxMTkuODM5ODE0NDUgMTEuMDU5MzI2MTcgMTIwLjc4NzU5
++NzY2IEMyLjY0NTEyMjk4IDE0NS4wODg1MjcxOSAtMjEuNTM2MDU3NzYgMTYzLjk3
++NjA2ODI2IC00My43ODYzNzY5NSAxNzUuMDA5MDMzMiBDLTYzLjA5MTU1MjYzIDE4
++NC4yODIxMTc1OSAtNjMuMDkxNTUyNjMgMTg0LjI4MjExNzU5IC03MiAxODYgQy03
++Mi45OSAxODUuMzQgLTczLjk4IDE4NC42OCAtNzUgMTg0IEMtNzMuODg2MjUgMTgz
++LjY1OTY4NzUgLTcyLjc3MjUgMTgzLjMxOTM3NSAtNzEuNjI1IDE4Mi45Njg3NSBD
++LTYwLjgzNTkyMjY1IDE3OS41NzkxNTU3NCAtNTAuOTI0NDY1MTYgMTc1LjQwNzE5
++NzAyIC00MSAxNzAgQy0zOS45NDE2Nzk2OSAxNjkuNDM0MTAxNTYgLTM4Ljg4MzM1
++OTM3IDE2OC44NjgyMDMxMyAtMzcuNzkyOTY4NzUgMTY4LjI4NTE1NjI1IEMtMTQu
++ODM2MjM5NzEgMTU1LjQ5Nzk4NzM5IDMuMjgzOTI2NTYgMTM2LjQ2MDMwMjMyIDEx
++LjQ5MjE4NzUgMTExLjE2MDE1NjI1IEMxMi44NjQ0NDY2NiAxMDUuMzIyNzc2OTIg
++MTMuMTM5ODA3ODEgOTkuNjE3NTA3NjYgMTMuMDk3NjU2MjUgOTMuNjYwMTU2MjUg
++QzEzLjA5NjI0MTMgOTIuODkzMTk5MzEgMTMuMDk0ODI2MzUgOTIuMTI2MjQyMzcg
++MTMuMDkzMzY4NTMgOTEuMzM2MDQ0MzEgQzEzLjA4NzgxNzY2IDg4LjkxMTQ4ODEg
++MTMuMDc1Mjc0NjMgODYuNDg3MDI3ODEgMTMuMDYyNSA4NC4wNjI1IEMxMy4wNTc0
++Nzg2NCA4Mi40MDgyMDQ0NyAxMy4wNTI5MTY4NSA4MC43NTM5MDc0NyAxMy4wNDg4
++MjgxMiA3OS4wOTk2MDkzOCBDMTMuMDM3ODY0MzggNzUuMDY2MzY5ODggMTMuMDIw
++NjM0MjQgNzEuMDMzMjAxMTQgMTMgNjcgQzEyLjQ4ODg4NjcyIDY4LjA5NDY1NTc2
++IDExLjk3Nzc3MzQ0IDY5LjE4OTMxMTUyIDExLjQ1MTE3MTg4IDcwLjMxNzEzODY3
++IEMtNC42OTYwMzc3MyAxMDQuNjc1MTk4MiAtMzUuNTI1MDc3NjUgMTIzLjMwMTU2
++MDQ4IC02OS44Nzg5MDYyNSAxMzYuMjUgQy03My4zMDkzNTY3OSAxMzcuMDc0MzM4
++NTUgLTc1LjU5NjY2MjIxIDEzNi44MTg4NDgxOSAtNzkgMTM2IEMtNzYuMzEzODk3
++MTMgMTM0LjU5MzUzMjk4IC03My42Nzk1NDE2NSAxMzMuNDg5Mzc4MiAtNzAuNzk2
++ODc1IDEzMi41NTQ2ODc1IEMtMzkuOTYyMTczNTQgMTIyLjMyMTU3ODYzIC05LjU2
++ODA0MjA2IDEwNS4wMTUwMjE5IDYuMDE1NjI1IDc1LjI1MzkwNjI1IEMxNC42NDcz
++MTY3OSA1Ny45NjYxMzMxIDE2Ljc4Nzc0NjczIDQwLjQ5ODI0NDExIDEwLjc2MjY5
++NTMxIDIyLjA1MjczNDM4IEM4LjQyNzA0ODgzIDE1Ljc2NjUyNTggNS4xOTAxNjQ3
++OSA5Ljg4MzE2MTA1IDIgNCBDMS4zMjY1NjUyNCAyLjY3MDA3MjI0IDAuNjU1ODI2
++OTYgMS4zMzg2OTgzMyAwIDAgWiAiIGZpbGw9IiMzRDRENTIiIHRyYW5zZm9ybT0i
++dHJhbnNsYXRlKDM5MCwxODIpIi8+CjxwYXRoIGQ9Ik0wIDAgQzIuODgwMjY3NDYg
++MC4wMDMxNjM1MiA1Ljc1OTUwNjQyIC0wLjAyMDQyODU2IDguNjM5NjQ4NDQgLTAu
++MDQ1NjU0MyBDNDAuMzExMjMxNzcgLTAuMTUzMjcwNjEgNDAuMzExMjMxNzcgLTAu
++MTUzMjcwNjEgNDguNTE0NjQ4NDQgNS4zMTU2NzM4MyBDNDQuNDkzMjg0ODggNi4z
++NjkyNDE0IDQxLjQ2NDQ2OTg5IDYuMTcxNTM4NjEgMzcuMzg5NjQ4NDQgNS40NDA2
++NzM4MyBDMjUuOTk2Njc1MDIgMy40MjM0NjQwNyAxNC42NzY5NDU3NCAzLjEwOTU4
++MjIgMy4xMzk2NDg0NCAzLjEyODE3MzgzIEMyLjM4Nzk4NDAxIDMuMTI5MTEwNDEg
++MS42MzYzMTk1OCAzLjEzMDA0NyAwLjg2MTg3NzQ0IDMuMTMxMDExOTYgQy00Ni40
++NTg4Njg0OSAzLjI1ODQ3ODIxIC05My4yNjMzMjE3IDE0Ljk4NTk0NjMzIC0xMjgu
++MDI0NDE0MDYgNDguNzg0NDIzODMgQy0xNDMuODI2NDUxNjQgNjUuNTA5NjA0NDkg
++LTE0OS40NDgyNTk5NSA4NC4wNzI3ODc5MSAtMTUwLjQ4NTM1MTU2IDEwNi4zMTU2
++NzM4MyBDLTE1MS4xNDUzNTE1NiAxMDYuMzE1NjczODMgLTE1MS44MDUzNTE1NiAx
++MDYuMzE1NjczODMgLTE1Mi40ODUzNTE1NiAxMDYuMzE1NjczODMgQy0xNTMuNjE2
++NDkyMjkgODQuMzcxNTQzNjUgLTE0Ni45NDk1MDIzMiA2Ny4xMDMzODI5NCAtMTMy
++LjQ4NTM1MTU2IDUwLjMxNTY3MzgzIEMtMTMxLjk2NzE0ODQ0IDQ5LjY1MzA5NTcg
++LTEzMS40NDg5NDUzMSA0OC45OTA1MTc1OCAtMTMwLjkxNTAzOTA2IDQ4LjMwNzg2
++MTMzIEMtMTExLjM5ODM3ODYgMjQuMDgzNjY0NjcgLTc3LjgxMjg5NzU2IDExLjQ1
++MzI0MjYgLTQ4LjQ4NTM1MTU2IDQuNTY1NjczODMgQy00Ny42NTY5Njc3NyA0LjM2
++Njk5NzA3IC00Ni44Mjg1ODM5OCA0LjE2ODMyMDMxIC00NS45NzUwOTc2NiAzLjk2
++MzYyMzA1IEMtMzAuODAyODAwNzYgMC41NzYxOTgwNSAtMTUuNDg3MTc5NDYgLTAu
++MDM1NDAwNzcgMCAwIFogIiBmaWxsPSIjM0E0QjUwIiB0cmFuc2Zvcm09InRyYW5z
++bGF0ZSgyMjguNDg1MzUxNTYyNSwxMzYuNjg0MzI2MTcxODc1KSIvPgo8cGF0aCBk
++PSJNMCAwIEMwLjk5IDAuNjYgMS45OCAxLjMyIDMgMiBDMi4zMTcxNTQzOSAyLjE5
++Mjk5MTc5IDEuNjM0MzA4NzggMi4zODU5ODM1OCAwLjkzMDc3MDg3IDIuNTg0ODIz
++NjEgQy03LjAzNDg2Mzg5IDQuODM2NDAwMDMgLTE1LjAwMDA2Mjc5IDcuMDg5NTE0
++NzIgLTIyLjk2NDkyMzg2IDkuMzQzODI2MjkgQy0yNC4zNTk5NjI5MiA5LjczODY2
++MjAzIC0yNS43NTUwMTAzOSAxMC4xMzM0NjgwOCAtMjcuMTUwMDY2MzggMTAuNTI4
++MjQ0MDIgQy00NC4zMjMyOTMzNyAxNS4zODgxMzY1OCAtNjEuNDg3MjgxMDMgMjAu
++Mjc0NjI2NjggLTc4LjYxNTcyMjY2IDI1LjI5MDUyNzM0IEMtODguMDMyMzI1MzEg
++MjguMDM3MjA5MDcgLTk3LjQ5MjAxMzE0IDMwLjU4OTY5NTA1IC0xMDcgMzMgQy0x
++MDYuMzQgMzUuOTcgLTEwNS42OCAzOC45NCAtMTA1IDQyIEMtMTA2Ljk1NzA4Njgg
++NDIuNjcwMzE3MTkgLTEwOC45MTU3MTExMyA0My4zMzYxNDY4MyAtMTEwLjg3NSA0
++NCBDLTExMS45NjU1NDY4OCA0NC4zNzEyNSAtMTEzLjA1NjA5Mzc1IDQ0Ljc0MjUg
++LTExNC4xNzk2ODc1IDQ1LjEyNSBDLTExNyA0NiAtMTE3IDQ2IC0xMTkgNDYgQy0x
++MjAuNTA1NzY1ODIgNDEuNDgyNzAyNTUgLTEyMS4xMzkwNTYyNSAzOC42MTE5ODMg
++LTEyMCAzNCBDLTEwNC40MDc2MzE4NiAyOS4yNzE1ODg3OSAtODguODA5MDQ1NTIg
++MjQuNTYzOTQ1NzQgLTczLjIwNjYyNDk4IDE5Ljg2ODgyMTE0IEMtNjguOTYxMzgz
++NTQgMTguNTkxMTEwODMgLTY0LjcxNjc5ODc3IDE3LjMxMTI0MTExIC02MC40NzI1
++ODM3NyAxNi4wMzAxMjU2MiBDLTUzLjEwMTU1OTU0IDEzLjgwNTI2ODQyIC00NS43
++Mjg2NTU1IDExLjU4NjgzMjIxIC0zOC4zNTI1Mjc2MiA5LjM3ODk0OTE3IEMtMzQu
++NzUzNjA2NSA4LjMwMTUxNjkxIC0zMS4xNTU2NTIgNy4yMjEwNzU5NSAtMjcuNTU5
++ODE0NDUgNi4xMzMzOTIzMyBDLTI0LjE1NDc0NjYgNS4xMDM1NjI1MSAtMjAuNzQ3
++MzA3MTEgNC4wODIwMDIxIC0xNy4zMzc4NzkxOCAzLjA2NjcwMzggQy0xNS40NzE0
++MTQxOCAyLjUwODU3MTM1IC0xMy42MDc1NDIxNyAxLjk0MTc5MDgxIC0xMS43NDM3
++NDM5IDEuMzc0ODE2ODkgQy0xMC42MzE4OTcyOCAxLjA0NTQ0MTI4IC05LjUyMDA1
++MDY2IDAuNzE2MDY1NjcgLTguMzc0NTExNzIgMC4zNzY3MDg5OCBDLTcuNDA0MDc5
++MjggMC4wODUyMTQ2OSAtNi40MzM2NDY4NSAtMC4yMDYyNzk2IC01LjQzMzgwNzM3
++IC0wLjUwNjYwNzA2IEMtMyAtMSAtMyAtMSAwIDAgWiAiIGZpbGw9IiM5MjYxM0Ii
++IHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1NCwxOTApIi8+CjxwYXRoIGQ9Ik0wIDAg
++QzQuMDMxMTc4MyAxLjM0MzcyNjEgNC44MDEzMDU5NyAzLjQ1MzcxOTMxIDcgNyBD
++Ny45OSA4LjQ4NSA3Ljk5IDguNDg1IDkgMTAgQzkuODUxMDI0MTQgMTEuNzk0NzM0
++MDggMTAuNjU4NTgxMyAxMy42MTAzMTY4OCAxMS40Mzc1IDE1LjQzNzUgQzEyLjA1
++NDMxNjQxIDE2Ljg1ODY5MTQxIDEyLjA1NDMxNjQxIDE2Ljg1ODY5MTQxIDEyLjY4
++MzU5Mzc1IDE4LjMwODU5Mzc1IEMxNi4xNjc5ODI1NCAyOC4wNzkzNTc1NiAxNy40
++NjI1NDQxOSAzNy4wMTU5NDkyNyAxNy4zMTI1IDQ3LjM3NSBDMTcuMzE3MzMzOTgg
++NDkuMDc4NDk2MDkgMTcuMzE3MzMzOTggNDkuMDc4NDk2MDkgMTcuMzIyMjY1NjIg
++NTAuODE2NDA2MjUgQzE3LjI1NDI1NjI3IDYxLjM2NDAzODMzIDE3LjI1NDI1NjI3
++IDYxLjM2NDAzODMzIDE1IDY2IEMxNC4wMSA2Ni40OTUgMTQuMDEgNjYuNDk1IDEz
++IDY3IEMxMS45NDY0NzE1NyA2OS4zMDk2NTg0OCAxMC45NDI4MDkwNCA3MS42NDI5
++Nzc0IDEwIDc0IEM5LjAxIDczLjY3IDguMDIgNzMuMzQgNyA3MyBDNy4yNTM5NDUz
++MSA3Mi40ODk1MzEyNSA3LjUwNzg5MDYzIDcxLjk3OTA2MjUgNy43Njk1MzEyNSA3
++MS40NTMxMjUgQzE1LjMxOTUzOSA1NS41MDQ3OTQwMiAxNi4yMTc2MjE3OCAzOC43
++NTI4MjQxIDEwLjc2MjY5NTMxIDIyLjA1MjczNDM4IEM4LjQyNzA0ODgzIDE1Ljc2
++NjUyNTggNS4xOTAxNjQ3OSA5Ljg4MzE2MTA1IDIgNCBDMS4zMjY1NjUyNCAyLjY3
++MDA3MjI0IDAuNjU1ODI2OTYgMS4zMzg2OTgzMyAwIDAgWiAiIGZpbGw9IiM0NDUx
++NTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM5MCwxODIpIi8+CjxwYXRoIGQ9Ik0w
++IDAgQzAuNjYgMy4zIDEuMzIgNi42IDIgMTAgQzAuMDQyOTEzMiAxMC42NzAzMTcx
++OSAtMS45MTU3MTExMyAxMS4zMzYxNDY4MyAtMy44NzUgMTIgQy00Ljk2NTU0Njg4
++IDEyLjM3MTI1IC02LjA1NjA5Mzc1IDEyLjc0MjUgLTcuMTc5Njg3NSAxMy4xMjUg
++Qy0xMCAxNCAtMTAgMTQgLTEyIDE0IEMtMTMuNTA1NzY1ODIgOS40ODI3MDI1NSAt
++MTQuMTM5MDU2MjUgNi42MTE5ODMgLTEzIDIgQy0xMS4zOTkzNTE1NyAxLjQ2ODQ1
++MjU4IC05Ljc5NDMxMTI2IDAuOTUwMTE2NDcgLTguMTg3NSAwLjQzNzUgQy03LjI5
++NDE3OTY5IDAuMTQ3NDYwOTQgLTYuNDAwODU5MzggLTAuMTQyNTc4MTIgLTUuNDgw
++NDY4NzUgLTAuNDQxNDA2MjUgQy0zIC0xIC0zIC0xIDAgMCBaICIgZmlsbD0iIzk4
++NTUyNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQ3LDIyMikiLz4KPHBhdGggZD0i
++TTAgMCBDMC42NiAwLjMzIDEuMzIgMC42NiAyIDEgQzEuMTc1IDEuODQ1NjI1IDAu
++MzUgMi42OTEyNSAtMC41IDMuNTYyNSBDLTIuNzA0ODg5OTUgNi4yMDQ2MjAyNSAt
++My4wMDA0NTM0OCA3LjAwMzc1NzQzIC0zLjQzNzUgMTAuNjI1IEMtMy4wNTUwOTc1
++OSAxNC42OTg2MjYwMSAtMy4wNTUwOTc1OSAxNC42OTg2MjYwMSAtMSAxOCBDMy42
++NjA2NDc5MSAxOS4wOTY2MjMwNCA4LjIyODM3Mjc0IDE5LjA5NzM4MDE1IDEzIDE5
++IEMxMC4xNTg3NDUzOSAyMS4zNDQzNDA3OCA3Ljc3MzQxMjk4IDIyLjU3MTY2MzY4
++IDQuMjI2NTYyNSAyMy41MzUxNTYyNSBDMy4zMTkwNjI1IDIzLjc4NzE2Nzk3IDIu
++NDExNTYyNSAyNC4wMzkxNzk2OSAxLjQ3NjU2MjUgMjQuMjk4ODI4MTIgQzAuNTM1
++NTQ2ODggMjQuNTUwODM5ODQgLTAuNDA1NDY4NzUgMjQuODAyODUxNTYgLTEuMzc1
++IDI1LjA2MjUgQy0zLjIzNzI4OTk5IDI1LjU3MzA4NjQxIC01LjA5OTI3NzY5IDI2
++LjA4NDc3Njg4IC02Ljk2MDkzNzUgMjYuNTk3NjU2MjUgQy03LjgzMjAyMTQ4IDI2
++LjgzNjI5Mzk1IC04LjcwMzEwNTQ3IDI3LjA3NDkzMTY0IC05LjYwMDU4NTk0IDI3
++LjMyMDgwMDc4IEMtMTIuNDMzMjI0NzEgMjguMTIyNjMyMzkgLTE1LjIyMTA5MTQ1
++IDI5LjAyODc3NjExIC0xOCAzMCBDLTEzLjU2MzM4MDI4IDI1LjI5NDQ5NDI0IC0x
++My41NjMzODAyOCAyNS4yOTQ0OTQyNCAtMTEuMTA5Mzc1IDI0LjAxMTcxODc1IEMt
++OC44OTYxNTU3NyAyMi44NDY2Mjk3NiAtNy41MzEwMzcyNCAyMS45OTczODc2NiAt
++NiAyMCBDLTUuNzM3MDEzMyAxNi42Nzc2MDE0MSAtNS45NDQ4MTM3OSAxMy41MDc4
++NDYzMiAtNi4xNTIzNDM3NSAxMC4xODM1OTM3NSBDLTUuOTQzOTMyNDQgNS44Mjgz
++MzE4MiAtNC4zNzc3MzM0MSA0LjAwNDYzODY2IC0xLjMxMjUgMS4wNzQyMTg3NSBD
++LTAuNjYyODEyNSAwLjU0MjQ4MDQ3IC0wLjY2MjgxMjUgMC41NDI0ODA0NyAwIDAg
++WiAiIGZpbGw9IiNFMEUwRTAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwNiw2OCki
++Lz4KPHBhdGggZD0iTTAgMCBDMC45OSAwLjY2IDEuOTggMS4zMiAzIDIgQy0yLjkw
++NDU2ODU3IDMuNzM5OTY5NzYgLTguODEyNzMwMDggNS40NjY5MTg0OCAtMTQuNzI0
++NjA5MzggNy4xODE4ODQ3NyBDLTE2LjczNTQxNzk2IDcuNzY3MTgwNjUgLTE4Ljc0
++NTE5NjM1IDguMzU2MDI3OTIgLTIwLjc1MzkwNjI1IDguOTQ4NDg2MzMgQy0yMy42
++NDA1OTQ5NyA5Ljc5OTIzMjI5IC0yNi41MzA3NDE4MyAxMC42MzcxNTc1NCAtMjku
++NDIxODc1IDExLjQ3MjY1NjI1IEMtMzAuNzY4OTU1MzggMTEuODc0MTI2MjEgLTMw
++Ljc2ODk1NTM4IDExLjg3NDEyNjIxIC0zMi4xNDMyNDk1MSAxMi4yODM3MDY2NyBD
++LTMyLjk4MzgxODk3IDEyLjUyNDAzMTIyIC0zMy44MjQzODg0MyAxMi43NjQzNTU3
++NyAtMzQuNjkwNDI5NjkgMTMuMDExOTYyODkgQy0zNS40Mjc2NzI3MyAxMy4yMjcz
++NjIyMSAtMzYuMTY0OTE1NzcgMTMuNDQyNzYxNTQgLTM2LjkyNDQ5OTUxIDEzLjY2
++NDY4ODExIEMtMzkuMjUwNjQzNjQgMTQuMDQwNDkzMjcgLTQwLjc3NjQ1ODAyIDEz
++LjcyMTczOTU0IC00MyAxMyBDLTQxLjAyIDEyLjY3IC0zOS4wNCAxMi4zNCAtMzcg
++MTIgQy0zNi42NyAxMS4wMSAtMzYuMzQgMTAuMDIgLTM2IDkgQy0zMy41ODE3NTUy
++OSA4LjAwNDMxOTUgLTMxLjI4ODY0NjgyIDcuMjEzNzk1NjIgLTI4Ljc4OTA2MjUg
++Ni40ODQzNzUgQy0yOC4wNjUxMjI5OSA2LjI2NDI4NzcyIC0yNy4zNDExODM0NyA2
++LjA0NDIwMDQ0IC0yNi41OTUzMDY0IDUuODE3NDQzODUgQy0yNS4wNjIwNjYwMSA1
++LjM1NDQ0NDA5IC0yMy41MjY5Njk4OCA0Ljg5NzU1MjY2IC0yMS45OTAyMzQzOCA0
++LjQ0NjI4OTA2IEMtMTkuNjM2ODQzMTggMy43NTM0ODY0NSAtMTcuMjkxMDU5NDQg
++My4wMzg1MTg5NCAtMTQuOTQ1MzEyNSAyLjMyMDMxMjUgQy0xMy40NTYxMzA0MSAx
++Ljg3MzY2MDAxIC0xMS45NjY1NTg3NSAxLjQyODMwMzk1IC0xMC40NzY1NjI1IDAu
++OTg0Mzc1IEMtOS43NzMzNDg2OSAwLjc2OTg4NzA4IC05LjA3MDEzNDg5IDAuNTU1
++Mzk5MTcgLTguMzQ1NjExNTcgMC4zMzQ0MTE2MiBDLTMuMzQ2MjY2NTUgLTEuMTE1
++NDIyMTggLTMuMzQ2MjY2NTUgLTEuMTE1NDIyMTggMCAwIFogIiBmaWxsPSIjOTk2
++MTM4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNTQsMTkwKSIvPgo8cGF0aCBkPSJN
++MCAwIEMtMS41NTkxODkzMSAxLjgzMTcxOTM3IC0yLjUxMDgxMDY3IDIuODg0NzEw
++NTIgLTQuODg3NDUxMTcgMy40NDQ4MjQyMiBDLTUuNTk4NzcxOTcgMy40ODEwNzkx
++IC02LjMxMDA5Mjc3IDMuNTE3MzMzOTggLTcuMDQyOTY4NzUgMy41NTQ2ODc1IEMt
++Ny44NTgwNTkwOCAzLjYwOTQ3MjY2IC04LjY3MzE0OTQxIDMuNjY0MjU3ODEgLTku
++NTEyOTM5NDUgMy43MjA3MDMxMiBDLTEwLjM5NTU0NDQzIDMuNzcxNjIxMDkgLTEx
++LjI3ODE0OTQxIDMuODIyNTM5MDYgLTEyLjE4NzUgMy44NzUgQy0yNS44NzIzNTU5
++MiA0LjkwNDQ2MSAtMzkuMzYzNTc2NTMgNy41NzIxNjUzIC01Mi41NzQyMTg3NSAx
++MS4yODEyNSBDLTUzLjcwNDcyNjU2IDExLjUxODQzNzUgLTU0LjgzNTIzNDM3IDEx
++Ljc1NTYyNSAtNTYgMTIgQy01Ni42NiAxMS4zNCAtNTcuMzIgMTAuNjggLTU4IDEw
++IEMtMzkuMDIxNDgyMzQgNC4zNzA2NjEyIC0xOS45MzI4Mzk2NCAtMC4zOTg2NTY3
++OSAwIDAgWiAiIGZpbGw9IiM0ODU2NUIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIx
++NywxMzcpIi8+CjxwYXRoIGQ9Ik0wIDAgQzAuNjYgMCAxLjMyIDAgMiAwIEMtMy45
++Nzk5OTUxMyAxNS45OTQzNDEwNCAtMTkuMjAyNzI3NDQgMzIuNDkxNTY4MjggLTM0
++IDQxIEMtMzQuNjYgNDEgLTM1LjMyIDQxIC0zNiA0MSBDLTM0LjY5OTM2MDYgMzcu
++MDk4MDgxODEgLTMyLjI2NDUzOTUgMzUuNzQ4OTMyODUgLTI5LjA2MjUgMzMuNDM3
++NSBDLTE3LjQ0ODIxNDMzIDI0LjczMzE2MzcyIC04LjUxMzgwMzYxIDE0Ljc3MTQ2
++NDkxIC0xLjM3MTA5Mzc1IDIuMTEzMjgxMjUgQy0wLjkxODYzMjgxIDEuNDE1ODk4
++NDQgLTAuNDY2MTcxODcgMC43MTg1MTU2MyAwIDAgWiAiIGZpbGw9IiMzNzQ4NEQi
++IHRyYW5zZm9ybT0idHJhbnNsYXRlKDM5NywyNTYpIi8+CjxwYXRoIGQ9Ik0wIDAg
++QzAuMzMgMCAwLjY2IDAgMSAwIEMxLjE4NTYyNSAxLjA3MjUgMS4zNzEyNSAyLjE0
++NSAxLjU2MjUgMy4yNSBDMi41NDYzMzE0IDYuNjU1NTcwMjMgMy4wMzcyNTI1OCA3
++LjAyNzU2NjkxIDYuMTI1IDkuMzEyNSBDOS45NDQ4NDI3OCAxMS4xODYyMzM0IDEz
++Ljg0OTM5ODA4IDEyLjEyNjE4OTA3IDE4IDEzIEMxNy42NyAxMy42NiAxNy4zNCAx
++NC4zMiAxNyAxNSBDMTEuNTYxMDgzNSAxNS4yMTc1NTY2NiA3LjEyOTE5MTg2IDE1
++LjEwNDI4Mzg0IDIgMTMgQzEuMDEgMTUuOTcgMC4wMiAxOC45NCAtMSAyMiBDLTEu
++MzMgMjIgLTEuNjYgMjIgLTIgMjIgQy0yLjA5MDMxMjEzIDE2Ljg1MjIwODM5IC0x
++LjgzNDE3NDAxIDEyLjA5NzczMDA3IC0xIDcgQy0wLjgxNDM3NSA1LjcwMDYyNSAt
++MC42Mjg3NSA0LjQwMTI1IC0wLjQzNzUgMy4wNjI1IEMtMC4yOTMxMjUgMi4wNTE4
++NzUgLTAuMTQ4NzUgMS4wNDEyNSAwIDAgWiAiIGZpbGw9IiNFMEUwRTAiIHRyYW5z
++Zm9ybT0idHJhbnNsYXRlKDI4NCwxMDMpIi8+CjxwYXRoIGQ9Ik0wIDAgQzAuMzMg
++MCAwLjY2IDAgMSAwIEMxLjAyNDc2MjY2IDUuNDYyNjQzMTQgMS4wNDI4ODk3NCAx
++MC45MjUyNTM0MyAxLjA1NDkzMTY0IDE2LjM4NzkzOTQ1IEMxLjA1OTk1MzAzIDE4
++LjI0NTM2NzEyIDEuMDY2NzcxNDEgMjAuMTAyNzkwODUgMS4wNzU0Mzk0NSAyMS45
++NjAyMDUwOCBDMS4wODc2MDExNyAyNC42MzM2MzYyMSAxLjA5MzI1MDMzIDI3LjMw
++NzAxNDk2IDEuMDk3NjU2MjUgMjkuOTgwNDY4NzUgQzEuMTAyODE3NTQgMzAuODA3
++NzM5NzIgMS4xMDc5Nzg4MiAzMS42MzUwMTA2OCAxLjExMzI5NjUxIDMyLjQ4NzM1
++MDQ2IEMxLjExMzY4MTIgMzYuNDYyMjUzNCAwLjk4OTgwMTE5IDQwLjExOTU2ODMz
++IDAgNDQgQy0wLjY2IDQ0IC0xLjMyIDQ0IC0yIDQ0IEMtMS44ODIwNzk3NCAzNy44
++OTQzMDg5MyAtMS43NTc4NTYyNyAzMS43ODg3OTE4MSAtMS42Mjc2ODU1NSAyNS42
++ODMzNDk2MSBDLTEuNTg0MjY2NjYgMjMuNjA0NjA5NDMgLTEuNTQyNTk2ODggMjEu
++NTI1ODMxOTcgLTEuNTAyNjg1NTUgMTkuNDQ3MDIxNDggQy0xLjQ0NTE1MDc5IDE2
++LjQ2NTg2ODU1IC0xLjM4MTQwODgxIDEzLjQ4NDkwNDUxIC0xLjMxNjQwNjI1IDEw
++LjUwMzkwNjI1IEMtMS4yOTk2OTM3NiA5LjU2ODQ5NTAzIC0xLjI4Mjk4MTI2IDgu
++NjMzMDgzOCAtMS4yNjU3NjIzMyA3LjY2OTMyNjc4IEMtMS4yNDU4MTcxMSA2Ljgw
++ODUwOTk4IC0xLjIyNTg3MTg5IDUuOTQ3NjkzMTggLTEuMjA1MzIyMjcgNS4wNjA3
++OTEwMiBDLTEuMTg5Nzc3OTggNC4yOTkxMjEyNSAtMS4xNzQyMzM3IDMuNTM3NDUx
++NDggLTEuMTU4MjE4MzggMi43NTI3MDA4MSBDLTEgMSAtMSAxIDAgMCBaICIgZmls
++bD0iIzM2NDc0QyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDA1LDI0NykiLz4KPHBh
++dGggZD0iTTAgMCBDMy4xMjMwNDczNCAyLjkyOTE1NTI3IDUuNDg5OTAwOTEgNS45
++Njg1ODM1MSA3LjgxMjUgOS41NjI1IEM4LjQzNzY5NTMxIDEwLjUxMjUzOTA2IDku
++MDYyODkwNjMgMTEuNDYyNTc4MTIgOS43MDcwMzEyNSAxMi40NDE0MDYyNSBDMTAu
++MTMzNzEwOTQgMTMuMjg1NzQyMTkgMTAuNTYwMzkwNjMgMTQuMTMwMDc4MTMgMTEg
++MTUgQzEwLjY3IDE1Ljk5IDEwLjM0IDE2Ljk4IDEwIDE4IEM4LjM1IDE4LjMzIDYu
++NyAxOC42NiA1IDE5IEMyLjczMzgzMzg1IDEyLjc0NTM4MTQ0IDEuMTYyMDQ5OTMg
++Ni41NDg0OTMxMyAwIDAgWiAiIGZpbGw9IiM5NUMwRUYiIHRyYW5zZm9ybT0idHJh
++bnNsYXRlKDI2MCwyNzIpIi8+CjxwYXRoIGQ9Ik0wIDAgQy0wLjY4NDAwODc5IDAu
++MTkxMTAzNTIgLTEuMzY4MDE3NTggMC4zODIyMDcwMyAtMi4wNzI3NTM5MSAwLjU3
++OTEwMTU2IEMtMjAuNTUwMTQ0MjkgNS43NDA4ODMwNiAtMjAuNTUwMTQ0MjkgNS43
++NDA4ODMwNiAtMzkgMTEgQy0zOSAxMC4wMSAtMzkgOS4wMiAtMzkgOCBDLTMxLjk0
++NDY1ODAxIDUuNjg5MzQ3NDYgLTI1LjAzOTkxOTY3IDMuNjg4ODA0NzggLTE3Ljcw
++NzAzMTI1IDIuNTA3ODEyNSBDLTEzLjg1NTUwNjM0IDEuNzg1MzA0MjIgLTEwLjE0
++OTUxNTgxIDAuNjUwMjkxMzYgLTYuNDEwMTU2MjUgLTAuNTExNzE4NzUgQy0zLjgy
++NjAzOTkyIC0xLjAzNTI0MzEzIC0yLjQ4ODc1NzgzIC0wLjcxMzkzNjc0IDAgMCBa
++ICIgZmlsbD0iIzc1Njg1QiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjg2LDIxMiki
++Lz4KPHBhdGggZD0iTTAgMCBDLTIwLjQ3NTc4NDIyIDEwLjg0MzI4NjUyIC0yMC40
++NzU3ODQyMiAxMC44NDMyODY1MiAtMzEgMTMgQy0zMS45OSAxMi4zNCAtMzIuOTgg
++MTEuNjggLTM0IDExIEMtMzIuODUxNDQ1MzEgMTAuNjM2NDg0MzggLTMxLjcwMjg5
++MDYzIDEwLjI3Mjk2ODc1IC0zMC41MTk1MzEyNSA5Ljg5ODQzNzUgQy0yMS44NTI2
++ODI2MSA3LjEwNzQxODQ1IC0xMy42MzE2OTEzOSA0LjE0NTY1MTE3IC01LjUwMzkw
++NjI1IDAuMDAzOTA2MjUgQy0zIC0xIC0zIC0xIDAgMCBaICIgZmlsbD0iIzM4NDg0
++RSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQ5LDM1NSkiLz4KPHBhdGggZD0iTTAg
++MCBDLTMuNjcyMDEzMTQgMi40NDgwMDg3NiAtNy4yMzU4MDQ1NCAzLjQ0OTIxNjk2
++IC0xMS40Mzc1IDQuNjg3NSBDLTEyLjU4MzE1NDMgNS4wNDQyNDgwNSAtMTIuNTgz
++MTU0MyA1LjA0NDI0ODA1IC0xMy43NTE5NTMxMiA1LjQwODIwMzEyIEMtMTQuNDky
++NTE5NTMgNS42Mjc5ODgyOCAtMTUuMjMzMDg1OTQgNS44NDc3NzM0NCAtMTUuOTk2
++MDkzNzUgNi4wNzQyMTg3NSBDLTE2LjY2ODI1OTI4IDYuMjc2MTk4NzMgLTE3LjM0
++MDQyNDggNi40NzgxNzg3MSAtMTguMDMyOTU4OTggNi42ODYyNzkzIEMtMjAuMjk5
++NjEyODUgNy4wNDc3ODQ4NSAtMjEuODMwNDQ1MjYgNi42OTE3MDI2IC0yNCA2IEMt
++MjIuMDIgNS42NyAtMjAuMDQgNS4zNCAtMTggNSBDLTE3LjY3IDQuMDEgLTE3LjM0
++IDMuMDIgLTE3IDIgQy0xMS4zMjQxNjM2MSAtMC43NDAwNTg5NSAtNi4wNzU4Mjg0
++NyAtMS40NTI5MTU1IDAgMCBaICIgZmlsbD0iIzkyNkE0QyIgdHJhbnNmb3JtPSJ0
++cmFuc2xhdGUoMzM1LDE5NykiLz4KPHBhdGggZD0iTTAgMCBDLTIuOTg3NjU3ODEg
++MS4zNjI0MjcyOSAtNS45ODk0MjY5NiAyLjY4OTAxOTUyIC05IDQgQy05LjcxNTQy
++OTY5IDQuMzE5Njg3NSAtMTAuNDMwODU5MzggNC42MzkzNzUgLTExLjE2Nzk2ODc1
++IDQuOTY4NzUgQy0xNS41Mjc4MDI1IDYuNzkwMjY2NjIgLTE4LjQyNzA2OTYzIDcu
++MjU3NTU1ODUgLTIzIDYgQy0xOS4zMjUzMzgxMiA0LjAwMzMwODczIC0xNS40NDY1
++NzUwOCAyLjY1NzQwMDgzIC0xMS41IDEuMzEyNSBDLTEwLjgzNjEzMjgxIDEuMDc0
++NjY3OTcgLTEwLjE3MjI2NTYzIDAuODM2ODM1OTQgLTkuNDg4MjgxMjUgMC41OTE3
++OTY4OCBDLTMuNDY0NDIyMjcgLTEuNDU4MjM4OTcgLTMuNDY0NDIyMjcgLTEuNDU4
++MjM4OTcgMCAwIFogIiBmaWxsPSIjM0U0RDUxIiB0cmFuc2Zvcm09InRyYW5zbGF0
++ZSgzMzQsMzEyKSIvPgo8cGF0aCBkPSJNMCAwIEMyIDMgMiAzIDIgNSBDMy42NSA1
++IDUuMyA1IDcgNSBDNyA1LjMzIDcgNS42NiA3IDYgQzUuMzUgNiAzLjcgNiAyIDYg
++QzEuNzMxODc1IDYuNTk4MTI1IDEuNDYzNzUgNy4xOTYyNSAxLjE4NzUgNy44MTI1
++IEMwLjAxNTA2NTMzIDkuOTcyMjQ4MDggLTEuMTkzNjkyODIgMTEuMzU3OTAyNTYg
++LTMgMTMgQy0zLjY2IDEyLjY3IC00LjMyIDEyLjM0IC01IDEyIEMtMy4zNSA4LjA0
++IC0xLjcgNC4wOCAwIDAgWiAiIGZpbGw9IiNFM0RGRDQiIHRyYW5zZm9ybT0idHJh
++bnNsYXRlKDM0Niw4OSkiLz4KPHBhdGggZD0iTTAgMCBDNi42NDQwOTk1OCAtMC4y
++MTQzMjU3OSAxMi41MzIwNTg2NyAwLjQ4NzY2Mjk5IDE5IDIgQzE4LjY3IDIuNjYg
++MTguMzQgMy4zMiAxOCA0IEMxNS4xODU5NjY5OSAzLjcxOTQ5MTk0IDEyLjM3NDMy
++NzQ3IDMuNDI2MTg2OTYgOS41NjI1IDMuMTI1IEM4Ljc2MDA1ODU5IDMuMDQ2MzY3
++MTkgNy45NTc2MTcxOSAyLjk2NzczNDM3IDcuMTMwODU5MzggMi44ODY3MTg3NSBD
++NS4wNzgyOTAwNiAyLjY2MTU0MjM3IDMuMDM3MDY5OTEgMi4zMzc3NzQxMyAxIDIg
++QzAuNjcgMS4zNCAwLjM0IDAuNjggMCAwIFogIiBmaWxsPSIjM0E0QjUyIiB0cmFu
++c2Zvcm09InRyYW5zbGF0ZSgyNTgsMTM5KSIvPgo8cGF0aCBkPSJNMCAwIEMtMS4x
++MTMyODEyNSAxLjQ4ODI4MTI1IC0xLjExMzI4MTI1IDEuNDg4MjgxMjUgLTMgMyBD
++LTUuOTE3OTY4NzUgMy4yOTI5Njg3NSAtNS45MTc5Njg3NSAzLjI5Mjk2ODc1IC05
++LjE4NzUgMy4xODc1IEMtMTAuMjc0MTc5NjkgMy4xNjA0Mjk2OSAtMTEuMzYwODU5
++MzcgMy4xMzMzNTkzNyAtMTIuNDgwNDY4NzUgMy4xMDU0Njg3NSBDLTEzLjcyNzYz
++NjcyIDMuMDUzMjYxNzIgLTEzLjcyNzYzNjcyIDMuMDUzMjYxNzIgLTE1IDMgQy0x
++NSAyLjM0IC0xNSAxLjY4IC0xNSAxIEMtOS45MTkxMzIwNCAwLjE1MzE4ODY3IC01
++LjE1MTcxNjIzIC0wLjA5MDM4MDk5IDAgMCBaICIgZmlsbD0iIzQ5NUE2MSIgdHJh
++bnNmb3JtPSJ0cmFuc2xhdGUoMjE3LDEzNykiLz4KPHBhdGggZD0iTTAgMCBDLTEg
++MyAtMSAzIC0zLjUwMzkwNjI1IDQuMzg2NzE4NzUgQy00LjUxMzI0MjE5IDQuODE1
++OTc2NTYgLTUuNTIyNTc4MTIgNS4yNDUyMzQzNyAtNi41NjI1IDUuNjg3NSBDLTcu
++NTc0NDE0MDYgNi4xMjQ0OTIxOSAtOC41ODYzMjgxMiA2LjU2MTQ4NDM3IC05LjYy
++ODkwNjI1IDcuMDExNzE4NzUgQy0xMC40MTEzNjcxOSA3LjMzNzg1MTU2IC0xMS4x
++OTM4MjgxMyA3LjY2Mzk4NDM4IC0xMiA4IEMtMTIgNy4wMSAtMTIgNi4wMiAtMTIg
++NSBDLTEwLjM3NzUwMDU5IDQuMTYxODA4NDIgLTguNzUxOTE1MDMgMy4zMjk1ODg0
++IC03LjEyNSAyLjUgQy02LjIyMDA3ODEyIDIuMDM1OTM3NSAtNS4zMTUxNTYyNSAx
++LjU3MTg3NSAtNC4zODI4MTI1IDEuMDkzNzUgQy0yIDAgLTIgMCAwIDAgWiAiIGZp
++bGw9IiM0NDU0NTkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE0MywxNTQpIi8+Cjxw
++YXRoIGQ9Ik0wIDAgQzEuMDE1NjIwMTYgMy4xNzc0NDAyMiAwLjk2NjY2NjQzIDUu
++Mzc4MjgzODkgMC4yNSA4LjYyNSBDMC4wMTAyMzQzNyA5Ljc4OTAyMzQ0IDAuMDEw
++MjM0MzcgOS43ODkwMjM0NCAtMC4yMzQzNzUgMTAuOTc2NTYyNSBDLTEgMTMgLTEg
++MTMgLTQgMTUgQy0zLjUwMzQxNzAzIDkuMzM4OTU0MTEgLTIuNDU0ODkzMTYgNS4x
++MjMyNTUyOSAwIDAgWiAiIGZpbGw9IiM0QTU5NUQiIHRyYW5zZm9ybT0idHJhbnNs
++YXRlKDgwLDIxNCkiLz4KPHBhdGggZD0iTTAgMCBDMS44NjM1MTE5OSAyLjc5NTI2
++Nzk4IDIuMzQzMDg5MDcgMy44NDA0NTYyNyAyLjc1IDcgQzIuODQ3OTY4NzUgNy42
++ODA2MjUgMi45NDU5Mzc1IDguMzYxMjUgMy4wNDY4NzUgOS4wNjI1IEMzIDExIDMg
++MTEgMSAxNCBDMC42MzY1OTcxNCAxMi4yMzEwMzg5OCAwLjI4NDU5MTE3IDEwLjQ1
++OTczMzc0IC0wLjA2MjUgOC42ODc1IEMtMC4yNTk3MjY1NiA3LjcwMTM2NzE5IC0w
++LjQ1Njk1MzEyIDYuNzE1MjM0MzcgLTAuNjYwMTU2MjUgNS42OTkyMTg3NSBDLTEg
++MyAtMSAzIDAgMCBaICIgZmlsbD0iIzUyNUU2MSIgdHJhbnNmb3JtPSJ0cmFuc2xh
++dGUoNDAzLDIwNCkiLz4KPHBhdGggZD0iTTAgMCBDMyAxIDMgMSA2IDMgQy0xLjQy
++ODU3MTQzIDUuNDI4NTcxNDMgLTEuNDI4NTcxNDMgNS40Mjg1NzE0MyAtNSA0IEMt
++NC4wMSA0IC0zLjAyIDQgLTIgNCBDLTEuMzQgMi42OCAtMC42OCAxLjM2IDAgMCBa
++ICIgZmlsbD0iIzk0NzM1QSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzUxLDE4OSki
++Lz4KPHBhdGggZD0iTTAgMCBDMCAwLjY2IDAgMS4zMiAwIDIgQy0yLjc1OTI0MTg1
++IDMuODA0MTE5NjcgLTMuODg5NzIxMDMgNC4wMTI3MjQ1IC03LjI1IDMuNjI1IEMt
++OC4xNTc1IDMuNDE4NzUgLTkuMDY1IDMuMjEyNSAtMTAgMyBDLTYuNTk1Mzg1MzUg
++MS4yMzg5OTI0MiAtMy45MDY1MDMzOSAwIDAgMCBaICIgZmlsbD0iIzRBNUE2MCIg
++dHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzIxLDMxNSkiLz4KPHBhdGggZD0iTTAgMCBD
++MiAxIDIgMSAzIDMgQzEuMDIgMy42NiAtMC45NiA0LjMyIC0zIDUgQy0xLjEyNSAx
++LjEyNSAtMS4xMjUgMS4xMjUgMCAwIFogIiBmaWxsPSIjRURBRjUxIiB0cmFuc2Zv
++cm09InRyYW5zbGF0ZSgyMjksMTg1KSIvPgo8cGF0aCBkPSJNMCAwIEMyLjk3IDAu
++NDk1IDIuOTcgMC40OTUgNiAxIEMyLjU1NTQ5MjYzIDMuMjk2MzM4MjQgMC4wNjE4
++NzcxNyAzLjU0MDE2NDg1IC00IDQgQy0zLjAxIDMuNjcgLTIuMDIgMy4zNCAtMSAz
++IEMtMC42NyAyLjAxIC0wLjM0IDEuMDIgMCAwIFogIiBmaWxsPSIjOEI3NTY1IiB0
++cmFuc2Zvcm09InRyYW5zbGF0ZSgzMjksMTk2KSIvPgo8cGF0aCBkPSJNMCAwIEMt
++MS4xNTE3MzM1NSAyLjQ2ODAwMDQ3IC0yLjA0NzgzNTY1IDQuMDQ3ODM1NjUgLTQg
++NiBDLTQuOTkgNS42NyAtNS45OCA1LjM0IC03IDUgQy0yLjI1IDAgLTIuMjUgMCAw
++IDAgWiAiIGZpbGw9IiM0QjU5NUMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwNSwx
++NzkpIi8+Cjwvc3ZnPgo=
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+new file mode 100644
+--- /dev/null	(date 1740271620765)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1740271620765)
+@@ -0,0 +1,6 @@
++<component name="InspectionProjectProfileManager">
++  <profile version="1.0">
++    <option name="myName" value="Project Default" />
++    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
++  </profile>
++</component>
+\ No newline at end of file
+Index: project_pi/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import logo from './logo.svg';\nimport './App.css';\nimport { BrowserRouter as Router, Route, Routes } from 'react-router-dom';\nimport Navbar from './components/navbar.js';\n//import pages as components\nimport Home from \"./pages/home.js\"\nimport Learn from \"./pages/learn.js\"\nimport Plan from \"./pages/plan.js\"\nimport User from \"./pages/user.js\"\n\n\nfunction App() {\n  return (\n      <Router>\n        <div>\n            <Navbar/>\n                <Routes>\n                    <Route path = \"/Home\" element={<Home />} />\n                    <Route path = \"/Learn\" element={<Learn />} />\n                    <Route path = \"/Plan\" element={<Plan />} />\n                    <Route path = \"/User\" element={<User />} />\n                </Routes>\n        </div>\n      </Router>\n  );\n}\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/App.js b/project_pi/src/App.js
+--- a/project_pi/src/App.js	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/src/App.js	(date 1740271620767)
+@@ -1,7 +1,8 @@
+-import logo from './logo.svg';
++import logo from './components/logo.svg';
+ import './App.css';
+ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+ import Navbar from './components/navbar.js';
++import {PlanContextProvider} from "./components/planContextProvider";
+ //import pages as components
+ import Home from "./pages/home.js"
+ import Learn from "./pages/learn.js"
+@@ -12,15 +13,17 @@
+ function App() {
+   return (
+       <Router>
+-        <div>
+-            <Navbar/>
+-                <Routes>
+-                    <Route path = "/Home" element={<Home />} />
+-                    <Route path = "/Learn" element={<Learn />} />
+-                    <Route path = "/Plan" element={<Plan />} />
+-                    <Route path = "/User" element={<User />} />
+-                </Routes>
+-        </div>
++          <PlanContextProvider>
++              <div>
++                  <Navbar/>
++                  <Routes>
++                      <Route path = "/Home" element={<Home />} />
++                      <Route path = "/Learn" element={<Learn />} />
++                      <Route path = "/Plan" element={<Plan />} />
++                      <Route path = "/User" element={<User />} />
++                  </Routes>
++              </div>
++          </PlanContextProvider>
+       </Router>
+   );
+ }
+Index: project_pi/src/components/charts.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\nimport { PieChart, Pie, Tooltip, Legend } from 'recharts';\n\nfunction Charts(){\n    const dailyTaskData = [\n        {name: 'Finished', value: 50},\n        {name: \"Unfinished\", value: 50},\n    ]\n\n    const finishRateData = [\n        {name: 'Succeed', value: 50},\n        {name: \"Failed\", value: 50},\n    ]\n\n    const progressNum = 40\n\n    return(\n        <div style={{display: \"flex\"}}>\n            <div style={{\"flex\": 1}}>\n                <PieChart width={300} height={300}>\n                    <Pie\n                        data={dailyTaskData}\n                        cx={150}\n                        cy={150}\n                        innerRadius={60}\n                        outerRadius={80}\n                        fill=\"#283739\"\n                        paddingAngle={10}\n                        dataKey=\"value\"\n                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}\n                    ></Pie>\n                    <Tooltip />\n                    <Legend />\n                </PieChart>\n            </div>\n            <div style={{\"flex\": 2}}>\n                <PieChart width={300} height={300}>\n                    <Pie\n                        data={finishRateData}\n                        cx={150}\n                        cy={150}\n                        innerRadius={60}\n                        outerRadius={80}\n                        fill=\"#228896\"\n                        paddingAngle={10}\n                        dataKey=\"value\"\n                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}\n                    ></Pie>\n                    <Tooltip />\n                    <Legend />\n                </PieChart>\n            </div>\n            <div style={{\"flex\": 3}}>\n                <div style={{ width: '80%', marginTop: '40px' }}>\n                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>\n                        <span>Progress</span>\n                        <span>{progressNum}%</span>\n                    </div>\n                    <div\n                        style={{\n                            width: '100%',\n                            height: '10px',\n                            backgroundColor: '#e0e0e0',\n                            borderRadius: '5px',\n                            overflow: 'hidden',\n                        }}\n                    >\n                    <div\n                        style={{\n                            width: `${progressNum}%`,\n                            height: '100%',\n                            backgroundColor: '#A9C52F',\n                            borderRadius: '5px',\n                        }}/>\n                    </div>\n                </div>\n            </div>\n        </div>\n)\n}\n\nexport default Charts;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/components/charts.js b/project_pi/src/components/charts.js
+--- a/project_pi/src/components/charts.js	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/src/components/charts.js	(date 1740271620768)
+@@ -15,67 +15,69 @@
+     const progressNum = 40
+ 
+     return(
+-        <div style={{display: "flex"}}>
+-            <div style={{"flex": 1}}>
+-                <PieChart width={300} height={300}>
+-                    <Pie
+-                        data={dailyTaskData}
+-                        cx={150}
+-                        cy={150}
+-                        innerRadius={60}
+-                        outerRadius={80}
+-                        fill="#283739"
+-                        paddingAngle={10}
+-                        dataKey="value"
+-                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+-                    ></Pie>
+-                    <Tooltip />
+-                    <Legend />
+-                </PieChart>
+-            </div>
+-            <div style={{"flex": 2}}>
+-                <PieChart width={300} height={300}>
+-                    <Pie
+-                        data={finishRateData}
+-                        cx={150}
+-                        cy={150}
+-                        innerRadius={60}
+-                        outerRadius={80}
+-                        fill="#228896"
+-                        paddingAngle={10}
+-                        dataKey="value"
+-                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+-                    ></Pie>
+-                    <Tooltip />
+-                    <Legend />
+-                </PieChart>
++        <div style={{display: "flex", alignItems: "flex-end", flexDirection: "column"}}>
++            <div style={{"flex": 1, width: '500px', marginRight: '50px'}}>
++                <div style={{ marginTop: '40px' }}>
++                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
++                        <span>Progress</span>
++                        <span>{progressNum}%</span>
++                    </div>
++                    <div
++                        style={{
++                            width: '100%',
++                            height: '10px',
++                            backgroundColor: '#e0e0e0',
++                            borderRadius: '5px',
++                            overflow: 'hidden',
++                        }}
++                    >
++                        <div
++                            style={{
++                                width: `${progressNum}%`,
++                                height: '100%',
++                                backgroundColor: '#A9C52F',
++                                borderRadius: '5px',
++                            }}/>
++                    </div>
++                </div>
++            </div>
++            <div style={{"flex": 2}}>
++                <div style={{display: "flex", alignItems:"center", flexDirection: "row"}}>
++                    <PieChart width={300} height={300}>
++                        <Pie
++                            data={dailyTaskData}
++                            cx={150}
++                            cy={150}
++                            innerRadius={60}
++                            outerRadius={80}
++                            fill="#283739"
++                            paddingAngle={10}
++                            dataKey="value"
++                            label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
++                        ></Pie>
++                        <Tooltip />
++                        <Legend />
++                    </PieChart>
++                    <PieChart width={300} height={300}>
++                        <Pie
++                            data={finishRateData}
++                            cx={150}
++                            cy={150}
++                            innerRadius={60}
++                            outerRadius={80}
++                            fill="#228896"
++                            paddingAngle={10}
++                            dataKey="value"
++                            label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
++                        ></Pie>
++                        <Tooltip />
++                        <Legend />
++                    </PieChart>
+             </div>
+-            <div style={{"flex": 3}}>
+-                <div style={{ width: '80%', marginTop: '40px' }}>
+-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+-                        <span>Progress</span>
+-                        <span>{progressNum}%</span>
+-                    </div>
+-                    <div
+-                        style={{
+-                            width: '100%',
+-                            height: '10px',
+-                            backgroundColor: '#e0e0e0',
+-                            borderRadius: '5px',
+-                            overflow: 'hidden',
+-                        }}
+-                    >
+-                    <div
+-                        style={{
+-                            width: `${progressNum}%`,
+-                            height: '100%',
+-                            backgroundColor: '#A9C52F',
+-                            borderRadius: '5px',
+-                        }}/>
+-                    </div>
+-                </div>
+             </div>
++
+         </div>
++
+ )
+ }
+ 
+Index: project_pi/package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"name\": \"project_pi\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@emotion/react\": \"^11.14.0\",\n    \"@emotion/styled\": \"^11.14.0\",\n    \"@testing-library/dom\": \"^10.4.0\",\n    \"@testing-library/jest-dom\": \"^6.6.3\",\n    \"@testing-library/react\": \"^16.2.0\",\n    \"@testing-library/user-event\": \"^13.5.0\",\n    \"antd\": \"^5.24.1\",\n    \"googleapis\": \"^144.0.0\",\n    \"mongodb\": \"^6.13.1\",\n    \"react\": \"^19.0.0\",\n    \"react-dom\": \"^19.0.0\",\n    \"react-router-dom\": \"^7.2.0\",\n    \"react-scripts\": \"5.0.1\",\n    \"recharts\": \"^2.15.1\",\n    \"web-vitals\": \"^2.1.4\"\n  },\n  \"scripts\": {\n    \"start\": \"react-scripts start\",\n    \"build\": \"react-scripts build\",\n    \"test\": \"react-scripts test\",\n    \"eject\": \"react-scripts eject\"\n  },\n  \"eslintConfig\": {\n    \"extends\": [\n      \"react-app\",\n      \"react-app/jest\"\n    ]\n  },\n  \"browserslist\": {\n    \"production\": [\n      \">0.2%\",\n      \"not dead\",\n      \"not op_mini all\"\n    ],\n    \"development\": [\n      \"last 1 chrome version\",\n      \"last 1 firefox version\",\n      \"last 1 safari version\"\n    ]\n  },\n  \"devDependencies\": {\n    \"babel-loader\": \"^9.2.1\"\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/package.json b/project_pi/package.json
+--- a/project_pi/package.json	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/project_pi/package.json	(date 1740271620767)
+@@ -10,6 +10,8 @@
+     "@testing-library/react": "^16.2.0",
+     "@testing-library/user-event": "^13.5.0",
+     "antd": "^5.24.1",
++    "axios": "^1.7.9",
++    "fastapi": "^0.0.8",
+     "googleapis": "^144.0.0",
+     "mongodb": "^6.13.1",
+     "react": "^19.0.0",
+@@ -44,6 +46,7 @@
+     ]
+   },
+   "devDependencies": {
++    "@babel/preset-react": "^7.26.3",
+     "babel-loader": "^9.2.1"
+   }
+ }
+Index: project_pi/src/components/planContextProvider.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_pi/src/components/planContextProvider.js b/project_pi/src/components/planContextProvider.js
+new file mode 100644
+--- /dev/null	(date 1740271620769)
++++ b/project_pi/src/components/planContextProvider.js	(date 1740271620769)
+@@ -0,0 +1,25 @@
++import React, { createContext, useContext, useState, useEffect} from 'react';
++import {axios} from 'axios';
++
++const planContext = createContext(null);
++
++export const PlanContextProvider = ({children}) => {
++    const [planData, setPlanData] = useState(null);
++
++    //useEffect(()=>{
++            //axios.get('/generate-roadmap').then(
++                //response => setPlanData(response.data)
++            //)
++        //},[]
++    //)
++    
++    return (
++        <planContext.Provider value={{planData}}>
++            {children}
++        </planContext.Provider>
++    )
++}
++
++export const usePlanData= () => {
++    return useContext(planContext)
++}
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"d319764d-5ab1-434d-bd61-81fcc4c5a1c5\" name=\"Changes\" comment=\"&quot;skeleton of frontend without calendar&quot;\">\n      <change afterPath=\"$PROJECT_DIR$/project_pi/src/components/charts.js\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/project_pi/package-lock.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/project_pi/package-lock.json\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/project_pi/package.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/project_pi/package.json\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/project_pi/src/components/taskcalendar.js\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/project_pi/src/pages/plan.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/project_pi/src/pages/plan.js\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"CSS File\" />\n        <option value=\"JavaScript File\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 7\n}</component>\n  <component name=\"ProjectId\" id=\"2tNcUGOLUS0ybfQHEIiK86Kn82A\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\n    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\n  }\n}</component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"d319764d-5ab1-434d-bd61-81fcc4c5a1c5\" name=\"Changes\" comment=\"\" />\n      <created>1740195988642</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1740195988642</updated>\n      <workItem from=\"1740195998913\" duration=\"1711000\" />\n      <workItem from=\"1740208751802\" duration=\"18071000\" />\n      <workItem from=\"1740256952529\" duration=\"2163000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"&quot;skeleton of frontend&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740217934446</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740217934446</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"&quot;skeleton of frontend without calendar&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740238514818</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740238514819</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"&quot;skeleton of frontend without calendar&quot;\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1740238566549</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1740238566549</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"4\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"&quot;skeleton of frontend&quot;\" />\n    <MESSAGE value=\"&quot;skeleton of frontend without calendar&quot;\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"&quot;skeleton of frontend without calendar&quot;\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 98bfee023b33ce4c2528f4b99dc4f2a11dd8ed3d)
++++ b/.idea/workspace.xml	(date 1740271620765)
+@@ -5,10 +5,14 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;skeleton of frontend without calendar&quot;">
+-      <change afterPath="$PROJECT_DIR$/project_pi/src/components/charts.js" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/project_pi/src/components/planContextProvider.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/project_pi/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/package-lock.json" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/project_pi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/package.json" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/project_pi/src/components/taskcalendar.js" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/project_pi/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/App.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/project_pi/src/components/calendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/components/calendar.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/project_pi/src/components/charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/components/charts.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/project_pi/src/pages/learn.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/learn.js" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/project_pi/src/pages/plan.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/plan.js" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -25,6 +29,11 @@
+     </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="main" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="MarkdownSettingsMigration">
+@@ -38,22 +47,22 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "WebServerToolWindowFactoryState": "false",
++    "git-widget-placeholder": "Sally",
++    "list.type.of.created.stylesheet": "CSS",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "settings.editor.selected.configurable": "preferences.keymap",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+@@ -65,6 +74,7 @@
+       <workItem from="1740195998913" duration="1711000" />
+       <workItem from="1740208751802" duration="18071000" />
+       <workItem from="1740256952529" duration="2163000" />
++      <workItem from="1740265827546" duration="2350000" />
+     </task>
+     <task id="LOCAL-00001" summary="&quot;skeleton of frontend&quot;">
+       <option name="closed" value="true" />
+diff --git a/project_pi/src/logo.svg b/project_pi/src/components/logo.svg
+rename from project_pi/src/logo.svg
+rename to project_pi/src/components/logo.svg

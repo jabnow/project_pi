@@ -1,42 +1,66 @@
-// import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
-// function ResumeUploader() {
-//   const [selectedFile, setSelectedFile] = useState(null);
+const ResumeUploader = forwardRef((props, ref) => {
+    const [selectedFile, setSelectedFile] = useState(null);
 
-//   const handleFileChange = (event) => {
-//     setSelectedFile(event.target.files[0]);
-//   };
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+        } else {
+            setSelectedFile(null);
+        }
+    };
 
-//   const handleUpload = () => {
-//     if (!selectedFile) {
-//       return;
-//     }
+    const handleUpload = () => {
+        if (!selectedFile) {
+            console.error('No file selected');
+            return;
+        }
 
-//     // Implement upload logic here (e.g., using fetch or axios)
-//     const formData = new FormData();
-//     formData.append('resume', selectedFile);
+        const formData = new FormData();
+        formData.append('resume', selectedFile);
 
-//     // Example using fetch:
-//     fetch('/upload', {
-//       method: 'POST',
-//       body: formData,
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//       console.log('Success:', data);
-//     })
-//     .catch(error => {
-//       console.error('Error:', error);
-//     });
-//   };
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Upload failed');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
 
-//   return (
-//     <div>
-//       <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} />
-//       <button onClick={handleUpload} disabled={!selectedFile}>Upload Resume</button>
-//       {selectedFile && <p>Selected file: {selectedFile.name}</p>}
-//     </div>
-//   );
-// }
+    useImperativeHandle(ref, () => ({
+        triggerFileInput: () => {
+            document.getElementById('file-input').click();
+        },
+        triggerUpload: handleUpload,
+    }));
 
-// export default ResumeUploader;
+    return (
+        <div>
+            <input
+                id="file-input" // Add id for programmatic access
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleFileChange}
+                style={{ display: 'none' }} // Hide the file input
+            />
+            <button onClick={handleUpload} disabled={!selectedFile}>
+                Upload Resume
+            </button>
+            {selectedFile && <p>Selected file: {selectedFile.name}</p>}
+        </div>
+    );
+});
+
+export default ResumeUploader;

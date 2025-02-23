@@ -1,11 +1,4 @@
-import React from "react";
-import { Link } from 'react-router-dom';
-
-function Navbar(){
-    return(
-        <nav style={style.nav}>
-            <ul style={style.ul}>
-                <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJz
+PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJz
 aW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lk
 dGg9IjUwMCIgaGVpZ2h0PSI1MDAiPgo8cGF0aCBkPSJNMCAwIEMxNjUgMCAzMzAg
 MCA1MDAgMCBDNTAwIDE2NSA1MDAgMzMwIDUwMCA1MDAgQzMzNSA1MDAgMTcwIDUw
@@ -924,45 +917,3 @@ MS4xNTE3MzM1NSAyLjQ2ODAwMDQ3IC0yLjA0NzgzNTY1IDQuMDQ3ODM1NjUgLTQg
 NiBDLTQuOTkgNS42NyAtNS45OCA1LjM0IC03IDUgQy0yLjI1IDAgLTIuMjUgMCAw
 IDAgWiAiIGZpbGw9IiM0QjU5NUMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwNSwx
 NzkpIi8+Cjwvc3ZnPgo=
-" alt="Logo" style={{width:"50px", height:"50px", marginTop:"20px", borderRadius:"50%"}}/>
-                <li style={style.li}>
-                    <Link to="/Home" style={style.link}>Home</Link>
-                </li>
-                <li style={style.li}>
-                    <Link to="/Learn" style={style.link}>Learn</Link>
-                </li>
-                <li style={style.li}>
-                    <Link to="/Plan" style={style.link}>Plan</Link>
-                </li>
-                <li style={style.li}>
-                    <Link to="/User" style={style.link}>User</Link>
-                </li>
-            </ul>
-
-        </nav>
-    )
-}
-
-const style = {
-    nav: {
-        backgroundColor: '#283739',
-        padding: '10px',
-        alignItems: "center",
-    },
-    ul: {
-        listStyleType: 'none',
-        justifyContent: 'space-evenly',
-        display: "flex",
-        textAlign: "center",
-    },
-    li: {
-        padding: '20px',
-    },
-    link: {
-        textDecoration: "none",
-        fontSize: '40px',
-        color: '#F5F5F5',
-    }
-
-}
-export default Navbar;
