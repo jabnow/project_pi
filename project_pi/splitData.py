@@ -1,116 +1,99 @@
-import pandas as pd
+import pymupdf  # PyMuPDF for PDF processing
 import re
 
-# Define keyword lists for each category.
+# Section headers for direct classification
+SECTION_HEADERS = ["Education", "Experience", "Skills"]
+
+# Define keyword lists for classification
 EDUCATION_KEYWORDS = [
-    "university", "college", "bachelor", "master", "phd", "high school", "education", "institute", "degree"
+    "university", "college", "school", "degree", "bachelor", "master", "phd", "gpa", "coursework",
+    "academic", "scholarship", "honors", "certification"
 ]
 EXPERIENCE_KEYWORDS = [
-    "experience", "worked", "job", "intern", "project", "role", "responsibility", "employment", "company", "career"
+    "experience", "worked", "intern", "job", "employment", "role", "responsibility",
+    "company", "career", "research", "developed", "managed", "led"
 ]
 SKILLS_KEYWORDS = [
-    "python", "java", "c++", "c#", "javascript", "skills", "proficient", "programming", "certification", "sql",
-    "knowledge", "tool"
+    "skills", "proficient", "expertise", "knowledge of", "programming", "python", "java",
+    "machine learning", "tensorflow", "pytorch", "linux", "devops", "kubernetes", "docker"
 ]
 
 
-def classify_paragraph(paragraph):
-    """Classify a paragraph as Education, Experience, or Skills based on keyword counts."""
-    text = paragraph.lower()
-    edu_count = sum(1 for kw in EDUCATION_KEYWORDS if kw in text)
-    exp_count = sum(1 for kw in EXPERIENCE_KEYWORDS if kw in text)
-    skills_count = sum(1 for kw in SKILLS_KEYWORDS if kw in text)
-
-    # If no keywords are found, return None.
-    if edu_count == 0 and exp_count == 0 and skills_count == 0:
-        return None
-
-    # Choose the category with the highest count.
-    max_count = max(edu_count, exp_count, skills_count)
-    if max_count == edu_count:
-        return "Education"
-    elif max_count == exp_count:
-        return "Experience"
-    else:
-        return "Skills"
+def clean_text(text):
+    """Remove contact details, links, and unnecessary data."""
+    text = re.sub(r'\S+@\S+', '', text)  # Remove emails
+    text = re.sub(r'\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}', '', text)  # Remove phone numbers
+    text = re.sub(r'https?://\S+', '', text)  # Remove URLs
+    text = re.sub(r'\s+', ' ', text).strip()  # Remove extra spaces
+    return text
 
 
 def extract_fields_from_resume(resume_text):
-    """
-    Splits the resume text into paragraphs, classifies each paragraph,
-    and then returns three strings: one each for Skills, Experience, and Education.
-    """
-    # Split the text into paragraphs (using newline as separator).
+    """Extracts structured data from the resume text."""
     paragraphs = re.split(r"\n+", resume_text)
-    edu_parts = []
-    exp_parts = []
-    skills_parts = []
+    sections = {"Education": [], "Experience": [], "Skills": []}
+    current_section = None
 
     for para in paragraphs:
         para = para.strip()
         if not para:
             continue
+
+        # Detect explicit section headers
+        if any(header.lower() in para.lower() for header in SECTION_HEADERS):
+            current_section = next(header for header in SECTION_HEADERS if header.lower() in para.lower())
+            continue  # Move to next line
+
+        # Associate bullet points with the current section
+        if current_section:
+            sections.setdefault(current_section, []).append(para)
+            continue
+
+        # Fallback to keyword-based classification
         category = classify_paragraph(para)
-        if category == "Education":
-            edu_parts.append(para)
-        elif category == "Experience":
-            exp_parts.append(para)
-        elif category == "Skills":
-            skills_parts.append(para)
+        if category:
+            sections[category].append(para)
 
-    # Join paragraphs for each category
-    education_text = "\n".join(edu_parts)
-    experience_text = "\n".join(exp_parts)
-    skills_text = "\n".join(skills_parts)
-    return skills_text, experience_text, education_text
+    # Format sections as clean text
+    formatted_sections = {key: clean_text("\n".join(value)) for key, value in sections.items()}
+    return formatted_sections
 
 
-def main():
-    input_csv = "UpdatedResumeDataSet.csv"
-    output_csv = "UpdatedResumeDataSet_Separated.csv"
+def classify_paragraph(paragraph):
+    """Classify a paragraph using keyword-based matching."""
+    text = paragraph.lower()
+    edu_count = sum(1 for kw in EDUCATION_KEYWORDS if kw in text)
+    exp_count = sum(1 for kw in EXPERIENCE_KEYWORDS if kw in text)
+    skills_count = sum(1 for kw in SKILLS_KEYWORDS if kw in text)
 
-    try:
-        df = pd.read_csv(input_csv)
-    except Exception as e:
-        print(f"Error reading CSV file: {e}")
-        return
-
-    if "Resume" not in df.columns:
-        print("Column 'Resume' not found in the CSV.")
-        return
-
-    skills_list = []
-    experience_list = []
-    education_list = []
-
-    # Process each resume row
-    for index, row in df.iterrows():
-        resume_text = row["Resume"]
-        if not isinstance(resume_text, str):
-            skills_list.append("")
-            experience_list.append("")
-            education_list.append("")
-        else:
-            skills_text, exp_text, edu_text = extract_fields_from_resume(resume_text)
-            skills_list.append(skills_text)
-            experience_list.append(exp_text)
-            education_list.append(edu_text)
-            # For debugging: print output for the first few rows
-            if index < 3:
-                print(
-                    f"Row {index} -- Skills: {skills_text}\nExperience: {exp_text}\nEducation: {edu_text}\n{'-' * 40}")
-
-    # Add new columns to DataFrame
-    df["Skills"] = skills_list
-    df["Experience"] = experience_list
-    df["Education"] = education_list
-
-    try:
-        df.to_csv(output_csv, index=False)
-        print(f"Extraction complete. File saved to {output_csv}")
-    except Exception as e:
-        print(f"Error writing CSV file: {e}")
+    if edu_count > exp_count and edu_count > skills_count:
+        return "Education"
+    elif exp_count > edu_count and exp_count > skills_count:
+        return "Experience"
+    elif skills_count > edu_count and skills_count > exp_count:
+        return "Skills"
+    return None
 
 
-if __name__ == '__main__':
-    main()
+def process_pdf(pdf_path, output_txt="resume_output.txt"):
+    """Reads a PDF file, extracts text, and organizes it into structured sections."""
+    doc = pymupdf.open(pdf_path)
+    extracted_text = ""
+
+    for page in doc:
+        extracted_text += page.get_text("text") + "\n"
+
+    # Process extracted text
+    structured_resume = extract_fields_from_resume(extracted_text)
+
+    # Save structured output
+    with open(output_txt, "w", encoding="utf-8") as f:
+        for section, content in structured_resume.items():
+            f.write(f"{section}:\n{content}\n\n")
+
+    print(f"Resume data extracted and saved to {output_txt}")
+
+
+if __name__ == "__main__":
+    pdf_file = "resume.pdf"  # Replace with your actual PDF filename
+    process_pdf(pdf_file)
