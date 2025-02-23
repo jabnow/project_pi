@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;skeleton of frontend without calendar&quot;">
-      <change afterPath="$PROJECT_DIR$/project_pi/src/components/charts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/components/taskcalendar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/pages/plan.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/plan.js" afterDir="false" />
-    </list>
+    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;stylized part of the webpage, will continue tommorow&quot;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,12 +13,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -43,7 +42,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Sally&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -54,6 +53,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/project_pi/src/pages" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -65,6 +69,7 @@
       <workItem from="1740195998913" duration="1711000" />
       <workItem from="1740208751802" duration="18071000" />
       <workItem from="1740256952529" duration="2163000" />
+      <workItem from="1740265827546" duration="2350000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;skeleton of frontend&quot;">
       <option name="closed" value="true" />
@@ -90,7 +95,39 @@
       <option name="project" value="LOCAL" />
       <updated>1740238566549</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="&quot;skeleton of frontend without calendar&quot;">
+      <option name="closed" value="true" />
+      <created>1740277637710</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1740277637710</updated>
+    </task>
+    <task id="LOCAL-00005" summary="&quot;upload resume fixed&quot;">
+      <option name="closed" value="true" />
+      <created>1740277678623</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740277678623</updated>
+    </task>
+    <task id="LOCAL-00006" summary="&quot;upload resume stored in local storage and displayed&quot;">
+      <option name="closed" value="true" />
+      <created>1740278884314</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740278884314</updated>
+    </task>
+    <task id="LOCAL-00007" summary="&quot;stylized part of the webpage, will continue tommorow&quot;">
+      <option name="closed" value="true" />
+      <created>1740292904632</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1740292904632</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -98,7 +135,12 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="&quot;skeleton of frontend&quot;" />
+    <MESSAGE value="fixed selecting resume bug" />
+    <MESSAGE value="&quot;fixed the resume upload bug and uploaded the right version of user.js&quot;" />
     <MESSAGE value="&quot;skeleton of frontend without calendar&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;skeleton of frontend without calendar&quot;" />
+    <MESSAGE value="&quot;upload resume fixed&quot;" />
+    <MESSAGE value="&quot;upload resume stored in local storage and displayed&quot;" />
+    <MESSAGE value="&quot;stylized part of the webpage, will continue tommorow&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;stylized part of the webpage, will continue tommorow&quot;" />
   </component>
 </project>
