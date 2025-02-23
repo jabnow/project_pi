@@ -13,8 +13,13 @@ function Learn() {
       {/* Charts on the right */}
       <div style={styles.rightColumn}>
         <div style={styles.chartContainer}>
-          <Charts />
+          <div>
+            <Charts/>
+          </div>
         </div>
+        <h2 style={{textAlign: "left", marginTop: "50px", marginLeft:"30px"}}>
+          Project Pi - Let's Take It One Slice at a Time!!!
+        </h2>
       </div>
     </div>
   );
@@ -25,8 +30,10 @@ export default Learn;
 const styles = {
   container: {
     display: "flex",
+    flexDirection: "row",
     width: "100%",
-    minHeight: "100vh"
+    minHeight: "100vh",
+    fontFamily: "Sans-serif"
   },
   leftColumn: {
     flex: 1,
@@ -35,14 +42,15 @@ const styles = {
   rightColumn: {
     // Make the right column flex
     flex: 1,
-    display: "flex",
-    alignItems: "flex-start",
+    //display: "flex",
+    //flexDirection: "column",
+    alignItems: "center",
     justifyContent: "center",
-    padding: "30px"
+    margin: "30px"
   },
   chartContainer: {
     // rounded box around charts
-    width: "80%", 
+    width: "90%",
     minHeight: "400px",           
     backgroundColor: "#f9f9f9",
     border: "1px solid #ddd",
