@@ -10,7 +10,7 @@ const ResumeUploader = forwardRef((props, ref) => {
             localStorage.setItem('uploadedResume', JSON.stringify({
                 name: file.name,
                 type: file.type,
-                data: URL.createObjectURL(file), // Create a URL for the file
+                data: URL.createObjectURL(file),
             }));
         } else {
             setSelectedFile(null);
@@ -55,11 +55,11 @@ const ResumeUploader = forwardRef((props, ref) => {
     return (
         <div>
             <input
-                id="file-input" // Add id for programmatic access
+                id="file-input"
                 type="file"
                 accept=".pdf,.doc,.docx"
                 onChange={handleFileChange}
-                style={{ display: 'none' }} // Hide the file input
+                style={{ display: 'none' }}
             />
             <button onClick={handleUpload} disabled={!selectedFile}>
                 Upload Resume

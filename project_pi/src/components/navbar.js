@@ -1,7 +1,50 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect} from "react";
 
 function Navbar(){
+    const basicColor = "#F7F7F7"
+    const highlightColor = '#FDB827'
+    const [homeColor, setHomeColor] = useState( basicColor)
+    const [learnColor, setLearnColor] = useState( basicColor)
+    const [planColor, setPlanColor] = useState( basicColor)
+    const [userColor, setUserColor] = useState( basicColor)
+    const location = useLocation();
+    useEffect(() => {
+        switch(location.pathname){
+            case '/':
+                setHomeColor(highlightColor);
+                setLearnColor(basicColor);
+                setPlanColor( basicColor);
+                setUserColor( basicColor);
+                break;
+            case '/Home':
+                setHomeColor(highlightColor);
+                setLearnColor( basicColor);
+                setPlanColor( basicColor);
+                setUserColor( basicColor);
+                break;
+            case '/Learn':
+                setHomeColor(basicColor);
+                setLearnColor(highlightColor);
+                setPlanColor(basicColor);
+                setUserColor(basicColor);
+                break;
+            case '/Plan':
+                setHomeColor(basicColor);
+                setLearnColor(basicColor);
+                setPlanColor(highlightColor);
+                setUserColor(basicColor);
+                break;
+            case '/User':
+                setHomeColor(basicColor);
+                setLearnColor(basicColor);
+                setPlanColor(basicColor);
+                setUserColor(highlightColor);
+                break;
+
+        }}, [location]);
+
     return(
         <nav style={style.nav}>
             <ul style={style.ul}>
@@ -924,18 +967,32 @@ MS4xNTE3MzM1NSAyLjQ2ODAwMDQ3IC0yLjA0NzgzNTY1IDQuMDQ3ODM1NjUgLTQg
 NiBDLTQuOTkgNS42NyAtNS45OCA1LjM0IC03IDUgQy0yLjI1IDAgLTIuMjUgMCAw
 IDAgWiAiIGZpbGw9IiM0QjU5NUMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwNSwx
 NzkpIi8+Cjwvc3ZnPgo=
-" alt="Logo" style={{width:"50px", height:"50px", marginTop:"20px", borderRadius:"50%"}}/>
+" alt="Logo" style={{width:"50px", height:"50px",
+                    marginTop:"10px", borderRadius:"50%",
+                marginRight: "10px"}}/>
                 <li style={style.li}>
-                    <Link to="/Home" style={style.link}>Home</Link>
+                    <Link to="/Home" style={{
+                        textDecoration: "none",
+                        fontSize: '30px',
+                        color: homeColor}}>Home</Link>
                 </li>
                 <li style={style.li}>
-                    <Link to="/Learn" style={style.link}>Learn</Link>
+                    <Link to="/Learn" style={{
+                        textDecoration: "none",
+                        fontSize: '30px',
+                        color: learnColor}}>Learn</Link>
                 </li>
                 <li style={style.li}>
-                    <Link to="/Plan" style={style.link}>Plan</Link>
+                    <Link to="/Plan" style={{
+                        textDecoration: "none",
+                        fontSize: '30px',
+                        color: planColor}}>Plan</Link>
                 </li>
                 <li style={style.li}>
-                    <Link to="/User" style={style.link}>User</Link>
+                    <Link to="/User" style={{
+                        textDecoration: "none",
+                        fontSize: '30px',
+                        color: userColor}}>User</Link>
                 </li>
             </ul>
 
@@ -945,23 +1002,21 @@ NzkpIi8+Cjwvc3ZnPgo=
 
 const style = {
     nav: {
-        backgroundColor: '#283739',
-        padding: '10px',
+        backgroundColor: "#005792",
+        padding: '5px',
         alignItems: "center",
+        fontBold: "true"
     },
     ul: {
+        marginLeft: "70px",
         listStyleType: 'none',
-        justifyContent: 'space-evenly',
+        justifyContent: 'left',
         display: "flex",
         textAlign: "center",
     },
     li: {
-        padding: '20px',
-    },
-    link: {
-        textDecoration: "none",
-        fontSize: '40px',
-        color: '#F5F5F5',
+        padding: '10px',
+        fontSize: "15px",
     }
 
 }
