@@ -1,7 +1,7 @@
 import React from "react";
 import "./user.css";
 import ProfilePicture from "./sample_user.jpg";
-import "/upload_res.js";
+// import "/upload_res.js";
 
 // sample user data
 const userData = {
@@ -50,7 +50,7 @@ function UserProfile() {
             <p>{userData.title}</p>
             <p>{userData.location}</p>
             <div className="user-actions">
-            <a href="/upload_res.js">
+            <a href="...">
             <button className="btn-resume">Upload Resume
                 </button>
               </a>
