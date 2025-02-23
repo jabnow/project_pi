@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="fixed selecting resume bug">
-      <change afterPath="$PROJECT_DIR$/project_pi/src/components/upload_res.js" afterDir="false" />
+    <list default="true" id="d319764d-5ab1-434d-bd61-81fcc4c5a1c5" name="Changes" comment="&quot;upload resume fixed&quot;">
+      <change afterPath="$PROJECT_DIR$/project_pi/src/components/resumeDisplay.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project_pi/src/pages/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project_pi/src/components/upload_res.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/components/upload_res.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project_pi/src/pages/plan.js" beforeDir="false" afterPath="$PROJECT_DIR$/project_pi/src/pages/plan.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +100,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740238566549</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="&quot;skeleton of frontend without calendar&quot;">
+      <option name="closed" value="true" />
+      <created>1740277637710</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1740277637710</updated>
+    </task>
+    <task id="LOCAL-00005" summary="&quot;upload resume fixed&quot;">
+      <option name="closed" value="true" />
+      <created>1740277678623</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740277678623</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -107,8 +124,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="&quot;skeleton of frontend&quot;" />
-    <MESSAGE value="&quot;skeleton of frontend without calendar&quot;" />
     <MESSAGE value="fixed selecting resume bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed selecting resume bug" />
+    <MESSAGE value="&quot;fixed the resume upload bug and uploaded the right version of user.js&quot;" />
+    <MESSAGE value="&quot;skeleton of frontend without calendar&quot;" />
+    <MESSAGE value="&quot;upload resume fixed&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;upload resume fixed&quot;" />
   </component>
 </project>

@@ -1,8 +1,9 @@
 import Charts from "../components/charts";
+import ResumeDisplay from "../components/resumeDisplay";
 function Plan(){
     return(
         <div>
-            <Charts/>
+            <ResumeDisplay />
         </div>
     )
 }
