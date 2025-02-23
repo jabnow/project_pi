@@ -10,8 +10,13 @@
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.24.1",
+    "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
+    "fastapi": "^0.0.8",
     "googleapis": "^144.0.0",
+    "mongodb": "^6.13.1",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.2.0",
     "react-scripts": "5.0.1",
@@ -43,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.26.3",
     "babel-loader": "^9.2.1"
   }
 }
