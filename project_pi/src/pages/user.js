@@ -1,6 +1,7 @@
 import React from "react";
 import "./user.css";
 import ProfilePicture from "./sample_user.jpg";
+import "/upload_res.js";
 
 // sample user data
 const userData = {
@@ -32,7 +33,7 @@ function UserProfile() {
     <div className="user-container">
       {/* page title */}
       <div className="breadcrumb">
-        <h2>Home / User / User Profile</h2>
+        <h2>Advanced Settings</h2>
       </div>
 
       <div className="user-main">
@@ -49,8 +50,10 @@ function UserProfile() {
             <p>{userData.title}</p>
             <p>{userData.location}</p>
             <div className="user-actions">
-              <button className="btn-follow">Follow</button>
-              <button className="btn-message">Message</button>
+            <a href="/upload_res.js">
+            <button className="btn-resume">Upload Resume
+                </button>
+              </a>
             </div>
           </div>
 

@@ -9,6 +9,9 @@ import Plan from "./pages/plan.js"
 import User from "./pages/user.js"
 
 
+// create short description welcoming people to the app, brief overview of functions
+// add the logo and make it zoom in
+
 function App() {
   return (
       <Router>
