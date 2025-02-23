@@ -15,43 +15,9 @@ function Charts(){
     const progressNum = 40
 
     return(
-        <div style={{display: "flex"}}>
-            <div style={{"flex": 1}}>
-                <PieChart width={300} height={300}>
-                    <Pie
-                        data={dailyTaskData}
-                        cx={150}
-                        cy={150}
-                        innerRadius={60}
-                        outerRadius={80}
-                        fill="#283739"
-                        paddingAngle={10}
-                        dataKey="value"
-                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
-                    ></Pie>
-                    <Tooltip />
-                    <Legend />
-                </PieChart>
-            </div>
-            <div style={{"flex": 2}}>
-                <PieChart width={300} height={300}>
-                    <Pie
-                        data={finishRateData}
-                        cx={150}
-                        cy={150}
-                        innerRadius={60}
-                        outerRadius={80}
-                        fill="#228896"
-                        paddingAngle={10}
-                        dataKey="value"
-                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
-                    ></Pie>
-                    <Tooltip />
-                    <Legend />
-                </PieChart>
-            </div>
-            <div style={{"flex": 3}}>
-                <div style={{ width: '80%', marginTop: '40px' }}>
+        <div style={{display: "flex", alignItems: "flex-end", flexDirection: "column"}}>
+            <div style={{"flex": 1, width: '500px', marginRight: '50px'}}>
+                <div style={{ marginTop: '40px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
                         <span>Progress</span>
                         <span>{progressNum}%</span>
@@ -65,17 +31,53 @@ function Charts(){
                             overflow: 'hidden',
                         }}
                     >
-                    <div
-                        style={{
-                            width: `${progressNum}%`,
-                            height: '100%',
-                            backgroundColor: '#A9C52F',
-                            borderRadius: '5px',
-                        }}/>
+                        <div
+                            style={{
+                                width: `${progressNum}%`,
+                                height: '100%',
+                                backgroundColor: '#A9C52F',
+                                borderRadius: '5px',
+                            }}/>
                     </div>
                 </div>
             </div>
+            <div style={{"flex": 2}}>
+                <div style={{display: "flex", alignItems:"center", flexDirection: "row"}}>
+                    <PieChart width={300} height={300}>
+                        <Pie
+                            data={dailyTaskData}
+                            cx={150}
+                            cy={150}
+                            innerRadius={60}
+                            outerRadius={80}
+                            fill="#283739"
+                            paddingAngle={10}
+                            dataKey="value"
+                            label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                        ></Pie>
+                        <Tooltip />
+                        <Legend />
+                    </PieChart>
+                    <PieChart width={300} height={300}>
+                        <Pie
+                            data={finishRateData}
+                            cx={150}
+                            cy={150}
+                            innerRadius={60}
+                            outerRadius={80}
+                            fill="#228896"
+                            paddingAngle={10}
+                            dataKey="value"
+                            label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                        ></Pie>
+                        <Tooltip />
+                        <Legend />
+                    </PieChart>
+            </div>
+            </div>
+
         </div>
+
 )
 }
 

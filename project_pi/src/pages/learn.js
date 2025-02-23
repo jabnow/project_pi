@@ -1,7 +1,9 @@
+import Charts from "../components/charts";
+
 function Learn(){
     return(
         <div>
-            Learn
+            <Charts/>
         </div>
     )
 }

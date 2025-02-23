@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {usePlanData} from "./planContextProvider";
 import { Modal, Button, Card, Calendar, Input, Table} from 'antd';
 
 const AntdDatePicker = () => {
@@ -72,6 +73,9 @@ const AntdDatePicker = () => {
         date: selectedDate.format('YYYY-MM-DD'),
     }));
 
+    //for the context test
+    const { planData } = usePlanData();
+
     return (
         <div style={{ display: 'flex', padding: '10px', gap: '20px' }}>
             <div style={{ flex: 1, padding: '10px' }}>
@@ -96,6 +100,7 @@ const AntdDatePicker = () => {
                         <Table dataSource={tableData} columns={columns} rowKey="id" />
                     </div>
                 )}
+
             </div>
             <Modal
                 title="add task"
