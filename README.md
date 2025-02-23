@@ -20,6 +20,7 @@
 <img width="1195" alt="Screenshot 2025-02-23 at 11 41 21 AM" src="https://github.com/user-attachments/assets/98e0467c-5c8e-4f17-a438-dfe445f694b2" />
 <img width="1190" alt="Screenshot 2025-02-23 at 11 41 45 AM" src="https://github.com/user-attachments/assets/60d6c7dd-659b-4411-9604-093abb87d475" />
 <img width="1195" alt="Screenshot 2025-02-23 at 11 42 02 AM" src="https://github.com/user-attachments/assets/eab1c2bf-bbb2-41b9-9ee5-88ce5f8d024a" />
+<img width="1195" alt="Screenshot 2025-02-23 at 11 42 02 AM" src="https://github.com/user-attachments/assets/bf69e14a-2a2e-40fe-a43e-fba27d437f2e" />
 
 ## 🛠️ Tech Stack
 | Technology | Usage |
