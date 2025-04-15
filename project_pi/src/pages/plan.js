@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import ReactMarkdown from 'react-markdown';
 const Plan = () => {
     const [showResume, setShowResume] = useState(false); // Chatbot shown first
     const [pdf, setPdf] = useState(null);
@@ -82,10 +82,19 @@ const Plan = () => {
                                 }}
                             >
                                 {messages.map((msg, index) => (
-                                    <React.Fragment key={index}>
-                                        {msg.user && <p><strong>You:</strong> {msg.user}</p>}
-                                        {msg.ai && <p><strong>AI:</strong> {msg.ai}</p>}
-                                    </React.Fragment>
+                                  <React.Fragment key={index}>
+                                    {msg.user && (
+                                      <p>
+                                        <strong>You:</strong> {msg.user}
+                                      </p>
+                                    )}
+                                    {msg.ai && (
+                                      <div>
+                                        <strong>AI:</strong>
+                                        <ReactMarkdown>{msg.ai}</ReactMarkdown>
+                                      </div>
+                                    )}
+                                  </React.Fragment>
                                 ))}
                             </div>
                             <input

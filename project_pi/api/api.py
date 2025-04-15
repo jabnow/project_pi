@@ -1,5 +1,5 @@
 import os
-import google.generativeai as palm
+import google.generativeai as genai
 from secrets import API_KEY
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -62,7 +62,7 @@ def generate_career_roadmap(skills: str, experience: str, education: str) -> str
         "Career Roadmap:"
     )
 
-    response = palm.GenerativeModel("gemini-pro").generate_content(prompt)
+    response = genai.GenerativeModel("gemini-2.0-flash").generate_content(prompt)
 
     if response and response.text:
         return response.text.strip()
