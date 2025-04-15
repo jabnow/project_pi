@@ -3,13 +3,13 @@ import { PieChart, Pie, Tooltip, Legend, Cell } from 'recharts';
 
 function Charts() {
   const dailyTaskData = [
-    { name: 'Finished', value: 50 },
-    { name: 'Unfinished', value: 50 },
+    { name: 'Finished', value: 40 },
+    { name: 'Unfinished', value: 60 },
   ];
 
   const finishRateData = [
-    { name: 'Succeed', value: 50 },
-    { name: 'Failed', value: 50 },
+    { name: 'Succeed', value: 40 },
+    { name: 'Failed', value: 60 },
   ];
 
   const progressNum = 40;
