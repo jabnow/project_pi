@@ -1,11 +1,11 @@
 import os
 import google.generativeai as genai
-from secrets import API_KEY
+from secretss import API_KEY
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 # Configure API Key
-palm.configure(api_key=os.getenv("GOOGLE_AI_STUDIO_API_KEY", API_KEY))
+genai.configure(api_key=os.getenv("GOOGLE_AI_STUDIO_API_KEY", API_KEY))
 
 # Initialize FastAPI app
 app = FastAPI()

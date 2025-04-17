@@ -4,7 +4,7 @@ import google.generativeai as genai
 import os
 from fastapi.responses import JSONResponse
 from secretss import API_KEY
-
+from fastapi.responses import Response
 # Load API Key (Replace with your actual API Key)
 GEMINI_API_KEY = API_KEY
 genai.configure(api_key=GEMINI_API_KEY)
@@ -31,7 +31,9 @@ def generate_gemini_response(user_input):
         return response.text.strip()
     return "I'm not sure, but I can analyze your skills and provide insights!"
 
-
+@app.options("/chat")
+async def options_chat():
+    return Response(status_code=204)
 @app.post("/chat")
 async def chat_with_ai(request: Request):
     """Chatbot Endpoint - Process user messages & return AI response."""
@@ -76,3 +78,4 @@ async def chat_with_ai(request: Request):
 @app.get("/")
 def home():
     return {"message": "Gemini-powered AI API is running. Send POST requests to /chat"}
+# Run with: uvicorn chatbot:app --host 0.0.0.0 --port 8000 --reload
