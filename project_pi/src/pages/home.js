@@ -80,13 +80,16 @@ const styles = {
   infoBox: {
     // Lower-left corner (adjust as you like)
     position: "absolute",
-    bottom: "275px",
+    bottom: "150px",
     left: "175px",
-    width: "300px",
+    width: "360px",
     padding: "20px",
     borderRadius: "8px",
     backgroundColor: "#fff",
     boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+    maxHeight: "220px",
+    overflowY: "auto",
+    scrollbarWidth: "thin",
   },
   header: {
     margin: 0,
@@ -98,29 +101,33 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     marginBottom: "10px",
+    gap: "6px"
   },
   tab: {
     flex: 1,
     padding: "8px",
-    margin: "0 4px",
     backgroundColor: "#f0f0f0",
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
+    fontFamily:"inherit",
   },
   activeTab: {
     flex: 1,
     padding: "8px",
-    margin: "0 4px",
     backgroundColor: "#FDB827",
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
+    color: "#fff",
+    fontWeight:"bold",
+    fontFamily: "inherit",
   },
   bodyText: {
     fontSize: "14px",
-    lineHeight: "1.4",
+    lineHeight: "1.5",
     color: "#555",
-    margin: 0
+    marginTop: "8px",
+    marginBottom: "0",
   }
 };
