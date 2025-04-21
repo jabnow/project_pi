@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 import os
 from fastapi.responses import JSONResponse
-from secretss import API_KEY
+from secrets import API_KEY
 
 # Load API Key (Replace with your actual API Key)
 GEMINI_API_KEY = API_KEY
